@@ -17,7 +17,20 @@ const Login = () => {
                 console.log(data, "data ");
 
                 if (data.access_token) {
-                    localStorage.setItem("token", data.access_token);
+                    fetch(`https://kapi.kakao.com/v2/user/me`, {
+                        method: "GET",
+                        // url: `https://kapi.kakao.com/v2/user/me`,
+                        headers: {
+                            Authorization: `Bearer ${data.access_token}`,
+                            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+                        },
+                    })
+                        .then((res) => res.json())
+                        .then((kakaoUser) => {
+                            console.log(kakaoUser);
+                        });
+
+                    // localStorage.setItem("token", data.access_token);
                     // window.location.href = "/guide";
                 } else {
                     window.location.href = "/";
