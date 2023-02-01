@@ -19,7 +19,6 @@ const Login = () => {
                 if (data.access_token) {
                     fetch(`https://kapi.kakao.com/v2/user/me`, {
                         method: "GET",
-                        // url: `https://kapi.kakao.com/v2/user/me`,
                         headers: {
                             Authorization: `Bearer ${data.access_token}`,
                             "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
