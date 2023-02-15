@@ -7,3 +7,10 @@
 -   코드를 수정했을때 --> [Modify]
 -   코드를 리팩토링 했을때 --> [Refactor]
 -   진행중 중간 커밋 --> wip
+
+### 깃 브랜치 네이밍 컨벤션
+
+-   master branch
+-   develop branch
+-   feature branch --> [feature/login]
+-   hotfix branch --> [hotfix-login]
