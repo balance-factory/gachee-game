@@ -5,7 +5,10 @@ import * as API from "../../api";
 import { json } from "react-router-dom";
 
 const Login = () => {
-    const [users, setUsers] = useState<{ gender: string; name: string }>({
+    const [users, setUsers] = useState<{
+        gender: string;
+        name: string;
+    }>({
         gender: "",
         name: "",
     });
@@ -71,6 +74,7 @@ const Login = () => {
 
     useEffect(() => {
         getUsers();
+
         if (!location.search) return;
         getKakaoToken();
     }, []);
