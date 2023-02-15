@@ -1,9 +1,38 @@
 import styled from "styled-components";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { REST_API_KEY, REDIRECT_URI } from "../../KakaoOAuth";
+import * as API from "../../api";
+import { json } from "react-router-dom";
 
 const Login = () => {
+    const [users, setUsers] = useState<{ gender: string; name: string }>({
+        gender: "",
+        name: "",
+    });
     const KAKAO_CODE = new URL(location.href).searchParams.get("code");
+
+    const getUsers = () => {
+        fetch(API.UsersDatabaseURL)
+            .then((res) => {
+                return res.json();
+            })
+            .then((res) => {
+                console.log("res", res);
+                setUsers(res);
+            });
+    };
+
+    const addUser = (user: { gender: string; name: string }) => {
+        fetch(API.UsersDatabaseURL, {
+            method: "POST",
+            body: JSON.stringify(user),
+        }).then((res) => {
+            if (res.status !== 200) {
+                throw new Error(res.statusText);
+            }
+            return res.json();
+        });
+    };
 
     const getKakaoToken = () => {
         console.log("getKakaoToken 실행됨");
@@ -25,6 +54,11 @@ const Login = () => {
                         .then((res) => res.json())
                         .then((kakaoUser) => {
                             console.log(kakaoUser);
+                            const userInfo: { gender: string; name: string } = {
+                                gender: kakaoUser.kakao_account.gender,
+                                name: kakaoUser.kakao_account.profile.nickname,
+                            };
+                            addUser(userInfo);
                         });
 
                     // localStorage.setItem("token", data.access_token);
@@ -36,6 +70,7 @@ const Login = () => {
     };
 
     useEffect(() => {
+        getUsers();
         if (!location.search) return;
         getKakaoToken();
     }, []);
