@@ -14,8 +14,6 @@ const Login = () => {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log(data, "data ");
-
                 if (data.access_token) {
                     fetch(`https://kapi.kakao.com/v2/user/me`, {
                         method: "GET",
