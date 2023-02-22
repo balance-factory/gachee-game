@@ -3,24 +3,23 @@ import * as API from "../../data/api";
 export type UserType = {
     gender: string;
     name: string;
+    email: string;
+    userId: string;
 };
 
 export const getUsers = (): UserType[] => {
     let aa: UserType[] = [];
-    fetch(API.UsersDatabaseURL)
+    fetch("http://localhost:8080/users")
         .then((res) => {
             return res.json();
         })
-        .then((res) => {
-            console.log("res", res);
-            return (aa = res);
-        });
+        .then((res) => console.log("res", res));
 
     return aa;
 };
 
-export const addUser = (user: { gender: string; name: string }) => {
-    fetch(API.UsersDatabaseURL, {
+export const addUser = (user: UserType) => {
+    fetch("http://localhost:8080/users", {
         method: "POST",
         body: JSON.stringify(user),
     }).then((res) => {

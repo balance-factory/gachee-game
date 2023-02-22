@@ -2,6 +2,7 @@ import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import { REST_API_KEY, REDIRECT_URI } from "../../KakaoOAuth";
 import * as VM from "../login/LoginViewModel";
+import uuid from "react-uuid";
 
 const Login = () => {
     const [users, setUsers] = useState<VM.UserType[]>([]);
@@ -27,9 +28,11 @@ const Login = () => {
                         .then((res) => res.json())
                         .then((kakaoUser) => {
                             console.log(kakaoUser);
-                            const userInfo: { gender: string; name: string } = {
+                            const userInfo: VM.UserType = {
                                 gender: kakaoUser.kakao_account.gender,
                                 name: kakaoUser.kakao_account.profile.nickname,
+                                email: kakaoUser.kakao_account.email,
+                                userId: uuid(),
                             };
                             VM.addUser(userInfo);
                         });
