@@ -9,7 +9,7 @@ export type UserType = {
 
 export const getUsers = (): UserType[] => {
     let aa: UserType[] = [];
-    fetch("http://localhost:8080/users")
+    fetch("http://35.73.236.228:8080/users")
         .then((res) => {
             return res.json();
         })
@@ -19,7 +19,7 @@ export const getUsers = (): UserType[] => {
 };
 
 export const addUser = (user: UserType) => {
-    fetch("http://localhost:8080/users", {
+    fetch("http://35.73.236.228:8080/users", {
         method: "POST",
         body: JSON.stringify(user),
     }).then((res) => {
