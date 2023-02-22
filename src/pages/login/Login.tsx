@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import { REST_API_KEY, REDIRECT_URI } from "../../KakaoOAuth";
-import * as VM from "../login/LoginViewModel";
+import * as VM from "./LoginViewModel";
 import uuid from "react-uuid";
 
 const Login = () => {
