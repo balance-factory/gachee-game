@@ -21,7 +21,15 @@ export const getUsers = (): UserType[] => {
 export const addUser = (user: UserType) => {
     fetch("http://35.73.236.228:8080/users", {
         method: "POST",
-        body: JSON.stringify(user),
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            userId: user.userId,
+            email: user.email,
+            gender: user.gender,
+            name: user.name,
+        }),
     }).then((res) => {
         if (res.status !== 200) {
             throw new Error(res.statusText);
