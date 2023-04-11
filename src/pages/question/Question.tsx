@@ -8,4 +8,5 @@ export default Question;
 
 const Header = styled.h1`
     color: red;
+    font-family: Galmuri;
 `;

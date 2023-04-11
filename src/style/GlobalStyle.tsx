@@ -1,4 +1,7 @@
 import { createGlobalStyle } from "styled-components";
+// import * as Images from "../../src/assets/image/";
+import Galmurittf from "../../src/assets/font/Galmuri11.ttf";
+import GalmuriBoldttf from "../../src/assets/font/Galmuri11-Bold.ttf";
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -7,7 +10,14 @@ const GlobalStyle = createGlobalStyle`
         letter-spacing: -0.8px;
         word-break: keep-all;
         overflow-wrap: break-word;
+        cursor: url(https://t1.daumcdn.net/cfile/tistory/246AC64B56E089B41A), url(two.svg) 5 5, progress;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+
+        .cursor-png {
+	cursor: url(https://t1.daumcdn.net/cfile/tistory/246AC64B56E089B41A), auto;
+}
+
 
         /* width */
         ::-webkit-scrollbar {
@@ -83,8 +93,15 @@ const GlobalStyle = createGlobalStyle`
     }
 
     @font-face {
-        font-family: GmarketSansLight;
-        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff') format('woff');
+        font-family:Galmuri_acB;
+        font-weight: 400;
+        src:url(${GalmuriBoldttf}) format('truetype') 
+    }
+
+    @font-face {
+        font-family:Galmuri;
+        font-weight: 400;
+        src:url(${Galmurittf}) format('truetype') 
     }
 
     @font-face {
@@ -100,7 +117,7 @@ const GlobalStyle = createGlobalStyle`
 
 
     body {
-        font-family: GmarketSansMedium, sans-serif;
+        font-family: Galmuri, sans-serif;
         margin: 0px;
         box-sizing: border-box;
         min-width: 1280px;

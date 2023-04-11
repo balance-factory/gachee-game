@@ -19,4 +19,5 @@ export default Main;
 
 const Header = styled.h1`
     color: blue;
+    font-family: Galmuri;
 `;
