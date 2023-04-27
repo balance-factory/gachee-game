@@ -1,5 +1,43 @@
 export const BASE_URL: any = "http://35.73.236.228:8080";
 
+export class PaginationInfo<T> {
+    offset: number;
+    total: number;
+
+    constructor(size?: number) {
+        this.total = 0;
+        this.offset = 0;
+    }
+
+    next = () => {
+        if (this.offset + 1 < this.total) {
+            this.offset = this.offset + 1;
+        }
+    };
+
+    prev = () => {
+        if (this.offset > 0) {
+            this.offset = this.offset - 1;
+        }
+    };
+
+    // startPage = () => {
+    //     if (this.offset > 0) {
+    //         this.offset = 0;
+    //     }
+    // };
+
+    // endPage = () => {
+    //     if (this.offset + 1 < this.totalPage) {
+    //         this.offset = this.totalPage - 1;
+    //     }
+    // };
+
+    setOffset = (offset: number) => {
+        this.offset = offset;
+    };
+}
+
 export type SituationAndQuestions = {
     id: string; //상황 id
     text: string; //상황 텍스트
@@ -30,7 +68,7 @@ const mockData = [
         questionAndAnswers: [
             {
                 question: {
-                    id: "question1-1", //문제 아이디
+                    id: "question1-1-ID", //문제 아이디
                     title: "situation1- 문제1일번", //문제 타이틀
                     subtitle: "상황1 문제 1번 서브", //문제 서브타이틀
                 },
@@ -49,7 +87,7 @@ const mockData = [
             },
             {
                 question: {
-                    id: "question1-2", //문제 아이디
+                    id: "question1-2-ID", //문제 아이디
                     title: "situation1-문제2일번", //문제 타이틀
                     subtitle: "상황1 문제 2번 서브", //문제 서브타이틀
                 },
@@ -61,7 +99,7 @@ const mockData = [
                     },
                     {
                         id: "answer2-1",
-                        text: "상황1 문제2 정답1번",
+                        text: "상황1 문제2 정답2번",
                         ordinal: 1,
                     },
                 ],
@@ -75,7 +113,7 @@ const mockData = [
         questionAndAnswers: [
             {
                 question: {
-                    id: "question2-1", //문제 아이디
+                    id: "question2-1-ID", //문제 아이디
                     title: "situation2- 문제1일번", //문제 타이틀
                     subtitle: "상황2 문제 1번 서브", //문제 서브타이틀
                 },
@@ -94,19 +132,19 @@ const mockData = [
             },
             {
                 question: {
-                    id: "question1", //문제 아이디
-                    title: "situation1-문제2일번", //문제 타이틀
+                    id: "question2-2-ID", //문제 아이디
+                    title: "situation2-문제2일번", //문제 타이틀
                     subtitle: "상황2 문제 2번 서브", //문제 서브타이틀
                 },
                 answers: [
                     {
-                        id: "answer2-1",
+                        id: "answer4-1",
                         text: "상황2 문제2-정답1번",
                         ordinal: 1,
                     },
                     {
-                        id: "answer1-1",
-                        text: "상황2 문제2 정답1번",
+                        id: "answer4-2",
+                        text: "상황2 문제2 정답2번",
                         ordinal: 1,
                     },
                 ],
