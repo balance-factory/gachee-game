@@ -1,7 +1,7 @@
 import { createGlobalStyle } from "styled-components";
-// import * as Images from "../../src/assets/image/";
-import Galmurittf from "../../src/assets/font/Galmuri11.ttf";
-import GalmuriBoldttf from "../../src/assets/font/Galmuri11-Bold.ttf";
+import * as Images from "../../src/assets/image";
+import Galmurittf from "../assets/font/Galmuri11.ttf";
+import GalmuriBoldttf from "../assets/font/Galmuri11-Bold.ttf";
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -10,12 +10,15 @@ const GlobalStyle = createGlobalStyle`
         letter-spacing: -0.8px;
         word-break: keep-all;
         overflow-wrap: break-word;
-        cursor: url(https://t1.daumcdn.net/cfile/tistory/246AC64B56E089B41A), url(two.svg) 5 5, progress;
+        /* cursor: url(https://t1.daumcdn.net/cfile/tistory/246AC64B56E089B41A), url(two.svg) 5 5, progress; */
+        cursor: url(${Images.Mouse}), auto;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
 
         .cursor-png {
-	cursor: url(https://t1.daumcdn.net/cfile/tistory/246AC64B56E089B41A), auto;
+	/* cursor: url(https://t1.daumcdn.net/cfile/tistory/246AC64B56E089B41A), auto; */
+	cursor: url(${Images.Mouse}), auto;
+
 }
 
 
@@ -92,15 +95,16 @@ const GlobalStyle = createGlobalStyle`
         --tasktype-sample-return-pink-default: #ec06e8;
     }
 
+   
+
     @font-face {
-        font-family:Galmuri_acB;
-        font-weight: 400;
+        font-family:Galmuri_Bold;
         src:url(${GalmuriBoldttf}) format('truetype') 
+
     }
 
     @font-face {
         font-family:Galmuri;
-        font-weight: 400;
         src:url(${Galmurittf}) format('truetype') 
     }
 
@@ -121,6 +125,7 @@ const GlobalStyle = createGlobalStyle`
         margin: 0px;
         box-sizing: border-box;
         min-width: 1280px;
+      
 
         @media (max-width: 768px) {
             min-width: auto;

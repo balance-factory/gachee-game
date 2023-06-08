@@ -30,7 +30,7 @@ const Question = () => {
             <Header>
                 {situationAndQuestions && (
                     <>
-                        <> situation : {situationAndQuestions[situationOffset].text}</>
+                        <Title> situation : {situationAndQuestions[situationOffset].text}</Title>
 
                         <div
                             onClick={() =>
@@ -66,7 +66,9 @@ const Question = () => {
 
 export default Question;
 
-const Header = styled.div`
-    color: red;
-    font-family: Galmuri;
+const Header = styled.div``;
+
+const Title = styled.div`
+    font-size: 30px;
+    font-family: Galmuri_Bold;
 `;

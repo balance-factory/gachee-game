@@ -1,9 +1,11 @@
 import * as Pages from "./pages";
+import GlobalStyle from "./style/GlobalStyle";
 import { BrowserRouter, Router, Route, Routes } from "react-router-dom";
 
 const App = () => {
     return (
         <BrowserRouter>
+            <GlobalStyle />
             <Routes>
                 <Route path="/" element={<Pages.MainView />} />
                 <Route path="/login" element={<Pages.LoginView />} />
