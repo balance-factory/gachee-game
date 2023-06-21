@@ -10,6 +10,8 @@ const GlobalStyle = createGlobalStyle`
         letter-spacing: -0.8px;
         word-break: keep-all;
         overflow-wrap: break-word;
+        margin:0;
+        padding:0;
         /* cursor: url(https://t1.daumcdn.net/cfile/tistory/246AC64B56E089B41A), url(two.svg) 5 5, progress; */
         cursor: url(${Images.Mouse}), auto;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);

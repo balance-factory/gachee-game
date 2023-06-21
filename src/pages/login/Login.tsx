@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { REST_API_KEY, REDIRECT_URI } from "../../KakaoOAuth";
 import * as VM from "./LoginViewModel";
 import uuid from "react-uuid";
+import * as Images from "../../assets/image";
 
 const Login = () => {
     const [users, setUsers] = useState<VM.UserType[]>([]);
@@ -51,11 +52,52 @@ const Login = () => {
         getKakaoToken();
     }, []);
 
-    return <Header>로그인 페이지</Header>;
+    return (
+        <LoginLayout>
+            <LoginWrap>
+                <Header></Header>
+                <InnerLayout image={Images.BackgroundImage}>
+                    <Border></Border>
+                </InnerLayout>
+            </LoginWrap>
+        </LoginLayout>
+    );
 };
 
 export default Login;
 
-const Header = styled.div`
-    color: red;
+const LoginLayout = styled.div`
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: lightgray;
 `;
+
+const LoginWrap = styled.div`
+    width: 740px;
+    height: 100vh;
+
+    @media (max-width: 700px) {
+        width: 700px;
+    }
+`;
+
+const Header = styled.div`
+    width: 100%;
+    height: 48px;
+    background-color: lightpink;
+
+    @media (max-width: 700px) {
+        width: 100%;
+    }
+`;
+
+const InnerLayout = styled.div<{ image: string }>`
+    width: 100%;
+    height: calc(100vh - 48px);
+    background: ${(props) => `url(${props.image}) center / contain no-repeat #171A5F`};
+`;
+
+const Border = styled.div``;
