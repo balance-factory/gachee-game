@@ -7,6 +7,7 @@ const GlobalStyle = createGlobalStyle`
     * {
         box-sizing: border-box;
         outline: none;
+        font-family:Galmuri;
         letter-spacing: -0.8px;
         word-break: keep-all;
         overflow-wrap: break-word;
@@ -101,13 +102,15 @@ const GlobalStyle = createGlobalStyle`
 
     @font-face {
         font-family:Galmuri_Bold;
-        src:url(${GalmuriBoldttf}) format('truetype') 
+        src:url(${GalmuriBoldttf}) format('truetype');
+        font-display: swap;
 
     }
 
     @font-face {
         font-family:Galmuri;
-        src:url(${Galmurittf}) format('truetype') 
+        src:url(${Galmurittf}) format('truetype');
+        font-display: swap;
     }
 
     @font-face {

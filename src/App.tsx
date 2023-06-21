@@ -2,7 +2,7 @@ import * as Pages from "./pages";
 import GlobalStyle from "./style/GlobalStyle";
 import { BrowserRouter, Router, Route, Routes } from "react-router-dom";
 
-const App = () => {
+const App: React.FC = () => {
     return (
         <BrowserRouter>
             <GlobalStyle />
