@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { REST_API_KEY, REDIRECT_URI } from "../../KakaoOAuth";
 import * as VM from "./LoginViewModel";
 import uuid from "react-uuid";
+import * as Images from "../../assets/image";
 
 const Login = () => {
     const [users, setUsers] = useState<VM.UserType[]>([]);
@@ -51,11 +52,61 @@ const Login = () => {
         getKakaoToken();
     }, []);
 
-    return <Header>로그인 페이지</Header>;
+    return (
+        <LoginViewLayout>
+            <ContentLayout>
+                <Header>
+                    <NavIcon src={Images.NavIcon} />
+                </Header>
+
+                <Content>
+                    <Border />
+                </Content>
+                {/* 로그인 페이지 */}
+            </ContentLayout>
+        </LoginViewLayout>
+    );
 };
 
 export default Login;
 
+const LoginViewLayout = styled.div`
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const ContentLayout = styled.div`
+    width: 740px;
+    height: 100%;
+`;
+
 const Header = styled.div`
-    color: red;
+    width: 100%;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    padding-right: 20px;
+    background-color: #f56571;
+`;
+
+const NavIcon = styled.img`
+    width: 92px;
+    height: 28px;
+`;
+
+const Content = styled.div`
+    width: 100%;
+    height: calc(100% - 48px);
+    padding: 24px 20px;
+    background: url(${Images.MainBackground}) center / contain no-repeat #171a5f;
+`;
+
+const Border = styled.div`
+    width: 100%;
+    height: 100%;
+    border: 1px solid #fff;
 `;
