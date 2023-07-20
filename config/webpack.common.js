@@ -13,6 +13,27 @@ module.exports = {
                 use: "babel-loader",
                 exclude: /node_modules/,
             },
+
+            {
+                test: /\.(ico|png|jpg|jpeg|gif|woff|woff2|ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                loader: "url-loader",
+                options: {
+                    name: "[hash].[ext]",
+                    limit: 50000,
+                },
+            },
+
+            {
+                test: /\.svg$/,
+                use: [
+                    {
+                        loader: "@svgr/webpack",
+                        options: {
+                            titleProp: true,
+                        },
+                    },
+                ],
+            },
         ],
     },
     plugins: [

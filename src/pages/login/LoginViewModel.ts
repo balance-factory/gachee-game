@@ -8,14 +8,14 @@ export type UserType = {
 };
 
 export const getUsers = (): UserType[] => {
-    let aa: UserType[] = [];
+    let user: UserType[] = [];
     fetch(`${BASE_URL}/users`)
         .then((res) => {
             return res.json();
         })
         .then((res) => console.log("res", res));
 
-    return aa;
+    return user;
 };
 
 export const addUser = (user: UserType) => {

@@ -1,4 +1,9 @@
 import { createGlobalStyle } from "styled-components";
+import * as Images from "../../src/assets/image";
+import Mouse from "../assets/icon/mouse_icon.svg";
+
+import Galmurittf from "../assets/font/Galmuri11.ttf";
+import GalmuriBoldttf from "../assets/font/Galmuri11-Bold.ttf";
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -7,7 +12,13 @@ const GlobalStyle = createGlobalStyle`
         letter-spacing: -0.8px;
         word-break: keep-all;
         overflow-wrap: break-word;
+        cursor: url(${Images.Heart}), url(two.svg) 5 5, pointer;
+        /* cursor: url(${Mouse}) 5 5, url(${Images.Heart}) 5 5, progress; */
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+        /* .cursor-svg {cursor: url(${Mouse}), pointer} */
+        /* .cursor-png {cursor: url(${Mouse}), auto} */
+
 
         /* width */
         ::-webkit-scrollbar {
@@ -82,9 +93,17 @@ const GlobalStyle = createGlobalStyle`
         --tasktype-sample-return-pink-default: #ec06e8;
     }
 
+   
+
     @font-face {
-        font-family: GmarketSansLight;
-        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff') format('woff');
+        font-family:Galmuri_Bold;
+        src:url(${GalmuriBoldttf}) format('truetype') 
+
+    }
+
+    @font-face {
+        font-family:Galmuri;
+        src:url(${Galmurittf}) format('truetype') 
     }
 
     @font-face {
@@ -100,7 +119,7 @@ const GlobalStyle = createGlobalStyle`
 
 
     body {
-        font-family: GmarketSansMedium, sans-serif;
+        font-family: Galmuri, sans-serif;
         margin: 0px;
         box-sizing: border-box;
         min-width: 1280px;
