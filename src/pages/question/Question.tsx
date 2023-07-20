@@ -13,8 +13,6 @@ const Question = () => {
     const [questionTotal, setQuestionTotal] = useState<number>(0);
     const [questionOffset, setQuestionOffset] = useState<number>(0);
 
-    //데이터 페이지네이션 형식으로 구현해서 순차적으로 보여주기
-
     useEffect(() => {
         const data = VM.getSituationAndQuestions("categoryId1");
         setSituationAndQuestions(data);
@@ -37,13 +35,13 @@ const Question = () => {
                                 navigate(
                                     `/question/${situationAndQuestions[situationOffset].questionAndAnswers[situationOffset].question.id}`
                                 )
-                            }
-                        >
+                            }>
                             상황 button
                         </div>
                     </>
                 )}
                 <Routes>
+                    {/* path에 부모 경로까지 적을 필요 없이 파라미터만 적어줌 (:questionId) */}
                     <Route
                         path=":questionId"
                         element={
