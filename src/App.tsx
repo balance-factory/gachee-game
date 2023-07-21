@@ -11,7 +11,7 @@ const App: React.FC = () => {
                 <Route path="/login" element={<Pages.LoginView />} />
                 <Route path="/menual" element={<Pages.MenualView />} />
                 <Route path="/category" element={<Pages.CategoryView />} />
-
+                {/* 하위 페이지가 있을때 부모 Route에 '/*' 을 추가해줌 (exact가 대체된 것)*/}
                 <Route path="/question/*" element={<Pages.QuestionView />} />
 
                 <Route path="/match-list" element={<Pages.MatchListView />} />

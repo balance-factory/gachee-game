@@ -1,4 +1,4 @@
-export const BASE_URL: any = "http://35.73.236.228:8080";
+export const BASE_URL: any = "https://btteur8pu6.execute-api.ap-northeast-2.amazonaws.com/dev";
 
 export class PaginationInfo<T> {
     offset: number;

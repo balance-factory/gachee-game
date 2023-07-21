@@ -21,7 +21,7 @@
         "react-switch": "^7.0.0",
         "react-uuid": "^2.0.0",
         "resolve-url-loader": "^5.0.0",
-        "styled-components": "^5.3.6",
+        "styled-components": "^5.3.11",
         "use-history": "^1.4.1"
     },
     "devDependencies": {
