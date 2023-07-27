@@ -1,7 +1,5 @@
 import { createGlobalStyle } from "styled-components";
 import * as Images from "../../src/assets/image";
-import Mouse from "../assets/icon/mouse_icon.svg";
-
 import Galmurittf from "../assets/font/Galmuri11.ttf";
 import GalmuriBoldttf from "../assets/font/Galmuri11-Bold.ttf";
 
@@ -12,13 +10,29 @@ const GlobalStyle = createGlobalStyle`
         letter-spacing: -0.8px;
         word-break: keep-all;
         overflow-wrap: break-word;
-        cursor: url(${Images.Heart}), url(two.svg) 5 5, pointer;
-        /* cursor: url(${Mouse}) 5 5, url(${Images.Heart}) 5 5, progress; */
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        /* cursor: url(https://t1.daumcdn.net/cfile/tistory/246AC64B56E089B41A), url(two.svg) 5 5, progress; */
+        cursor: url(${Images.Mouse}) , auto;
+ 
+        /* .cursor {
+      width: 10px;
+      height: 10px;
+      border: 2px solid var(--color-texta);
+      border-radius: 50%;
+      position: absolute;
+      z-index: 1000;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      transition: all 0.3s ease;
+      transition-property: background, transform;
+      transform-origin: 100% 100%;
+      backdrop-filter: sepia(20%);
+      background-size: cover;
+  } */
 
-        /* .cursor-svg {cursor: url(${Mouse}), pointer} */
-        /* .cursor-png {cursor: url(${Mouse}), auto} */
-
+        .cursor-png {
+            cursor: url(${Images.Mouse}), auto;
+        }
 
         /* width */
         ::-webkit-scrollbar {
@@ -123,6 +137,7 @@ const GlobalStyle = createGlobalStyle`
         margin: 0px;
         box-sizing: border-box;
         min-width: 1280px;
+    
 
         @media (max-width: 768px) {
             min-width: auto;
