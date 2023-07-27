@@ -1,7 +1,10 @@
-import styled from "styled-components";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import * as VM from "./MatchListModel";
+import styled from "styled-components";
 import BlueStar from "../../assets/icon/blue-star.svg";
 import Return from "../../assets/icon/small-return.svg";
+import Home from "../../assets/icon/home_icon.svg";
 
 const MatchUserList = [
     {
@@ -32,10 +35,26 @@ const MatchUserList = [
 ];
 
 const MatchList: React.FC = () => {
+    const navigate = useNavigate();
+    const [matchUsers, setMatchUsers] = useState<VM.MatchUser[]>([]);
+    const userAId = localStorage.getItem("userId");
+
+    useEffect(() => {
+        setMatchUsers(VM.getMatchUsers);
+    }, []);
+
+    const handleClickMyAnswer = () => {
+        if (userAId) {
+            navigate(`/my-answer`);
+        }
+    };
+
     return (
         <MatchLayout>
             <MatchLayoutWrap>
-                <Header>안녕 난 헤더야</Header>
+                <Header>
+                    <Home />
+                </Header>
                 <InnerTitleLayout>
                     <Title>
                         <BlueStarIcon style={{ top: "-15px", left: "-20px" }}>
@@ -51,10 +70,10 @@ const MatchList: React.FC = () => {
                         <br />
                         링크를 공유해주세요.
                     </SubTitle>
-                    <LinkShareButton>
+                    <LinkShareButton onClick={() => console.log("data")}>
                         <ButtonText style={{ fontFamily: "Galmuri_Bold" }}>링크 공유하기</ButtonText>
                     </LinkShareButton>
-                    <MyAnswerButton>
+                    <MyAnswerButton onClick={handleClickMyAnswer}>
                         <ButtonText style={{ color: "#fff" }}>내 답안 보기</ButtonText>
                     </MyAnswerButton>
                     <RetryTest>
@@ -69,7 +88,7 @@ const MatchList: React.FC = () => {
                             <Count>{`${5}명`}</Count>
                         </MatchUserCount>
                         <MatchUserListLayout>
-                            {MatchUserList.map((user) => {
+                            {matchUsers.map((user) => {
                                 return (
                                     <MatchUserLayout key={user.userId}>
                                         <UserImg />
@@ -101,7 +120,7 @@ const MatchLayout = styled.div`
 
 const MatchLayoutWrap = styled.div`
     width: 740px;
-    height: 100vh;
+    height: auto;
 `;
 
 const Header = styled.div`
@@ -200,8 +219,8 @@ const InnnerMatchListLayout = styled.div`
 const MatchListWrap = styled.div`
     border-top: 1px dashed #fff;
     width: 100%;
-    height: 500px;
     padding-top: 48px;
+    padding-bottom: 48px;
 `;
 
 const MatchUserCount = styled.div`
