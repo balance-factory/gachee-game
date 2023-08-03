@@ -1,13 +1,14 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
-import { REST_API_KEY, REDIRECT_URI } from "../../KakaoOAuth";
+import { REST_API_KEY, REDIRECT_URI } from "KakaoOAuth";
 import * as VM from "./LoginViewModel";
 import uuid from "react-uuid";
-import * as Images from "../../assets/image";
-import * as Icons from "../../assets/icon";
-import Button from "../../assets/icon/main_button_icon.svg";
+import * as Images from "assets/image";
+import Button from "assets/icon/main_button_icon.svg";
+import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Login: React.FC = () => {
+    const navigate = useNavigate();
     const [users, setUsers] = useState<VM.UserType[]>([]);
     const KAKAO_CODE = new URL(location.href).searchParams.get("code");
 
@@ -66,7 +67,8 @@ const Login = () => {
                         <HeartIcon src={Images.Heart} />
                         <TitleIcon src={Images.Title} />
 
-                        <ButtonIconLayout>
+                        <ButtonIconLayout onClick={() => navigate(`/category`)}>
+                            <ButtonText>start</ButtonText>
                             <Button />
                         </ButtonIconLayout>
                     </Border>
@@ -126,6 +128,14 @@ const ButtonIconLayout = styled.div`
     position: absolute;
     bottom: 36px;
     left: calc(50% - 145px);
+`;
+
+const ButtonText = styled.div`
+    position: absolute;
+    bottom: 28px;
+    left: calc(50% - 20px);
+    font-size: 16px;
+    font-weight: 700;
 `;
 
 const Content = styled.div`
