@@ -1,25 +1,66 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
-import Home from "../../assets/icon/home_icon.svg";
+import BackArrow from "../../assets/icon/back_arrow_icon.svg";
+
+const ANSWER = [
+    {
+        id: "dfsdfdfsf",
+        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
+        answers: [
+            { id: "1", text: "위로 10살을 받는다.", select: false },
+            { id: "2", text: "아래로 10살을 받는다.", select: true },
+        ],
+    },
+    {
+        id: "dfsewerdfsf",
+        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
+        answers: [
+            { id: "1", text: "위로 10살을 받는다.", select: false },
+            { id: "2", text: "아래로 10살을 받는다.", select: true },
+        ],
+    },
+    {
+        id: "dfsdfdfsf",
+        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
+        answers: [
+            { id: "1", text: "위로 10살을 받는다.", select: true },
+            { id: "2", text: "아래로 10살을 받는다.", select: false },
+        ],
+    },
+];
 
 const MyAnswerView: React.FC = () => {
     return (
-        <MatchLayout>
-            <MatchLayoutWrap>
+        <MyAnswerLayout>
+            <MyAnswerLayoutWrap>
                 <Header>
-                    <Home />
+                    <BackArrow />
                 </Header>
                 <InnnerMyAnswerViewLayout>
-                    <MyAnswerViewWrap></MyAnswerViewWrap>
+                    {ANSWER.map((answer, index) => {
+                        return (
+                            <ResultLayout key={answer.id}>
+                                <QuestionNumber>{`Q${index + 1}`}</QuestionNumber>
+                                <QuestionText>{answer.question}</QuestionText>
+                                {answer.answers.map((content) => {
+                                    return (
+                                        <AnswerContent selected={content.select} key={content.id}>
+                                            <AnswerText>{content.text}</AnswerText>
+                                        </AnswerContent>
+                                    );
+                                })}
+                            </ResultLayout>
+                        );
+                    })}
                 </InnnerMyAnswerViewLayout>
-            </MatchLayoutWrap>
-        </MatchLayout>
+            </MyAnswerLayoutWrap>
+        </MyAnswerLayout>
     );
 };
 
 export default MyAnswerView;
 
-const MatchLayout = styled.div`
+const MyAnswerLayout = styled.div`
     width: 100%;
     height: auto;
     display: flex;
@@ -28,9 +69,8 @@ const MatchLayout = styled.div`
     background: linear-gradient(#010614, #171a5f);
 `;
 
-const MatchLayoutWrap = styled.div`
+const MyAnswerLayoutWrap = styled.div`
     width: 740px;
-    height: 100vh;
 `;
 
 const Header = styled.div`
@@ -39,150 +79,51 @@ const Header = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 0 20px;
     color: #fff;
-    border-bottom: 1px solid #fff;
-`;
-
-const InnerTitleLayout = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    padding: 30px;
-    margin-bottom: 40px;
-    border: 3px solid #bbcbcb;
-`;
-
-const ResultTitleText = styled.div`
-    font-family: Galmuri_Bold;
-    font-size: 24px;
-    margin-top: 6px;
-`;
-
-const BlueStarIcon = styled.div`
-    position: absolute;
-`;
-
-const TitleText = styled.div`
-    font-size: 16px;
-    color: #fff;
-`;
-
-const SubTitle = styled.div`
-    margin-top: 20px;
-    color: #fff;
-    text-align: center;
-`;
-
-const LinkShareButton = styled.div`
-    margin-top: 48px;
-    width: 244px;
-    height: 48px;
-    background-color: #fff;
-    border-radius: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-
-const MyAnswerButton = styled.div`
-    margin-top: 20px;
-    width: 244px;
-    height: 48px;
-    background-color: transparent;
-    border: 1px solid #fff;
-    border-radius: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-
-const ButtonText = styled.div`
-    color: #000;
-    font-weight: 100;
-    font-size: 16px;
-`;
-
-const RetryTest = styled.div`
-    margin-top: 24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-
-const RetryTestText = styled.div`
-    color: #fff;
-    font-size: 14px;
-    margin-left: 10px;
+    margin-bottom: 62px;
 `;
 
 const InnnerMyAnswerViewLayout = styled.div`
-    margin-top: 48px;
     width: 100%;
-    padding: 0 20px;
+    padding: 0 20px 80px;
 `;
 
-const MyAnswerViewWrap = styled.div`
-    border-top: 1px dashed #fff;
+const ResultLayout = styled.div`
     width: 100%;
-    height: 500px;
-    padding-top: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 `;
 
-const MatchUserCount = styled.div`
-    color: #fff;
-    font-size: 16px;
-`;
-
-const Count = styled.span`
+const QuestionNumber = styled.div`
     font-family: Galmuri_Bold;
     font-size: 16px;
-    margin-left: 8px;
-    letter-spacing: 1.2;
+    margin-bottom: 6px;
+    color: #fff;
 `;
 
-const MatchUserListLayout = styled.div`
-    margin-top: 10px;
+const QuestionText = styled.div`
+    margin-bottom: 20px;
+    font-family: Galmuri_Bold;
+    font-size: 16px;
+    color: #fff;
 `;
 
-const MatchUserLayout = styled.div`
+const AnswerContent = styled.div<{ selected: boolean }>`
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
-    padding: 20px;
     width: 100%;
-    height: 93px;
-    border: 1px solid #fff;
+    padding: 21px 0;
+    border: ${(props) => (props.selected ? "1px solid #fff" : "1px solid #1EB82D")};
     border-radius: 12px;
-    margin: 20px 0;
+    margin-bottom: 16px;
 `;
 
-const UserImg = styled.div`
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background-color: #eee;
-`;
-
-const UserName = styled.div`
-    font-size: 16px;
-    color: #fff;
-    margin-left: 30px;
-`;
-
-const UserScore = styled.div<{ score: number }>`
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+const AnswerText = styled.div`
     font-family: Galmuri_Bold;
-    font-size: 20px;
-    color: ${(props) => (props.score <= 39 ? "#E5505D" : props.score > 39 && props.score < 80 ? "#F2AA18" : "#1eb82d")};
-    margin-left: auto;
-`;
-
-const ScoreText = styled.span`
-    font-size: 16px;
-    color: inherit;
-    margin-left: 4px;
+    font-size: 14px;
+    color: #fff;
 `;
