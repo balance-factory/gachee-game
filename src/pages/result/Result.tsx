@@ -1,6 +1,7 @@
 import styled from "styled-components";
+import React from "react";
 
-const Result = () => {
+const Result: React.FC = () => {
     return <Header>궁합 결과지 페이지</Header>;
 };
 

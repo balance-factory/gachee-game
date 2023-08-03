@@ -4,7 +4,7 @@ import * as VM from "./QuestionViewModel";
 import * as Components from "./components";
 import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
-const Question = () => {
+const Question: React.FC = () => {
     const location = useLocation().search as {};
     const navigate = useNavigate();
     const [situationAndQuestions, setSituationAndQuestions] = useState<VM.SituationAndQuestions[]>();

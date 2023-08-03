@@ -76,10 +76,7 @@ module.exports = {
         maxAssetSize: 512000,
     },
     resolve: {
-        alias: {
-            "@": path.resolve(__dirname, "../src/"),
-            asset: path.resolve(__dirname, "../src/assets/"),
-        },
+        modules: [path.resolve("./node_modules"), path.resolve("./src")],
         extensions: [".js", ".ts", ".jsx", ".tsx", ".css", ".json"],
     },
 };
