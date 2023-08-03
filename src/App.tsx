@@ -15,9 +15,9 @@ const App: React.FC = () => {
                 <Route path="/question/*" element={<Pages.QuestionView />} />
 
                 <Route path="/match-list" element={<Pages.MatchListView />} />
-                <Route path="/answer" element={<Pages.MyAnswerView />} />
+                <Route path="/my-answer" element={<Pages.MyAnswerView />} />
 
-                <Route path="/answer" element={<Pages.AnswerView />} />
+                <Route path="/result" element={<Pages.ResultView />} />
                 {/* 링크 공유주소 "?requester-id=&participater-id=" */}
             </Routes>
         </BrowserRouter>
