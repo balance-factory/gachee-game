@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import React, { useState, useEffect } from "react";
+import React from "react";
 
-const MatchList = () => {
+const MatchList: React.FC = () => {
     return <Header>매칭 리스트 페이지</Header>;
 };
 

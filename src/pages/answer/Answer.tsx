@@ -1,6 +1,7 @@
+import React from "react";
 import styled from "styled-components";
 
-const Answer = () => {
+const Answer: React.FC = () => {
     return <Header>개인 답안 페이지</Header>;
 };
 

@@ -5,11 +5,13 @@ import Question from "assets/icon/question_icon.svg";
 import Button from "assets/icon/main_button_icon.svg";
 import RightArrow from "assets/icon/arrow_right_icon.svg";
 import LeftArrow from "assets/icon/arrow_left_icon.svg";
-
 import { useNavigate } from "react-router-dom";
+import * as VM from "./CategoryViewModel";
 
 const Category: React.FC = () => {
     const navigate = useNavigate();
+
+    useEffect(() => {}, []);
 
     return (
         <CategoryViewLayout>
@@ -74,8 +76,6 @@ const Content = styled.div`
     width: 100%;
     margin-top: 114px;
     text-align: center;
-    /* height: 100%; */
-    /* height: calc(100% - 48px); */
 `;
 
 const ContentText = styled.div`
@@ -87,45 +87,21 @@ const ContentText = styled.div`
 const CoupleLayout = styled.div``;
 
 const MarryLayout = styled.div``;
-const NavIcon = styled.img`
-    width: 92px;
-    height: 28px;
-`;
 
 const CoupleDiscatIcon = styled.img`
     width: 126px;
     height: 126px;
-    /* position: absolute;
-    top: calc(50% - 100px);
-    left: calc(50% - 18px); */
 `;
 
 const MarryDiscatIcon = styled.img`
     width: 126px;
     height: 126px;
-    /* position: absolute;
-    top: calc(50% - 60px);
-    left: calc(50% - 145px); */
     opacity: 0.3; //선택사항으로 풀리면 0.5로 변경
 `;
 
-const ButtonIconLayout = styled.div`
-    /* position: absolute;
-    bottom: 36px;
-    left: calc(50% - 145px); */
-`;
+const ButtonIconLayout = styled.div``;
 
 const ButtonText = styled.div`
-    /* position: absolute;
-    bottom: 28px;
-    left: calc(50% - 20px); */
     font-size: 16px;
     font-weight: 700;
-`;
-
-const Border = styled.div`
-    width: 100%;
-    height: 100%;
-    border: 1px solid #fff;
-    position: relative;
 `;
