@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import BackArrow from "../../assets/icon/back_arrow_icon.svg";
 
 const ANSWER = [
@@ -30,11 +31,19 @@ const ANSWER = [
 ];
 
 const MyAnswerView: React.FC = () => {
+    const navigate = useNavigate();
+
+    const clickBack = () => {
+        navigate("/match-list");
+    };
+
     return (
         <MyAnswerLayout>
             <MyAnswerLayoutWrap>
                 <Header>
-                    <BackArrow />
+                    <IconWrap onClick={clickBack}>
+                        <BackArrow />
+                    </IconWrap>
                 </Header>
                 <InnnerMyAnswerViewLayout>
                     {ANSWER.map((answer, index) => {
@@ -71,6 +80,7 @@ const MyAnswerLayout = styled.div`
 
 const MyAnswerLayoutWrap = styled.div`
     width: 740px;
+    height: 100vh;
 `;
 
 const Header = styled.div`
@@ -127,3 +137,5 @@ const AnswerText = styled.div`
     font-size: 14px;
     color: #fff;
 `;
+
+const IconWrap = styled.div``;
