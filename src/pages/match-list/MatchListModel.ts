@@ -6,13 +6,14 @@ export type MatchUser = {
     matchScore: number;
 };
 
-export const getMatchUsers = (): MatchUser[] => {
-    let user: MatchUser[] = [];
-    fetch(`${BASE_URL}/matched-users`)
-        .then((res) => {
-            return res.json();
-        })
-        .then((res) => console.log("res", res));
-
-    return user;
+export const getMatchUsers = async (): Promise<MatchUser[]> => {
+    try {
+        const response = await fetch(`${BASE_URL}/matched-users`);
+        const data = await response.json();
+        console.log("data", data);
+        return data;
+    } catch (error) {
+        console.error("Error fetching match users:", error);
+        return [];
+    }
 };

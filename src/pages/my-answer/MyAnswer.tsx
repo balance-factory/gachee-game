@@ -71,7 +71,7 @@ export default MyAnswerView;
 
 const MyAnswerLayout = styled.div`
     width: 100%;
-    height: auto;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -40,13 +40,23 @@ const MatchList: React.FC = () => {
     const userAId = localStorage.getItem("userId");
 
     useEffect(() => {
-        setMatchUsers(VM.getMatchUsers);
+        // 컴포넌트가 마운트되었을 때 호출
+        const fetchMatchedUsers = async () => {
+            try {
+                const users = await VM.getMatchUsers();
+                setMatchUsers(users);
+            } catch (error) {
+                console.error("Error fetching matched users:", error);
+            }
+        };
+
+        fetchMatchedUsers();
     }, []);
 
+    console.log("matchUsers", matchUsers);
+
     const handleClickMyAnswer = () => {
-        if (userAId) {
-            navigate(`/my-answer`);
-        }
+        navigate(`/my-answer`);
     };
 
     return (
@@ -85,7 +95,7 @@ const MatchList: React.FC = () => {
                     <MatchListWrap>
                         <MatchUserCount>
                             {`응답한 사람`}
-                            <Count>{`${5}명`}</Count>
+                            <Count>{`${matchUsers.length}명`}</Count>
                         </MatchUserCount>
                         <MatchUserListLayout>
                             {matchUsers.map((user) => {
@@ -111,7 +121,6 @@ export default MatchList;
 
 const MatchLayout = styled.div`
     width: 100%;
-    height: auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -120,7 +129,7 @@ const MatchLayout = styled.div`
 
 const MatchLayoutWrap = styled.div`
     width: 740px;
-    height: auto;
+    height: 100vh;
 `;
 
 const Header = styled.div`
