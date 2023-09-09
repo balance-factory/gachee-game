@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import BackArrow from "../../assets/icon/back_arrow_icon.svg";
 import * as Interface from "../../interface";
 import * as Component from "./components";
-import { useNavigate } from "react-router-dom";
 
 const RESULTS: Interface.SelectResult[] = [
     {
@@ -101,11 +101,18 @@ const RESULTS: Interface.SelectResult[] = [
 
 const MyAnswerView: React.FC = () => {
     const navigate = useNavigate();
+
+    const clickBack = () => {
+        navigate("/match-list");
+    };
+
     return (
         <MyAnswerLayout>
             <MyAnswerLayoutWrap>
                 <Header>
-                    <BackArrow onClick={() => navigate("/")} />
+                    <IconWrap onClick={clickBack}>
+                        <BackArrow />
+                    </IconWrap>
                 </Header>
                 <InnnerMyAnswerViewLayout>
                     {RESULTS.map((result, index) => {
@@ -121,7 +128,7 @@ export default MyAnswerView;
 
 const MyAnswerLayout = styled.div`
     width: 100%;
-    height: auto;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -130,6 +137,7 @@ const MyAnswerLayout = styled.div`
 
 const MyAnswerLayoutWrap = styled.div`
     width: 740px;
+    height: 100vh;
 `;
 
 const Header = styled.div`
@@ -186,3 +194,5 @@ const AnswerText = styled.div`
     font-size: 14px;
     color: #fff;
 `;
+
+const IconWrap = styled.div``;
