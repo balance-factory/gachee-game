@@ -1,11 +1,16 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import BackArrow from "../../assets/icon/back_arrow_icon.svg";
+import * as Interface from "../../interface";
+import * as Component from "./components";
+import { useNavigate } from "react-router-dom";
 
-const ANSWER = [
+const RESULTS: Interface.SelectResult[] = [
     {
         id: "dfsdfdfsf",
         question: "10살 차이나는 이성의 소개팅이 들어왔다.",
+        auserAnswerId: "1",
+        buserAnswerId: "1",
         answers: [
             { id: "1", text: "위로 10살을 받는다.", select: false },
             { id: "2", text: "아래로 10살을 받는다.", select: true },
@@ -14,6 +19,8 @@ const ANSWER = [
     {
         id: "dfsewerdfsf",
         question: "10살 차이나는 이성의 소개팅이 들어왔다.",
+        auserAnswerId: "1",
+        buserAnswerId: "2",
         answers: [
             { id: "1", text: "위로 10살을 받는다.", select: false },
             { id: "2", text: "아래로 10살을 받는다.", select: true },
@@ -22,6 +29,69 @@ const ANSWER = [
     {
         id: "dfsdfdfsf",
         question: "10살 차이나는 이성의 소개팅이 들어왔다.",
+
+        auserAnswerId: "1",
+        buserAnswerId: "1",
+        answers: [
+            { id: "1", text: "위로 10살을 받는다.", select: true },
+            { id: "2", text: "아래로 10살을 받는다.", select: false },
+        ],
+    },
+    {
+        id: "dfsdfdfsf",
+        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
+        auserAnswerId: "1",
+        buserAnswerId: "1",
+        answers: [
+            { id: "1", text: "위로 10살을 받는다.", select: false },
+            { id: "2", text: "아래로 10살을 받는다.", select: true },
+        ],
+    },
+    {
+        id: "dfsewerdfsf",
+        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
+        auserAnswerId: "1",
+        buserAnswerId: "1",
+        answers: [
+            { id: "1", text: "위로 10살을 받는다.", select: false },
+            { id: "2", text: "아래로 10살을 받는다.", select: true },
+        ],
+    },
+    {
+        id: "dfsdfdfsf1",
+        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
+        auserAnswerId: "1",
+        buserAnswerId: "1",
+        answers: [
+            { id: "1", text: "위로 10살을 받는다.", select: true },
+            { id: "2", text: "아래로 10살을 받는다.", select: false },
+        ],
+    },
+    {
+        id: "dfsdfdfsf2",
+        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
+        auserAnswerId: "1",
+        buserAnswerId: "1",
+        answers: [
+            { id: "1", text: "위로 10살을 받는다.", select: false },
+            { id: "2", text: "아래로 10살을 받는다.", select: true },
+        ],
+    },
+    {
+        id: "dfsewerdfsf3",
+        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
+        auserAnswerId: "1",
+        buserAnswerId: "1",
+        answers: [
+            { id: "1", text: "위로 10살을 받는다.", select: false },
+            { id: "2", text: "아래로 10살을 받는다.", select: true },
+        ],
+    },
+    {
+        id: "dfsdfdfsf4",
+        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
+        auserAnswerId: "1",
+        buserAnswerId: "1",
         answers: [
             { id: "1", text: "위로 10살을 받는다.", select: true },
             { id: "2", text: "아래로 10살을 받는다.", select: false },
@@ -30,27 +100,16 @@ const ANSWER = [
 ];
 
 const MyAnswerView: React.FC = () => {
+    const navigate = useNavigate();
     return (
         <MyAnswerLayout>
             <MyAnswerLayoutWrap>
                 <Header>
-                    <BackArrow />
+                    <BackArrow onClick={() => navigate("/")} />
                 </Header>
                 <InnnerMyAnswerViewLayout>
-                    {ANSWER.map((answer, index) => {
-                        return (
-                            <ResultLayout key={answer.id}>
-                                <QuestionNumber>{`Q${index + 1}`}</QuestionNumber>
-                                <QuestionText>{answer.question}</QuestionText>
-                                {answer.answers.map((content) => {
-                                    return (
-                                        <AnswerContent selected={content.select} key={content.id}>
-                                            <AnswerText>{content.text}</AnswerText>
-                                        </AnswerContent>
-                                    );
-                                })}
-                            </ResultLayout>
-                        );
+                    {RESULTS.map((result, index) => {
+                        return <Component.SelectResult result={result} index={index} key={result.id} />;
                     })}
                 </InnnerMyAnswerViewLayout>
             </MyAnswerLayoutWrap>
