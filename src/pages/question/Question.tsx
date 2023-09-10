@@ -5,61 +5,79 @@ import * as Components from "./components";
 import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
 const Question: React.FC = () => {
-    const location = useLocation().search as {};
-    const navigate = useNavigate();
-    const [situationAndQuestions, setSituationAndQuestions] = useState<VM.SituationAndQuestions[]>();
-    const [situationTotal, setSituationTotal] = useState<number>(0);
-    const [situationOffset, setSituationOffset] = useState<number>(0);
-    const [questionTotal, setQuestionTotal] = useState<number>(0);
-    const [questionOffset, setQuestionOffset] = useState<number>(0);
+  const pathname = useLocation().pathname;
+  const navigate = useNavigate();
+  const [situationAndQuestion, setSituationAndQuestion] =
+    useState<VM.SituationAndQuestion[]>();
+  const [situationTotal, setSituationTotal] = useState<number>(0);
+  const [situationOffset, setSituationOffset] = useState<number>(0);
+  const categoryId = pathname.split("/")[2];
 
-    useEffect(() => {
-        const data = VM.getSituationAndQuestions("categoryId1");
-        setSituationAndQuestions(data);
-    }, []);
+  const fetchSituationAndQuestion = async (categoryId: string) => {
+    try {
+      const data = await VM.getSituationAndQuestion(categoryId);
 
-    useEffect(() => {
-        situationAndQuestions && setSituationTotal(situationAndQuestions.length);
-        situationAndQuestions && setQuestionTotal(situationAndQuestions[situationOffset].questionAndAnswers.length);
-    }, [situationAndQuestions]);
+      setSituationAndQuestion(data);
+      setSituationTotal(data.length);
+    } catch (error) {
+      console.error("Error fetching matched users:", error);
+    }
+  };
 
-    return (
-        <>
-            <Header>
-                {situationAndQuestions && (
-                    <>
-                        <Title> situation : {situationAndQuestions[situationOffset].text}</Title>
+  const onClickNextSituation = (updateOffset: number) => {
+    if (situationTotal < updateOffset + 1) {
+      navigate(`/result`);
+    } else {
+      setSituationOffset(updateOffset);
+      navigate(
+        `/category/${categoryId}/question/${
+          situationAndQuestion && situationAndQuestion[updateOffset].question_id
+        }`
+      );
+    }
+  };
 
-                        <div
-                            onClick={() =>
-                                navigate(
-                                    `/question/${situationAndQuestions[situationOffset].questionAndAnswers[situationOffset].question.id}`
-                                )
-                            }>
-                            상황 button
-                        </div>
-                    </>
-                )}
-                <Routes>
-                    {/* path에 부모 경로까지 적을 필요 없이 파라미터만 적어줌 (:questionId) */}
-                    <Route
-                        path=":questionId"
-                        element={
-                            <Components.QuestionAndAnswer
-                                situationAndQuestions={situationAndQuestions}
-                                situationOffset={situationOffset}
-                                questionOffset={questionOffset}
-                                situationTotal={situationTotal}
-                                questionTotal={questionTotal}
-                                updataQuestionOffset={setQuestionOffset}
-                                updataSituationOffset={setSituationOffset}
-                            />
-                        }
-                    />
-                </Routes>
-            </Header>
-        </>
-    );
+  useEffect(() => {
+    fetchSituationAndQuestion(categoryId);
+  }, []);
+
+  return (
+    <>
+      <Header>
+        {situationAndQuestion && (
+          <>
+            <Title>
+              situation : {situationAndQuestion[situationOffset].situation}
+            </Title>
+
+            <div
+              onClick={() =>
+                navigate(
+                  `/category/${categoryId}/question/${situationAndQuestion[situationOffset].question_id}`
+                )
+              }
+            >
+              상황 button
+            </div>
+          </>
+        )}
+        <Routes>
+          {/* path에 부모 경로까지 적을 필요 없이 파라미터만 적어줌 (:questionId) */}
+          <Route
+            path=":questionId"
+            element={
+              <Components.QuestionAndAnswer
+                categoryId={categoryId}
+                situationAndQuestion={situationAndQuestion}
+                situationOffset={situationOffset}
+                clickGoNextSituation={onClickNextSituation}
+              />
+            }
+          />
+        </Routes>
+      </Header>
+    </>
+  );
 };
 
 export default Question;
