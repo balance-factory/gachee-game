@@ -143,6 +143,7 @@ export default MyAnswerView;
 const MyAnswerLayout = styled.div`
     width: 100%;
     height: 100vh;
+    overflow: scroll;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -151,7 +152,8 @@ const MyAnswerLayout = styled.div`
 
 const MyAnswerLayoutWrap = styled.div`
     width: 740px;
-    height: 100vh;
+    height: auto;
+    padding-bottom: 100px;
 `;
 
 const Header = styled.div`
