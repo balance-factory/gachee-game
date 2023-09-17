@@ -128,8 +128,8 @@ const MatchLayout = styled.div`
 `;
 
 const MatchLayoutWrap = styled.div`
-    width: 740px;
-    height: 100vh;
+  width: 740px;
+  height: 100%;
 `;
 
 const Header = styled.div`

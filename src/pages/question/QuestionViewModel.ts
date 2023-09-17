@@ -60,7 +60,7 @@ export const getSituationAndQuestion = async (
 
 export const postUserAnswers = async (answers: Answer[], userId: string) => {
   try {
-    const response = await fetch(`${BASE_URL}/save-user-answers/${userId}`, {
+    const response = await fetch(`${BASE_URL}/user-answers/${userId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

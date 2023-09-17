@@ -5,6 +5,7 @@ import GalmuriBoldttf from "../assets/font/Galmuri11-Bold.ttf";
 
 const GlobalStyle = createGlobalStyle`
     * {
+     
         box-sizing: border-box;
         outline: none;
         font-family:Galmuri;
@@ -108,6 +109,7 @@ const GlobalStyle = createGlobalStyle`
         --tasktype-sample-return-pink-default: #ec06e8;
     }
 
+  
    
 
     @font-face {
@@ -139,9 +141,8 @@ const GlobalStyle = createGlobalStyle`
         font-family: Galmuri, sans-serif;
         margin: 0px;
         box-sizing: border-box;
+        height : 100vh;
         min-width: 1280px;
-    
-
         @media (max-width: 768px) {
             min-width: auto;
         }
