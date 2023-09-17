@@ -4,9 +4,10 @@ import * as VM from "./QuestionViewModel";
 import * as Components from "./components";
 import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Pause from "assets/icon/pause_icon.svg";
-
-
-
+import ReplayIcon from "assets/icon/re_play_Icon.svg";
+import StopIcon from "assets/icon/stop.svg";
+import PlayIcon from "assets/icon/play.svg";
+import * as Images from "assets/image";
 
 const Question: React.FC = () => {
   const pathname = useLocation().pathname;
@@ -14,6 +15,8 @@ const Question: React.FC = () => {
   const categoryId = splitUrl[2];
   const questionId = splitUrl[4];
   const lastPath = splitUrl[splitUrl.length - 1] === "answer" ? false : true;
+  const [isPause, setIsPause] = useState<boolean>(false);
+
   const navigate = useNavigate();
   const [situationAndQuestion, setSituationAndQuestion] =
     useState<VM.SituationAndQuestion[]>();
@@ -85,33 +88,58 @@ const Question: React.FC = () => {
 
   return (
     <QuestionViewLayout>
+      {isPause && (
+        <PauseLayout>
+          <PauseContent>
+            <PauseButtonColor
+              onClick={() => {
+                window.location.replace(`/category/${categoryId}/question`);
+              }}
+            >
+              <ReplayIcon />
+              다시하기
+            </PauseButtonColor>
+            <PauseButtonColor onClick={() => navigate("/")}>
+              <StopIcon />
+              그만하기
+            </PauseButtonColor>
+            <PauseButtonDefault onClick={() => setIsPause(false)}>
+              <PlayIcon />
+              계속하기
+            </PauseButtonDefault>
+          </PauseContent>
+        </PauseLayout>
+      )}
       <ContentLayout>
-        <Pause />
-        {lastPath && situationAndQuestion && (
-          <>
-            <SituationImage
-              src={situationAndQuestion[situationOffset].situation_image}
-            />
+        <Pause onClick={() => setIsPause(true)} />
+        <>
+          {lastPath && situationAndQuestion && (
+            <>
+              <SituationImage
+                src={situationAndQuestion[situationOffset].situation_image}
+              />
 
-            <QuestionLayout>
-              <QuestionContent>
-                <QuestionText>
-                  {situationAndQuestion[situationOffset].situation}
-                </QuestionText>
+              <QuestionLayout>
+                <QuestionContent>
+                  <QuestionText>
+                    {situationAndQuestion[situationOffset].situation}
+                  </QuestionText>
 
-                <div
-                  onClick={() =>
-                    navigate(
-                      `/category/${categoryId}/question/${situationAndQuestion[situationOffset].question_id}/answer`
-                    )
-                  }
-                >
-                  상황 button
-                </div>
-              </QuestionContent>
-            </QuestionLayout>
-          </>
-        )}
+                  <NextQuestionButton
+                    onClick={() =>
+                      navigate(
+                        `/category/${categoryId}/question/${situationAndQuestion[situationOffset].question_id}/answer`
+                      )
+                    }
+                  >
+                    <BottomArrow src={Images.BottomArrow} />
+                  </NextQuestionButton>
+                </QuestionContent>
+              </QuestionLayout>
+            </>
+          )}
+        </>
+
         <Routes>
           {/* path에 부모 경로까지 적을 필요 없이 파라미터만 적어줌 (:questionId) */}
           <Route
@@ -135,12 +163,14 @@ export default Question;
 
 const QuestionViewLayout = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 `;
 const ContentLayout = styled.div`
+  position: absolute;
   width: 740px;
   height: 100%;
   background: linear-gradient(180deg, #000513 0%, #171a5f 100%);
@@ -148,6 +178,54 @@ const ContentLayout = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+`;
+const PauseLayout = styled.div`
+  z-index: 1;
+  height: 100%;
+  position: absolute;
+  width: 740px;
+  background: rgba(3, 3, 3, 0.76);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 37px;
+`;
+
+const PauseContent = styled.div`
+  width: 100%;
+  padding: 34px 32px 35px 24px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 14px;
+  border-radius: 15px;
+  background: #fff;
+  color: var(--white, #fff);
+  font-size: 16px;
+  font-weight: 700;
+`;
+
+const PauseButtonColor = styled.div`
+  display: flex;
+  height: 48px;
+  align-items: center;
+  border-radius: 30px;
+  background: #f56571;
+  justify-content: center;
+
+  box-shadow: 0px 5px 0px 1px #883037;
+  margin-bottom: 19px;
+`;
+
+const PauseButtonDefault = styled.div`
+  display: flex;
+  height: 48px;
+  align-items: center;
+  border-radius: 30px;
+  background: #171a5f;
+  justify-content: center;
+
+  box-shadow: 0px 5px 0px 1px #000;
 `;
 
 const SituationImage = styled.img``;
@@ -160,6 +238,9 @@ const QuestionLayout = styled.div`
 
 const QuestionContent = styled.div`
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   padding: 24px 20px 13px 20px;
   border-bottom: 11px solid #c7dde7;
 `;
@@ -170,4 +251,13 @@ const QuestionText = styled.div`
   font-size: 14px;
   line-height: 160%;
   letter-spacing: -0.07px;
+`;
+
+const NextQuestionButton = styled.div`
+  text-align: end;
+`;
+
+const BottomArrow = styled.img`
+  width: 15px;
+  height: 20px;
 `;
