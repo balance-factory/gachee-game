@@ -8,10 +8,9 @@ export type MatchUser = {
 
 export const getMatchUsers = async (): Promise<MatchUser[]> => {
     try {
-        const response = await fetch(`${BASE_URL}/matched-users`);
-        const data = await response.json();
-        console.log("data", data);
-        return data;
+      const response = await fetch(`${BASE_URL}/matched-users`);
+      const data = await response.json();
+      return data;
     } catch (error) {
         console.error("Error fetching match users:", error);
         return [];

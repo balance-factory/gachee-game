@@ -9,99 +9,164 @@ import { useNavigate } from "react-router-dom";
 import * as VM from "./CategoryViewModel";
 
 const Category: React.FC = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [categoryList, setCategoryList] = useState<VM.Category[]>([]);
+  const [categoryId, setCategoryId] = useState<number>(1);
 
-    useEffect(() => {}, []);
+  const fetchCategories = async () => {
+    try {
+      const Categories = await VM.getCategories();
 
-    return (
-        <CategoryViewLayout>
-            <ContentLayout>
-                <Header>
-                    <Question />
-                    <HeaderText> 게임 메뉴얼</HeaderText>
-                </Header>
+      setCategoryList(Categories);
+      setCategoryId(Categories[0].category_id);
+    } catch (error) {
+      console.error("Error fetching matched users:", error);
+    }
+  };
 
-                <Content>
-                    <ContentText>원하는 테스트를 선택해주세요.</ContentText>
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
-                    <CoupleLayout>
-                        <RightArrow /> <CoupleDiscatIcon src={Images.CoupleDiscat} />
-                        <LeftArrow />
-                    </CoupleLayout>
-                    <MarryLayout>
-                        <MarryDiscatIcon src={Images.MarryDiscat} />
-                    </MarryLayout>
+  return (
+    <CategoryViewLayout>
+      <ContentLayout>
+        <Header>
+          <Question />
+          <HeaderText onClick={() => navigate("/menual")}>
+            게임 메뉴얼
+          </HeaderText>
+        </Header>
 
-                    <ButtonIconLayout onClick={() => navigate(`/category`)}>
-                        <ButtonText>OK</ButtonText>
-                        <Button />
-                    </ButtonIconLayout>
-                </Content>
-            </ContentLayout>
-        </CategoryViewLayout>
-    );
+        <Content>
+          <ContentText>원하는 테스트를 선택해주세요.</ContentText>
+
+          {categoryList.length > 0 &&
+            categoryList.map((c) => (
+              <CoupleLayout
+                key={c.category_id.toString()}
+                categoryId={c.category_id}
+                onClick={() => setCategoryId(c.category_id)}
+              >
+                {c.category_id === 2 && (
+                  <ComingSoonText>Coming Soon</ComingSoonText>
+                )}
+                {c.category_id === categoryId && <RightArrow />}
+                <DiscatIcon
+                  categoryId={c.category_id}
+                  isOpacity={c.category_id === categoryId}
+                />
+                {c.category_id === categoryId && <LeftArrow />}
+              </CoupleLayout>
+            ))}
+
+          <ButtonIconLayout
+            onClick={() => navigate(`/category/${categoryId}/question`)}
+          >
+            <ButtonText>OK</ButtonText>
+            <Button />
+          </ButtonIconLayout>
+        </Content>
+      </ContentLayout>
+    </CategoryViewLayout>
+  );
 };
 
 export default Category;
 
 const CategoryViewLayout = styled.div`
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ContentLayout = styled.div`
-    width: 740px;
-    height: 100%;
-    background: #171a5f;
-    padding: 21px 20px;
+  width: 740px;
+  height: 100%;
+  background: #171a5f;
+  padding: 21px 20px;
 `;
 
 const Header = styled.div`
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: end;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
 `;
 const HeaderText = styled.div`
-    color: #fff;
-    font-size: 12px;
-    font-weight: 700;
-    margin-left: 8px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  margin-left: 8px;
 `;
 
 const Content = styled.div`
-    width: 100%;
-    margin-top: 114px;
-    text-align: center;
+  width: 100%;
+  margin-top: 114px;
+  text-align: center;
 `;
 
 const ContentText = styled.div`
-    color: #fff;
-    font-size: 16px;
-    font-weight: 700;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
 `;
 
-const CoupleLayout = styled.div``;
+const CoupleLayout = styled.div<{ categoryId: number }>`
+  position: ${({ categoryId }) => {
+    switch (categoryId) {
+      case 1:
+        return "relative";
+      case 2:
+        return "inherit";
 
-const MarryLayout = styled.div``;
-
-const CoupleDiscatIcon = styled.img`
-    width: 126px;
-    height: 126px;
+      default:
+        return "inherit";
+    }
+  }};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 64px;
 `;
 
-const MarryDiscatIcon = styled.img`
-    width: 126px;
-    height: 126px;
-    opacity: 0.3; //선택사항으로 풀리면 0.5로 변경
+const ComingSoonText = styled.div`
+  z-index: 1;
+  position: absolute;
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
 `;
 
-const ButtonIconLayout = styled.div``;
+const DiscatIcon = styled.div<{ categoryId: number; isOpacity: boolean }>`
+  width: 126px;
+  height: 126px;
+  margin: 0 20px;
+  opacity: ${({ isOpacity }) => (isOpacity ? "1" : "0.3")};
+  background-size: contain;
+  background-image: ${({ categoryId }) => {
+    switch (categoryId) {
+      case 1:
+        return `url(${Images.CoupleDiscat})`;
+      case 2:
+        return `url(${Images.MarryDiscat})`;
+      default:
+        return `url(${Images.CoupleDiscat})`;
+    }
+  }};
+`;
+
+const ButtonIconLayout = styled.div`
+  position: relative;
+  margin-top: 124px;
+`;
 
 const ButtonText = styled.div`
-    font-size: 16px;
-    font-weight: 700;
+  font-size: 16px;
+  font-weight: 700;
+  position: absolute;
+  right: 50%;
+  top: calc(50% - 15px);
 `;

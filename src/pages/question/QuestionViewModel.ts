@@ -1,166 +1,79 @@
-export const BASE_URL: any = "https://btteur8pu6.execute-api.ap-northeast-2.amazonaws.com/dev";
+export const BASE_URL: any =
+  "https://btteur8pu6.execute-api.ap-northeast-2.amazonaws.com/dev";
+
 
 export class PaginationInfo<T> {
-    offset: number;
-    total: number;
+  offset: number;
+  total: number;
 
-    constructor(size?: number) {
-        this.total = 0;
-        this.offset = 0;
+  constructor(size?: number) {
+    this.total = 0;
+    this.offset = 0;
+  }
+
+  next = () => {
+    if (this.offset + 1 < this.total) {
+      this.offset = this.offset + 1;
     }
+  };
 
-    next = () => {
-        if (this.offset + 1 < this.total) {
-            this.offset = this.offset + 1;
-        }
-    };
+  prev = () => {
+    if (this.offset > 0) {
+      this.offset = this.offset - 1;
+    }
+  };
 
-    prev = () => {
-        if (this.offset > 0) {
-            this.offset = this.offset - 1;
-        }
-    };
-
-    // startPage = () => {
-    //     if (this.offset > 0) {
-    //         this.offset = 0;
-    //     }
-    // };
-
-    // endPage = () => {
-    //     if (this.offset + 1 < this.totalPage) {
-    //         this.offset = this.totalPage - 1;
-    //     }
-    // };
-
-    setOffset = (offset: number) => {
-        this.offset = offset;
-    };
+  setOffset = (offset: number) => {
+    this.offset = offset;
+  };
 }
 
-export type SituationAndQuestions = {
-    id: string; //상황 id
-    text: string; //상황 텍스트
-    questionAndAnswers: QuestionAndAnswer[];
-};
-
-export type QuestionAndAnswer = {
-    question: Question;
-    answers: Answer[];
-};
-
-export type Question = {
-    id: string; //문제 아이디
-    title: string; //문제 타이틀
-    subtitle: string; //문제 서브타이틀
+export type SituationAndQuestion = {
+  question_id: number; // 문제 id
+  situation: string; // 상황 설명
+  situation_image: string; //상황 이미지
+  title_image: string; // 문제 이미지
+  title: string; // 문제 설명
+  sub_title: string; // 추가 설명
+  categoryId: number; //문제의 카테고리 id
+  answers: [{ answer_id: number; answer_content: string; question_id: string }];
 };
 
 export type Answer = {
-    id: string;
-    text: string;
-    ordinal: number; //답안지 랜덤하게 보여주기 위해서
+  question_id: number;
+  answer_id: number;
 };
 
-const mockData = [
-    {
-        id: "situation1", //상황 id
-        text: "상황1일 상황", //상황 텍스트
-        questionAndAnswers: [
-            {
-                question: {
-                    id: "question1-1-ID", //문제 아이디
-                    title: "situation1- 문제1일번", //문제 타이틀
-                    subtitle: "상황1 문제 1번 서브", //문제 서브타이틀
-                },
-                answers: [
-                    {
-                        id: "answer1-1",
-                        text: "문제1 정답1번",
-                        ordinal: 1,
-                    },
-                    {
-                        id: "answer1-2",
-                        text: "문제1 정답2번",
-                        ordinal: 2,
-                    },
-                ],
-            },
-            {
-                question: {
-                    id: "question1-2-ID", //문제 아이디
-                    title: "situation1-문제2일번", //문제 타이틀
-                    subtitle: "상황1 문제 2번 서브", //문제 서브타이틀
-                },
-                answers: [
-                    {
-                        id: "answer2-1",
-                        text: "상황1 문제2-정답1번",
-                        ordinal: 1,
-                    },
-                    {
-                        id: "answer2-1",
-                        text: "상황1 문제2 정답2번",
-                        ordinal: 1,
-                    },
-                ],
-            },
-        ],
-    },
+export const getSituationAndQuestion = async (
+  categoryId: string
+): Promise<SituationAndQuestion[]> => {
+  try {
+    const response = await fetch(`${BASE_URL}/questions-answers/${categoryId}`);
 
-    {
-        id: "situation2", //상황 id
-        text: "상황2일 상황", //상황 텍스트
-        questionAndAnswers: [
-            {
-                question: {
-                    id: "question2-1-ID", //문제 아이디
-                    title: "situation2- 문제1일번", //문제 타이틀
-                    subtitle: "상황2 문제 1번 서브", //문제 서브타이틀
-                },
-                answers: [
-                    {
-                        id: "answer3-1",
-                        text: "상황2  문제1 정답1번",
-                        ordinal: 1,
-                    },
-                    {
-                        id: "answer3-2",
-                        text: "상황2 문제1 정답2번",
-                        ordinal: 2,
-                    },
-                ],
-            },
-            {
-                question: {
-                    id: "question2-2-ID", //문제 아이디
-                    title: "situation2-문제2일번", //문제 타이틀
-                    subtitle: "상황2 문제 2번 서브", //문제 서브타이틀
-                },
-                answers: [
-                    {
-                        id: "answer4-1",
-                        text: "상황2 문제2-정답1번",
-                        ordinal: 1,
-                    },
-                    {
-                        id: "answer4-2",
-                        text: "상황2 문제2 정답2번",
-                        ordinal: 1,
-                    },
-                ],
-            },
-        ],
-    },
-];
-
-export const getSituationAndQuestions = (categoryId: string): SituationAndQuestions[] => {
-    let data: SituationAndQuestions[] = [];
-    // fetch(`${BASE_URL}/questions/${categoryId}`)
-    //     .then((res) => {
-    //         return res.json();
-    //     })
-    //     .then((res) => console.log("res", res));
-
-    data = mockData;
+    const data = await response.json();
     return data;
+  } catch (error) {
+    console.log(`${error} 에러`);
+    return [];
+  }
 };
+
+export const postUserAnswers = async (answers: Answer[], userId: string) => {
+  try {
+    const response = await fetch(`${BASE_URL}/save-user-answers/${userId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ answers: answers }),
+    });
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    return console.log(`${error} 에러`);
+  }
+};
+
+

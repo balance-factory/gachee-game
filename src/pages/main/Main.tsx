@@ -1,77 +1,44 @@
 import styled from "styled-components";
 import React, { useState } from "react";
-import uuid from "react-uuid";
-import * as VM from "./MainViewModel";
+import * as Modal from "./modal";
 import * as Images from "assets/image";
 import Button from "assets/icon/main_button_icon.svg";
-import { useNavigate } from "react-router-dom";
 
 const Main: React.FC = () => {
-    const navigate = useNavigate();
-    const [users, setUsers] = useState<VM.UserType[]>(VM.getUsers);
-    const KAKAO_TOKEN = document.cookie.match(
-        new RegExp("(?:^|; )" + "kakao_token".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)")
-    );
+  const [isModal, setModal] = useState<boolean>(false);
+  return (
+    <MainViewLayout>
+      <ContentLayout>
+        <Header>
+          <NavIcon src={Images.NavBar} />
+        </Header>
 
-    const getKakaoToken = () => {
-        if (KAKAO_TOKEN) {
-            const TOKEN = decodeURIComponent(KAKAO_TOKEN[1]);
+        <Content>
+          <Border>
+            <HeartIcon src={Images.Heart} />
+            <TitleIcon src={Images.Title} />
 
-            fetch(`https://kapi.kakao.com/v2/user/me`, {
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${TOKEN}`,
-                    "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
-                },
-            })
-                .then((res) => res.json())
-                .then((kakaoUser) => {
-                    const userInfo: VM.UserType = {
-                        gender: kakaoUser.kakao_account.gender,
-                        name: kakaoUser.kakao_account.profile.nickname,
-                        email: kakaoUser.kakao_account.email,
-                        userId: uuid(),
-                    };
-                    VM.addUser(userInfo);
-                    navigate(`/category`);
-                });
-        } else {
-            navigate(`/login`);
-        }
-    };
-
-    return (
-        <MainViewLayout>
-            <ContentLayout>
-                <Header>
-                    <NavIcon src={Images.NavBar} />
-                </Header>
-
-                <Content>
-                    <Border>
-                        <HeartIcon src={Images.Heart} />
-                        <TitleIcon src={Images.Title} />
-
-                        <ButtonIconLayout onClick={() => getKakaoToken()}>
-                            {/* 클릭시 로그인 팝업띄우기 */}
-                            <ButtonText>start</ButtonText>
-                            <Button />
-                        </ButtonIconLayout>
-                    </Border>
-                </Content>
-            </ContentLayout>
-        </MainViewLayout>
-    );
+            <ButtonIconLayout onClick={() => setModal(true)}>
+              <ButtonText>start</ButtonText>
+              <Button />
+            </ButtonIconLayout>
+          </Border>
+        </Content>
+      </ContentLayout>
+      {isModal && <Modal.LoginModal cancelButton={() => setModal(false)} />}
+    </MainViewLayout>
+  );
 };
 
 export default Main;
 
 const MainViewLayout = styled.div`
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 `;
 
 const ContentLayout = styled.div`
