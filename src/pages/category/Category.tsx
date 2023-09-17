@@ -11,14 +11,14 @@ import * as VM from "./CategoryViewModel";
 const Category: React.FC = () => {
   const navigate = useNavigate();
   const [categoryList, setCategoryList] = useState<VM.Category[]>([]);
-  const [isCategoryId, setIsCategoryId] = useState<number>(1);
+  const [categoryId, setCategoryId] = useState<number>(1);
 
   const fetchCategories = async () => {
     try {
       const Categories = await VM.getCategories();
 
       setCategoryList(Categories);
-      setIsCategoryId(Categories[0].category_id);
+      setCategoryId(Categories[0].category_id);
     } catch (error) {
       console.error("Error fetching matched users:", error);
     }
@@ -46,22 +46,22 @@ const Category: React.FC = () => {
               <CoupleLayout
                 key={c.category_id.toString()}
                 categoryId={c.category_id}
-                onClick={() => setIsCategoryId(c.category_id)}
+                onClick={() => setCategoryId(c.category_id)}
               >
                 {c.category_id === 2 && (
                   <ComingSoonText>Coming Soon</ComingSoonText>
                 )}
-                {c.category_id === isCategoryId && <RightArrow />}
+                {c.category_id === categoryId && <RightArrow />}
                 <DiscatIcon
                   categoryId={c.category_id}
-                  isOpacity={c.category_id === isCategoryId}
+                  isOpacity={c.category_id === categoryId}
                 />
-                {c.category_id === isCategoryId && <LeftArrow />}
+                {c.category_id === categoryId && <LeftArrow />}
               </CoupleLayout>
             ))}
 
           <ButtonIconLayout
-            onClick={() => navigate(`/category/${isCategoryId}/question`)}
+            onClick={() => navigate(`/category/${categoryId}/question`)}
           >
             <ButtonText>OK</ButtonText>
             <Button />

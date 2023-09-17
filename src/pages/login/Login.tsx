@@ -9,10 +9,13 @@ const Login: React.FC = () => {
   const goToLogin = async (KAKAO_CODE: string) => {
     try {
       const userInfo = await VM.getKakaoToken(KAKAO_CODE);
+
+    
+
       if (userInfo.gachee_id) {
+        window.sessionStorage.setItem("ID", userInfo.gachee_id);
         navigate(`/category`);
       } else {
-        console.log("error");
         navigate(`/`);
       }
     } catch (error) {

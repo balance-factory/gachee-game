@@ -19,12 +19,14 @@ export type KakaoUserInfo = {
   name: string;
   email: string;
   userId: string;
+  profile_image: string | null;
 };
 
 export type UserInfo = {
   profile_image: string | null;
   gachee_id: string;
   name: string;
+  email: string;
   isFirstTime: boolean;
 };
 
@@ -59,12 +61,14 @@ export const getKakaoUserInfo = async (
     });
 
     const data = await response.json();
+
     const userInfo: KakaoUserInfo = {
       social: "kakao",
       userId: uuid(),
       email: data.kakao_account.email,
       gender: data.kakao_account.gender,
       name: data.kakao_account.profile.nickname,
+      profile_image: data.kakao_account.profile.profile_image,
     };
     return getUserInfo(userInfo);
   } catch (error) {
@@ -86,11 +90,19 @@ export const getUserInfo = async (user: KakaoUserInfo): Promise<UserInfo> => {
         email: user.email,
         gender: user.gender,
         name: user.name,
+        profile_image: user.profile_image ?? "",
       }),
     });
 
     const data = await response.json();
-    return data;
+    const userInfo: UserInfo = {
+      profile_image: data.user.profile_image,
+      gachee_id: data.user.gacheeId,
+      name: data.user.name,
+      email: data.user.email,
+      isFirstTime: data.user.isFirstTime === 1 ? true : false,
+    };
+    return userInfo;
   } catch (error) {
     console.log(`${error} 에러`);
     const userInfo = {} as UserInfo;

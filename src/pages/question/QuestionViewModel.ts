@@ -1,6 +1,7 @@
 export const BASE_URL: any =
   "https://btteur8pu6.execute-api.ap-northeast-2.amazonaws.com/dev";
 
+
 export class PaginationInfo<T> {
   offset: number;
   total: number;
@@ -26,29 +27,6 @@ export class PaginationInfo<T> {
     this.offset = offset;
   };
 }
-
-// export type SituationAndQuestions = {
-//     id: string; //상황 id
-//     text: string; //상황 텍스트
-//     questionAndAnswers: QuestionAndAnswer[];
-// };
-
-// export type QuestionAndAnswer = {
-//     question: Question;
-//     answers: Answer[];
-// };
-
-// export type Question = {
-//     id: string; //문제 아이디
-//     title: string; //문제 타이틀
-//     subtitle: string; //문제 서브타이틀
-// };
-
-// export type Answer = {
-//     id: string;
-//     text: string;
-//     ordinal: number; //답안지 랜덤하게 보여주기 위해서
-// };
 
 export type SituationAndQuestion = {
   question_id: number; // 문제 id
@@ -80,22 +58,22 @@ export const getSituationAndQuestion = async (
   }
 };
 
-export const getUserInfo = async (answer: Answer[], userId: string) => {
+export const postUserAnswers = async (answers: Answer[], userId: string) => {
   try {
     const response = await fetch(`${BASE_URL}/save-user-answers/${userId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(answer),
+      body: JSON.stringify({ answers: answers }),
     });
 
     const data = await response.json();
 
-    return console.log("완료");
+    return data;
   } catch (error) {
-    console.log(`${error} 에러`);
-
     return console.log(`${error} 에러`);
   }
 };
+
+

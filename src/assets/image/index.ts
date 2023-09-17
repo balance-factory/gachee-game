@@ -7,5 +7,20 @@ import CoupleDiscat from "./couple_discat.png";
 import MarryDiscat from "./marry_discat.png";
 import Man from "./man.png";
 import Error from "./error.png";
+import ClickArrow from "./click_arrow.png";
+import Enter from "./enter.png";
 
-export { Mouse, MainBackground, Title, Heart, NavBar, CoupleDiscat, MarryDiscat, Error, Man };
+
+export {
+  Mouse,
+  MainBackground,
+  Title,
+  Heart,
+  NavBar,
+  CoupleDiscat,
+  MarryDiscat,
+  Error,
+  Man,
+  ClickArrow,
+  Enter,
+};
