@@ -1,109 +1,31 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import BackArrow from "../../assets/icon/back_arrow_icon.svg";
 import * as Interface from "../../interface";
 import * as Component from "./components";
 import * as Util from "../../utils";
+import * as VM from "./ResultViewModel";
 
-const RESULTS: Interface.SelectResult[] = [
-    {
-        id: "dfsdfdfsf",
-        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
-        auserAnswerId: "1",
-        buserAnswerId: "1",
-        answers: [
-            { id: "1", text: "위로 10살을 받는다.", select: false },
-            { id: "2", text: "아래로 10살을 받는다.", select: true },
-        ],
-    },
-    {
-        id: "dfsewerdfsf",
-        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
-        auserAnswerId: "1",
-        buserAnswerId: "2",
-        answers: [
-            { id: "1", text: "위로 10살을 받는다.", select: false },
-            { id: "2", text: "아래로 10살을 받는다.", select: true },
-        ],
-    },
-    {
-        id: "dfsdfdfsf",
-        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
-
-        auserAnswerId: "1",
-        buserAnswerId: "1",
-        answers: [
-            { id: "1", text: "위로 10살을 받는다.", select: true },
-            { id: "2", text: "아래로 10살을 받는다.", select: false },
-        ],
-    },
-    {
-        id: "dfsdfdfsf",
-        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
-        auserAnswerId: "1",
-        buserAnswerId: "1",
-        answers: [
-            { id: "1", text: "위로 10살을 받는다.", select: false },
-            { id: "2", text: "아래로 10살을 받는다.", select: true },
-        ],
-    },
-    {
-        id: "dfsewerdfsf",
-        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
-        auserAnswerId: "1",
-        buserAnswerId: "1",
-        answers: [
-            { id: "1", text: "위로 10살을 받는다.", select: false },
-            { id: "2", text: "아래로 10살을 받는다.", select: true },
-        ],
-    },
-    {
-        id: "dfsdfdfsf1",
-        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
-        auserAnswerId: "1",
-        buserAnswerId: "1",
-        answers: [
-            { id: "1", text: "위로 10살을 받는다.", select: true },
-            { id: "2", text: "아래로 10살을 받는다.", select: false },
-        ],
-    },
-    {
-        id: "dfsdfdfsf2",
-        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
-        auserAnswerId: "1",
-        buserAnswerId: "1",
-        answers: [
-            { id: "1", text: "위로 10살을 받는다.", select: false },
-            { id: "2", text: "아래로 10살을 받는다.", select: true },
-        ],
-    },
-    {
-        id: "dfsewerdfsf3",
-        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
-        auserAnswerId: "1",
-        buserAnswerId: "1",
-        answers: [
-            { id: "1", text: "위로 10살을 받는다.", select: false },
-            { id: "2", text: "아래로 10살을 받는다.", select: true },
-        ],
-    },
-    {
-        id: "dfsdfdfsf4",
-        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
-        auserAnswerId: "1",
-        buserAnswerId: "1",
-        answers: [
-            { id: "1", text: "위로 10살을 받는다.", select: true },
-            { id: "2", text: "아래로 10살을 받는다.", select: false },
-        ],
-    },
-];
-
-const MyAnswerView: React.FC = () => {
-    const RESULTSCORE = RESULTS.map((result) => result.auserAnswerId === result.buserAnswerId).length;
-
+const ResultView: React.FC = () => {
+    const { aid, bid } = useParams();
     const navigate = useNavigate();
+    const [resultList, setResultList] = useState<Interface.UserAnswer[]>([]);
+    // const RESULTSCORE = resultList.filter((result) => result.auserAnswerId === result.buserAnswerId).length;
+
+    useEffect(() => {
+        // 컴포넌트가 마운트되었을 때 호출
+        const fetchUserResult = async () => {
+            try {
+                const users = await VM.getUserResult(aid!);
+                setResultList(users);
+            } catch (error) {
+                console.error("Error fetching matched users:", error);
+            }
+        };
+
+        fetchUserResult();
+    }, []);
 
     const clickBack = () => {
         navigate("/match-list");
@@ -118,19 +40,21 @@ const MyAnswerView: React.FC = () => {
                     </IconWrap>
                 </Header>
                 <InnnerMyAnswerViewLayout>
-                    <ScoreLayout>
-                        <ScoreTitle>나와 김도희의 가치관은</ScoreTitle>
-                        <Score score={Util.calculateScore(RESULTSCORE)}>{`${Util.calculateScore(
-                            RESULTSCORE
-                        )}% 일치`}</Score>
-                    </ScoreLayout>
-                    <DividerContent>
-                        <Divider />
-                        <ContentTitle>전체 답안 보기</ContentTitle>
-                        <Divider />
-                    </DividerContent>
-                    {RESULTS.map((result, index) => {
-                        return <Component.SelectResult result={result} index={index} key={result.id} />;
+                    {bid && (
+                        <>
+                            <ScoreLayout>
+                                <ScoreTitle>나와 김도희의 가치관은</ScoreTitle>
+                                <Score score={Util.calculateScore(8)}>{`${Util.calculateScore(8)}% 일치`}</Score>
+                            </ScoreLayout>
+                            <DividerContent>
+                                <Divider />
+                                <ContentTitle>전체 답안 보기</ContentTitle>
+                                <Divider />
+                            </DividerContent>
+                        </>
+                    )}
+                    {resultList.map((result, index) => {
+                        return <Component.SelectResult result={result} index={index} key={`result_${result.id}`} />;
                     })}
                 </InnnerMyAnswerViewLayout>
             </MyAnswerLayoutWrap>
@@ -138,7 +62,7 @@ const MyAnswerView: React.FC = () => {
     );
 };
 
-export default MyAnswerView;
+export default ResultView;
 
 const MyAnswerLayout = styled.div`
     width: 100%;
@@ -152,7 +76,7 @@ const MyAnswerLayout = styled.div`
 
 const MyAnswerLayoutWrap = styled.div`
     width: 740px;
-    height: auto;
+    height: 100%;
     padding-bottom: 100px;
 `;
 

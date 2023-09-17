@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import * as Interface from "../../interface";
 import * as VM from "./MatchListModel";
 import styled from "styled-components";
 import BlueStar from "../../assets/icon/blue-star.svg";
@@ -36,7 +37,7 @@ const MatchUserList = [
 
 const MatchList: React.FC = () => {
     const navigate = useNavigate();
-    const [matchUsers, setMatchUsers] = useState<VM.MatchUser[]>([]);
+    const [matchUsers, setMatchUsers] = useState<Interface.MatchUser[]>([]);
     const userAId = "test_0101";
 
     useEffect(() => {
@@ -53,10 +54,8 @@ const MatchList: React.FC = () => {
         fetchMatchedUsers();
     }, []);
 
-
-
     const handleClickMyAnswer = () => {
-        navigate(`/my-answer`);
+        navigate(`/result/${userAId}`);
     };
 
     const handleClickHome = () => {
@@ -67,8 +66,8 @@ const MatchList: React.FC = () => {
         navigate(`/category`);
     };
 
-    const handleClickMatchResult = () => {
-        navigate(`/result`);
+    const handleClickMatchResult = (userBId: string) => {
+        navigate(`/result/${userAId}/${userBId}`);
     };
 
     return (
@@ -112,7 +111,9 @@ const MatchList: React.FC = () => {
                         <MatchUserListLayout>
                             {matchUsers.map((user) => {
                                 return (
-                                    <MatchUserLayout onClick={handleClickMatchResult} key={`${user.user_b_id}`}>
+                                    <MatchUserLayout
+                                        onClick={() => handleClickMatchResult(user.user_b_id)}
+                                        key={`${user.user_b_id}`}>
                                         <UserImg src={user.user_b_profile_image} />
                                         <UserName>{user.user_b_name}</UserName>
                                         <UserScore score={user.match_score}>
