@@ -1,39 +1,19 @@
-export const BASE_URL: any = "http://35.73.236.228:8080";
+export const BASE_URL: any =
+  "https://btteur8pu6.execute-api.ap-northeast-2.amazonaws.com/dev";
 
-export type UserType = {
-    gender: string;
-    name: string;
-    email: string;
-    userId: string;
+export type Category = {
+  category_id: number;
+  name: string;
 };
 
-export const getUsers = (): UserType[] => {
-    let user: UserType[] = [];
-    fetch(`${BASE_URL}/users`)
-        .then((res) => {
-            return res.json();
-        })
-        .then((res) => console.log("res", res));
+export const getCategories = async (): Promise<Category[]> => {
+  try {
+    const response = await fetch(`${BASE_URL}/categories`);
 
-    return user;
-};
+    const data: Category[] = await response.json();
 
-export const addUser = (user: UserType) => {
-    fetch(`${BASE_URL}/users`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            userId: user.userId,
-            email: user.email,
-            gender: user.gender,
-            name: user.name,
-        }),
-    }).then((res) => {
-        if (res.status !== 200) {
-            throw new Error(res.statusText);
-        }
-        return res.json();
-    });
+    return data;
+  } catch (error) {
+    return [];
+  }
 };

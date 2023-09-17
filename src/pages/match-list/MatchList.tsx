@@ -53,7 +53,7 @@ const MatchList: React.FC = () => {
         fetchMatchedUsers();
     }, []);
 
-    console.log("matchUsers", matchUsers);
+
 
     const handleClickMyAnswer = () => {
         navigate(`/my-answer`);
