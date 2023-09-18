@@ -25,7 +25,7 @@ const App: React.FC = () => {
 
                 <Route path="/match-list" element={<Pages.MatchListView />} />
                 <Route path="/result/:aid/:bid" element={<Pages.ResultView />} />
-                <Route path="/result/:aid" element={<Pages.ResultView />} />
+                <Route path="/result/:aid" element={<Pages.MyAnswerView />} />
                 <Route path="*" element={<>NotFound</>} />
                 {/* 링크 공유주소 "?requester-id=&participater-id=" */}
             </Routes>

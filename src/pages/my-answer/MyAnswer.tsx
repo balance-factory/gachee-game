@@ -4,20 +4,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import BackArrow from "../../assets/icon/back_arrow_icon.svg";
 import * as Interface from "../../interface";
 import * as Component from "./components";
-import * as Util from "../../utils";
-import * as VM from "./ResultViewModel";
+import * as VM from "./MyAnswerViewModel";
 
-const ResultView: React.FC = () => {
-    const { aid, bid } = useParams();
+const MyAnswerView: React.FC = () => {
+    const { aid } = useParams();
     const navigate = useNavigate();
-    const [resultList, setResultList] = useState<Interface.SelectResult[]>([]);
-    // const RESULTSCORE = resultList.filter((result) => result.auserAnswerId === result.buserAnswerId).length;
+    const [resultList, setResultList] = useState<Interface.UserAnswer[]>([]);
 
     useEffect(() => {
-        // 컴포넌트가 마운트되었을 때 호출
         const fetchUserResult = async () => {
             try {
-                const users = await VM.getResult(aid!, "");
+                const users = await VM.getUserResult(aid!);
                 setResultList(users);
             } catch (error) {
                 console.error("Error fetching matched users:", error);
@@ -28,7 +25,7 @@ const ResultView: React.FC = () => {
     }, []);
 
     const clickBack = () => {
-        navigate("/match-list");
+        navigate(`/match-list/${aid}`);
     };
 
     return (
@@ -40,21 +37,8 @@ const ResultView: React.FC = () => {
                     </IconWrap>
                 </Header>
                 <InnnerMyAnswerViewLayout>
-                    {bid && (
-                        <>
-                            <ScoreLayout>
-                                <ScoreTitle>나와 김도희의 가치관은</ScoreTitle>
-                                <Score score={Util.calculateScore(8)}>{`${Util.calculateScore(8)}% 일치`}</Score>
-                            </ScoreLayout>
-                            <DividerContent>
-                                <Divider />
-                                <ContentTitle>전체 답안 보기</ContentTitle>
-                                <Divider />
-                            </DividerContent>
-                        </>
-                    )}
                     {resultList.map((result, index) => {
-                        return <Component.SelectResult result={result} index={index} key={`result_${result.id}`} />;
+                        return <Component.AnswerItem result={result} index={index} />;
                     })}
                 </InnnerMyAnswerViewLayout>
             </MyAnswerLayoutWrap>
@@ -62,7 +46,7 @@ const ResultView: React.FC = () => {
     );
 };
 
-export default ResultView;
+export default MyAnswerView;
 
 const MyAnswerLayout = styled.div`
     width: 100%;

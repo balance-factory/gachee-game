@@ -61,7 +61,7 @@ export const getKakaoUserInfo = async (accessToken: string): Promise<UserInfo> =
 
         const userInfo: KakaoUserInfo = {
             social: "kakao",
-            userId: uuid(),
+            userId: data.id,
             email: data.kakao_account.email,
             gender: data.kakao_account.gender,
             name: data.kakao_account.profile.nickname,
@@ -93,12 +93,14 @@ export const getUserInfo = async (user: KakaoUserInfo): Promise<UserInfo> => {
 
         const data = await response.json();
         const userInfo: UserInfo = {
-            profile_image: data.user.profile_image,
-            gachee_id: data.user.gacheeId,
+            profile_image: data.user.profile_image ?? "",
+            gachee_id: data.user.gachee_id,
             name: data.user.name,
             email: data.user.email,
-            isFirstTime: data.user.isFirstTime === 1 ? true : false,
+            isFirstTime: data.user.is_first === 1 ? true : false,
         };
+
+        console.log("userInfo", userInfo, data);
         return userInfo;
     } catch (error) {
         console.log(`${error} 에러`);
