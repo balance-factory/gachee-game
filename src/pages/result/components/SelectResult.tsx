@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import * as Interface from "../../../interface";
 
 interface ResultProps {
-    result: Interface.SelectResult | Interface.MatchUser;
+    result: Interface.SelectResult;
     index: number;
     bUserId?: string;
 }

@@ -10,6 +10,7 @@ const MyAnswerView: React.FC = () => {
     const { aid } = useParams();
     const navigate = useNavigate();
     const [resultList, setResultList] = useState<Interface.UserAnswer[]>([]);
+    const [situationAndQuestion, setSituationAndQuestion] = useState<VM.SituationAndQuestion[]>();
 
     useEffect(() => {
         const fetchUserResult = async () => {
@@ -22,10 +23,21 @@ const MyAnswerView: React.FC = () => {
         };
 
         fetchUserResult();
+
+        const fetchSituationAndQuestion = async (categoryId: string) => {
+            try {
+                const data = await VM.getSituationAndQuestion(categoryId);
+
+                setSituationAndQuestion(data);
+            } catch (error) {
+                console.error("Error fetching matched users:", error);
+            }
+        };
+        fetchSituationAndQuestion("1");
     }, []);
 
     const clickBack = () => {
-        navigate(`/match-list/${aid}`);
+        navigate(`/match-list`);
     };
 
     return (
