@@ -54,9 +54,9 @@ export const getSituationAndQuestion = async (categoryId: string): Promise<Situa
     }
 };
 
-export const postUserAnswers = async (answers: Answer[], userId: string) => {
+export const postUserAnswers = async (answers: Answer[], userId: string, categoryId: number) => {
     try {
-        const response = await fetch(`${BASE_URL}/user-answers/${userId}`, {
+        const response = await fetch(`${BASE_URL}/category/${categoryId}/user-answer/user/${userId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
