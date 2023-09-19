@@ -1,9 +1,9 @@
-import * as Interface from "../../interface";
 export const BASE_URL: any = "https://btteur8pu6.execute-api.ap-northeast-2.amazonaws.com/dev";
+import * as Interface from "../../interface";
 
-export const getMatchUsers = async (userId: string): Promise<Interface.MatchUser[]> => {
+export const getResult = async (userId: string, userBId: string): Promise<Interface.SelectResult[]> => {
     try {
-        const response = await fetch(`${BASE_URL}/matched-users/${1}`);
+        const response = await fetch(`${BASE_URL}/`);
         const data = await response.json();
         console.log("data", data);
         return data;

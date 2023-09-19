@@ -1,30 +1,18 @@
 export const BASE_URL: any = "https://btteur8pu6.execute-api.ap-northeast-2.amazonaws.com/dev";
+import * as Interface from "../../interface";
 
-export class PaginationInfo<T> {
-    offset: number;
-    total: number;
-
-    constructor(size?: number) {
-        this.total = 0;
-        this.offset = 0;
+export const getUserResult = async (userId: string): Promise<Interface.UserAnswer[]> => {
+    try {
+        const response = await fetch(`${BASE_URL}/user/${userId}/answers`);
+        await fetch(`${BASE_URL}/user/${userId}/answers`);
+        const data = await response.json();
+        console.log("data", data);
+        return data;
+    } catch (error) {
+        console.error("Error fetching match users:", error);
+        return [];
     }
-
-    next = () => {
-        if (this.offset + 1 < this.total) {
-            this.offset = this.offset + 1;
-        }
-    };
-
-    prev = () => {
-        if (this.offset > 0) {
-            this.offset = this.offset - 1;
-        }
-    };
-
-    setOffset = (offset: number) => {
-        this.offset = offset;
-    };
-}
+};
 
 export type SituationAndQuestion = {
     question_id: number; // 문제 id
@@ -54,20 +42,14 @@ export const getSituationAndQuestion = async (categoryId: string): Promise<Situa
     }
 };
 
-export const postUserAnswers = async (answers: Answer[], userId: string) => {
+export const getResult = async (userId: string, userBId: string): Promise<Interface.SelectResult[]> => {
     try {
-        const response = await fetch(`${BASE_URL}/user-answers/${userId}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ answers: answers }),
-        });
-
+        const response = await fetch(`${BASE_URL}/`);
         const data = await response.json();
-
+        console.log("data", data);
         return data;
     } catch (error) {
-        return console.log(`${error} 에러`);
+        console.error("Error fetching match users:", error);
+        return [];
     }
 };

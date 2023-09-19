@@ -1,10 +1,21 @@
 export const calculateScore = (correctAnswers: number) => {
-    const totalQuestions = 20;
+    console.log("correctAnswers", correctAnswers);
+    const totalQuestions = 10;
     const maxScore = 100;
-    const minScore = 0;
-    const scoreIncrement = (maxScore - minScore) / (totalQuestions / 5); // 5점 단위로 총 20개의 항목이므로
 
-    const score = minScore + correctAnswers * scoreIncrement;
+    // 각 문제당 점수 계산 (5점 단위로 계산)
+    const scorePerQuestion = maxScore / totalQuestions;
+
+    // 정확한 점수 계산 (5점 단위로 반올림)
+    const exactScore = Math.round((correctAnswers * scorePerQuestion) / 5) * 5;
+
+    // 최대 점수는 100점으로 제한
+    const score = Math.min(maxScore, exactScore);
 
     return score;
 };
+
+// // 테스트
+// const testCorrectAnswers = 8;
+// const testScore = calculateScore(testCorrectAnswers);
+// console.log("Score:", testScore); // 출력: Score: 80

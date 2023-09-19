@@ -2,31 +2,20 @@ import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import * as Interface from "../../../interface";
 
-interface ResultProps {
-    result: Interface.SelectResult;
+interface AnswerItemProps {
+    result: Interface.UserAnswer;
     index: number;
 }
 
-const SelectResult: React.FC<ResultProps> = ({ result, index }) => {
+const AnswerItem: React.FC<AnswerItemProps> = ({ result, index }) => {
     return (
         <ResultLayout>
             <QuestionNumber>{`Q${index + 1}`}</QuestionNumber>
-            <QuestionText>{result.question}</QuestionText>
+            <QuestionText>{result.question_title}</QuestionText>
             {result.answers.map((content) => {
                 return (
-                    <AnswerContent
-                        selected={result.auserAnswerId === content.id}
-                        bUserSelected={result.buserAnswerId === content.id}
-                        key={content.id}>
+                    <AnswerContent selected={result.selected_answer.answer_id === content.id} key={content.id}>
                         <AnswerText>{content.text}</AnswerText>
-                        {result.auserAnswerId === content.id && <UserA>나</UserA>}
-                        {result.buserAnswerId === content.id && (
-                            <UserB
-                                aUserSelected={result.auserAnswerId === content.id}
-                                bUserSelected={result.buserAnswerId === content.id}>
-                                너
-                            </UserB>
-                        )}
                     </AnswerContent>
                 );
             })}
@@ -34,7 +23,7 @@ const SelectResult: React.FC<ResultProps> = ({ result, index }) => {
     );
 };
 
-export default SelectResult;
+export default AnswerItem;
 
 const ResultLayout = styled.div`
     width: 100%;
@@ -59,15 +48,14 @@ const QuestionText = styled.div`
     color: #fff;
 `;
 
-const AnswerContent = styled.div<{ selected: boolean; bUserSelected?: boolean }>`
+const AnswerContent = styled.div<{ selected: boolean }>`
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     padding: 21px 0;
-    border: ${(props) =>
-        props.selected ? "1px solid #1EB82D" : props.bUserSelected ? "1px solid #F56571" : "1px solid #fff"};
+    border: ${(props) => (props.selected ? "1px solid #1EB82D" : "1px solid #fff")};
     border-radius: 12px;
     margin-bottom: 16px;
 `;

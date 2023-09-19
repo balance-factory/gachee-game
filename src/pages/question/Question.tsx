@@ -10,254 +10,245 @@ import PlayIcon from "assets/icon/play.svg";
 import * as Images from "assets/image";
 
 const Question: React.FC = () => {
-  const pathname = useLocation().pathname;
-  const splitUrl = pathname.split("/");
-  const categoryId = splitUrl[2];
-  const questionId = splitUrl[4];
-  const lastPath = splitUrl[splitUrl.length - 1] === "answer" ? false : true;
-  const [isPause, setIsPause] = useState<boolean>(false);
+    const pathname = useLocation().pathname;
+    const splitUrl = pathname.split("/");
+    const categoryId = splitUrl[2];
+    const questionId = splitUrl[4];
+    const lastPath = splitUrl[splitUrl.length - 1] === "answer" ? false : true;
+    const [isPause, setIsPause] = useState<boolean>(false);
 
-  const navigate = useNavigate();
-  const [situationAndQuestion, setSituationAndQuestion] =
-    useState<VM.SituationAndQuestion[]>();
-  const [situationTotal, setSituationTotal] = useState<number>(0);
-  const [situationOffset, setSituationOffset] = useState<number>(0);
-  const [userAnswers, setUserAnswers] = useState<VM.Answer[]>([]);
-  const answers = window.sessionStorage.getItem("ANSWERS");
-  const userId = window.sessionStorage.getItem("ID");
+    const navigate = useNavigate();
+    const [situationAndQuestion, setSituationAndQuestion] = useState<VM.SituationAndQuestion[]>();
+    const [situationTotal, setSituationTotal] = useState<number>(0);
+    const [situationOffset, setSituationOffset] = useState<number>(0);
+    const [userAnswers, setUserAnswers] = useState<VM.Answer[]>([]);
+    const answers = window.sessionStorage.getItem("ANSWERS");
+    const userId = window.sessionStorage.getItem("ID");
 
-  const fetchSituationAndQuestion = async (categoryId: string) => {
-    try {
-      const data = await VM.getSituationAndQuestion(categoryId);
+    const fetchSituationAndQuestion = async (categoryId: string) => {
+        try {
+            const data = await VM.getSituationAndQuestion(categoryId);
 
-      setSituationAndQuestion(data);
-      setSituationTotal(data.length);
-    } catch (error) {
-      console.error("Error fetching matched users:", error);
-    }
-  };
+            setSituationAndQuestion(data);
+            setSituationTotal(data.length);
+        } catch (error) {
+            console.error("Error fetching matched users:", error);
+        }
+    };
 
-  const fetchPostUserAnswers = async (answers: VM.Answer[], userId: string) => {
-    try {
-      const data = await VM.postUserAnswers(answers, userId);
+    const fetchPostUserAnswers = async (answers: VM.Answer[], userId: string) => {
+        try {
+            const data = await VM.postUserAnswers(answers, userId);
 
-      if (data) {
-        navigate(`/result`);
-        window.sessionStorage.removeItem("ANSWERS");
-      }
-    } catch (error) {
-      console.error("Error fetching matched users:", error);
-    }
-  };
-
-  const onClickNextSituation = (updateOffset: number, answerId: number) => {
-    userAnswers.push({
-      question_id: Number(questionId),
-      answer_id: answerId,
-    });
-    setUserAnswers(userAnswers);
-
-    window.sessionStorage.setItem("ANSWERS", JSON.stringify(userAnswers));
-
-    if (situationTotal < updateOffset + 1) {
-      if (answers && userId) fetchPostUserAnswers(JSON.parse(answers), userId);
-    } else {
-      setSituationOffset(updateOffset);
-      navigate(
-        `/category/${categoryId}/question/${
-          situationAndQuestion && situationAndQuestion[updateOffset].question_id
-        }`
-      );
-    }
-  };
-
-  useEffect(() => {
-    fetchSituationAndQuestion(categoryId);
-  }, []);
-
-  useEffect(() => {
-    if (situationAndQuestion && situationAndQuestion.length > 0 && questionId) {
-      const indexNumber = situationAndQuestion.findIndex(
-        (s) => s.question_id === Number(questionId)
-      );
-
-      answers && setUserAnswers(JSON.parse(answers));
-      setSituationOffset(indexNumber);
-    }
-  }, [situationAndQuestion]);
-
-  return (
-    <QuestionViewLayout>
-      {isPause && (
-        <PauseLayout>
-          <PauseContent>
-            <PauseButtonColor
-              onClick={() => {
-                window.location.replace(`/category/${categoryId}/question`);
-              }}
-            >
-              <ReplayIcon />
-              다시하기
-            </PauseButtonColor>
-            <PauseButtonColor onClick={() => navigate("/")}>
-              <StopIcon />
-              그만하기
-            </PauseButtonColor>
-            <PauseButtonDefault onClick={() => setIsPause(false)}>
-              <PlayIcon />
-              계속하기
-            </PauseButtonDefault>
-          </PauseContent>
-        </PauseLayout>
-      )}
-      <ContentLayout>
-        <Pause onClick={() => setIsPause(true)} />
-        <>
-          {lastPath && situationAndQuestion && (
-            <>
-              <SituationImage
-                src={situationAndQuestion[situationOffset].situation_image}
-              />
-
-              <QuestionLayout>
-                <QuestionContent>
-                  <QuestionText>
-                    {situationAndQuestion[situationOffset].situation}
-                  </QuestionText>
-
-                  <NextQuestionButton
-                    onClick={() =>
-                      navigate(
-                        `/category/${categoryId}/question/${situationAndQuestion[situationOffset].question_id}/answer`
-                      )
-                    }
-                  >
-                    <BottomArrow src={Images.BottomArrow} />
-                  </NextQuestionButton>
-                </QuestionContent>
-              </QuestionLayout>
-            </>
-          )}
-        </>
-
-        <Routes>
-          {/* path에 부모 경로까지 적을 필요 없이 파라미터만 적어줌 (:questionId) */}
-          <Route
-            path="/:id/answer"
-            element={
-              <Components.QuestionAndAnswer
-                categoryId={categoryId}
-                situationAndQuestion={situationAndQuestion}
-                situationOffset={situationOffset}
-                clickGoNextSituation={onClickNextSituation}
-              />
+            if (data) {
+                navigate(`/result`);
+                window.sessionStorage.removeItem("ANSWERS");
             }
-          />
-        </Routes>
-      </ContentLayout>
-    </QuestionViewLayout>
-  );
+        } catch (error) {
+            console.error("Error fetching matched users:", error);
+        }
+    };
+
+    const onClickNextSituation = (updateOffset: number, answerId: number) => {
+        userAnswers.push({
+            question_id: Number(questionId),
+            answer_id: answerId,
+        });
+        setUserAnswers(userAnswers);
+
+        window.sessionStorage.setItem("ANSWERS", JSON.stringify(userAnswers));
+
+        if (situationTotal < updateOffset + 1) {
+            if (answers && userId) fetchPostUserAnswers(JSON.parse(answers), userId);
+        } else {
+            setSituationOffset(updateOffset);
+            navigate(
+                `/category/${categoryId}/question/${
+                    situationAndQuestion && situationAndQuestion[updateOffset].question_id
+                }`
+            );
+        }
+    };
+
+    useEffect(() => {
+        fetchSituationAndQuestion(categoryId);
+    }, []);
+
+    useEffect(() => {
+        if (situationAndQuestion && situationAndQuestion.length > 0 && questionId) {
+            const indexNumber = situationAndQuestion.findIndex((s) => s.question_id === Number(questionId));
+
+            answers && setUserAnswers(JSON.parse(answers));
+            setSituationOffset(indexNumber);
+        }
+    }, [situationAndQuestion]);
+
+    return (
+        <QuestionViewLayout>
+            {isPause && (
+                <PauseLayout>
+                    <PauseContent>
+                        <PauseButtonColor
+                            onClick={() => {
+                                window.location.replace(`/category/${categoryId}/question`);
+                            }}>
+                            <ReplayIcon />
+                            다시하기
+                        </PauseButtonColor>
+                        <PauseButtonColor onClick={() => navigate("/")}>
+                            <StopIcon />
+                            그만하기
+                        </PauseButtonColor>
+                        <PauseButtonDefault onClick={() => setIsPause(false)}>
+                            <PlayIcon />
+                            계속하기
+                        </PauseButtonDefault>
+                    </PauseContent>
+                </PauseLayout>
+            )}
+            <ContentLayout>
+                <Pause onClick={() => setIsPause(true)} />
+                <>
+                    {lastPath && situationAndQuestion && (
+                        <>
+                            <SituationImage src={situationAndQuestion[situationOffset].situation_image} />
+
+                            <QuestionLayout>
+                                <QuestionContent>
+                                    <QuestionText>{situationAndQuestion[situationOffset].situation}</QuestionText>
+
+                                    <NextQuestionButton
+                                        onClick={() =>
+                                            navigate(
+                                                `/category/${categoryId}/question/${situationAndQuestion[situationOffset].question_id}/answer`
+                                            )
+                                        }>
+                                        <BottomArrow src={Images.BottomArrow} />
+                                    </NextQuestionButton>
+                                </QuestionContent>
+                            </QuestionLayout>
+                        </>
+                    )}
+                </>
+
+                <Routes>
+                    {/* path에 부모 경로까지 적을 필요 없이 파라미터만 적어줌 (:questionId) */}
+                    <Route
+                        path="/:id/answer"
+                        element={
+                            <Components.QuestionAndAnswer
+                                categoryId={categoryId}
+                                situationAndQuestion={situationAndQuestion}
+                                situationOffset={situationOffset}
+                                clickGoNextSituation={onClickNextSituation}
+                            />
+                        }
+                    />
+                </Routes>
+            </ContentLayout>
+        </QuestionViewLayout>
+    );
 };
 
 export default Question;
 
 const QuestionViewLayout = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
 `;
 const ContentLayout = styled.div`
-  position: absolute;
-  width: 740px;
-  height: 100%;
-  background: linear-gradient(180deg, #000513 0%, #171a5f 100%);
-  padding: 20px 20px 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+    position: absolute;
+    width: 740px;
+    height: 100%;
+    background: linear-gradient(180deg, #000513 0%, #171a5f 100%);
+    padding: 20px 20px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 `;
 const PauseLayout = styled.div`
-  z-index: 1;
-  height: 100%;
-  position: absolute;
-  width: 740px;
-  background: rgba(3, 3, 3, 0.76);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0 37px;
+    z-index: 1;
+    height: 100%;
+    position: absolute;
+    width: 740px;
+    background: rgba(3, 3, 3, 0.76);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 37px;
 `;
 
 const PauseContent = styled.div`
-  width: 100%;
-  padding: 34px 32px 35px 24px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 14px;
-  border-radius: 15px;
-  background: #fff;
-  color: var(--white, #fff);
-  font-size: 16px;
-  font-weight: 700;
+    width: 100%;
+    padding: 34px 32px 35px 24px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 14px;
+    border-radius: 15px;
+    background: #fff;
+    color: var(--white, #fff);
+    font-size: 16px;
+    font-weight: 700;
 `;
 
 const PauseButtonColor = styled.div`
-  display: flex;
-  height: 48px;
-  align-items: center;
-  border-radius: 30px;
-  background: #f56571;
-  justify-content: center;
+    display: flex;
+    height: 48px;
+    align-items: center;
+    border-radius: 30px;
+    background: #f56571;
+    justify-content: center;
 
-  box-shadow: 0px 5px 0px 1px #883037;
-  margin-bottom: 19px;
+    box-shadow: 0px 5px 0px 1px #883037;
+    margin-bottom: 19px;
 `;
 
 const PauseButtonDefault = styled.div`
-  display: flex;
-  height: 48px;
-  align-items: center;
-  border-radius: 30px;
-  background: #171a5f;
-  justify-content: center;
+    display: flex;
+    height: 48px;
+    align-items: center;
+    border-radius: 30px;
+    background: #171a5f;
+    justify-content: center;
 
-  box-shadow: 0px 5px 0px 1px #000;
+    box-shadow: 0px 5px 0px 1px #000;
 `;
 
 const SituationImage = styled.img``;
 
 const QuestionLayout = styled.div`
-  height: 168px;
-  border: 3px solid #bbcbcb;
-  background: #00316b;
+    height: 168px;
+    border: 3px solid #bbcbcb;
+    background: #00316b;
 `;
 
 const QuestionContent = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 24px 20px 13px 20px;
-  border-bottom: 11px solid #c7dde7;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 24px 20px 13px 20px;
+    border-bottom: 11px solid #c7dde7;
 `;
 
 const QuestionText = styled.div`
-  color: #f7ffff;
-  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  font-size: 14px;
-  line-height: 160%;
-  letter-spacing: -0.07px;
+    color: #f7ffff;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: 14px;
+    line-height: 160%;
+    letter-spacing: -0.07px;
 `;
 
 const NextQuestionButton = styled.div`
-  text-align: end;
+    text-align: end;
 `;
 
 const BottomArrow = styled.img`
-  width: 15px;
-  height: 20px;
+    width: 15px;
+    height: 20px;
 `;

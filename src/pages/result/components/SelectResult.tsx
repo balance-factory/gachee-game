@@ -5,9 +5,10 @@ import * as Interface from "../../../interface";
 interface ResultProps {
     result: Interface.SelectResult;
     index: number;
+    bUserId?: string;
 }
 
-const SelectResult: React.FC<ResultProps> = ({ result, index }) => {
+const SelectResult: React.FC<ResultProps> = ({ result, index, bUserId }) => {
     return (
         <ResultLayout>
             <QuestionNumber>{`Q${index + 1}`}</QuestionNumber>
@@ -16,16 +17,20 @@ const SelectResult: React.FC<ResultProps> = ({ result, index }) => {
                 return (
                     <AnswerContent
                         selected={result.auserAnswerId === content.id}
-                        bUserSelected={result.buserAnswerId === content.id}
+                        bUserSelected={bUserId ? result.buserAnswerId === content.id : false}
                         key={content.id}>
                         <AnswerText>{content.text}</AnswerText>
-                        {result.auserAnswerId === content.id && <UserA>나</UserA>}
-                        {result.buserAnswerId === content.id && (
-                            <UserB
-                                aUserSelected={result.auserAnswerId === content.id}
-                                bUserSelected={result.buserAnswerId === content.id}>
-                                너
-                            </UserB>
+                        {bUserId && (
+                            <>
+                                {result.auserAnswerId === content.id && <UserA>나</UserA>}
+                                {result.buserAnswerId === content.id && (
+                                    <UserB
+                                        aUserSelected={result.auserAnswerId === content.id}
+                                        bUserSelected={result.buserAnswerId === content.id}>
+                                        너
+                                    </UserB>
+                                )}
+                            </>
                         )}
                     </AnswerContent>
                 );

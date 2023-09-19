@@ -1,109 +1,43 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import BackArrow from "../../assets/icon/back_arrow_icon.svg";
 import * as Interface from "../../interface";
 import * as Component from "./components";
-
-const RESULTS: Interface.SelectResult[] = [
-    {
-        id: "dfsdfdfsf",
-        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
-        auserAnswerId: "1",
-        buserAnswerId: "1",
-        answers: [
-            { id: "1", text: "위로 10살을 받는다.", select: false },
-            { id: "2", text: "아래로 10살을 받는다.", select: true },
-        ],
-    },
-    {
-        id: "dfsewerdfsf",
-        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
-        auserAnswerId: "1",
-        buserAnswerId: "2",
-        answers: [
-            { id: "1", text: "위로 10살을 받는다.", select: false },
-            { id: "2", text: "아래로 10살을 받는다.", select: true },
-        ],
-    },
-    {
-        id: "dfsdfdfsf",
-        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
-
-        auserAnswerId: "1",
-        buserAnswerId: "1",
-        answers: [
-            { id: "1", text: "위로 10살을 받는다.", select: true },
-            { id: "2", text: "아래로 10살을 받는다.", select: false },
-        ],
-    },
-    {
-        id: "dfsdfdfsf",
-        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
-        auserAnswerId: "1",
-        buserAnswerId: "1",
-        answers: [
-            { id: "1", text: "위로 10살을 받는다.", select: false },
-            { id: "2", text: "아래로 10살을 받는다.", select: true },
-        ],
-    },
-    {
-        id: "dfsewerdfsf",
-        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
-        auserAnswerId: "1",
-        buserAnswerId: "1",
-        answers: [
-            { id: "1", text: "위로 10살을 받는다.", select: false },
-            { id: "2", text: "아래로 10살을 받는다.", select: true },
-        ],
-    },
-    {
-        id: "dfsdfdfsf1",
-        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
-        auserAnswerId: "1",
-        buserAnswerId: "1",
-        answers: [
-            { id: "1", text: "위로 10살을 받는다.", select: true },
-            { id: "2", text: "아래로 10살을 받는다.", select: false },
-        ],
-    },
-    {
-        id: "dfsdfdfsf2",
-        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
-        auserAnswerId: "1",
-        buserAnswerId: "1",
-        answers: [
-            { id: "1", text: "위로 10살을 받는다.", select: false },
-            { id: "2", text: "아래로 10살을 받는다.", select: true },
-        ],
-    },
-    {
-        id: "dfsewerdfsf3",
-        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
-        auserAnswerId: "1",
-        buserAnswerId: "1",
-        answers: [
-            { id: "1", text: "위로 10살을 받는다.", select: false },
-            { id: "2", text: "아래로 10살을 받는다.", select: true },
-        ],
-    },
-    {
-        id: "dfsdfdfsf4",
-        question: "10살 차이나는 이성의 소개팅이 들어왔다.",
-        auserAnswerId: "1",
-        buserAnswerId: "1",
-        answers: [
-            { id: "1", text: "위로 10살을 받는다.", select: true },
-            { id: "2", text: "아래로 10살을 받는다.", select: false },
-        ],
-    },
-];
+import * as VM from "./MyAnswerViewModel";
 
 const MyAnswerView: React.FC = () => {
+    const { aid } = useParams();
     const navigate = useNavigate();
+    const [resultList, setResultList] = useState<Interface.UserAnswer[]>([]);
+    const [situationAndQuestion, setSituationAndQuestion] = useState<VM.SituationAndQuestion[]>();
+
+    useEffect(() => {
+        const fetchUserResult = async () => {
+            try {
+                const users = await VM.getUserResult(aid!);
+                setResultList(users);
+            } catch (error) {
+                console.error("Error fetching matched users:", error);
+            }
+        };
+
+        fetchUserResult();
+
+        const fetchSituationAndQuestion = async (categoryId: string) => {
+            try {
+                const data = await VM.getSituationAndQuestion(categoryId);
+
+                setSituationAndQuestion(data);
+            } catch (error) {
+                console.error("Error fetching matched users:", error);
+            }
+        };
+        fetchSituationAndQuestion("1");
+    }, []);
 
     const clickBack = () => {
-        navigate("/match-list");
+        navigate(`/match-list`);
     };
 
     return (
@@ -115,8 +49,8 @@ const MyAnswerView: React.FC = () => {
                     </IconWrap>
                 </Header>
                 <InnnerMyAnswerViewLayout>
-                    {RESULTS.map((result, index) => {
-                        return <Component.SelectResult result={result} index={index} key={result.id} />;
+                    {resultList.map((result, index) => {
+                        return <Component.AnswerItem result={result} index={index} />;
                     })}
                 </InnnerMyAnswerViewLayout>
             </MyAnswerLayoutWrap>
@@ -127,17 +61,19 @@ const MyAnswerView: React.FC = () => {
 export default MyAnswerView;
 
 const MyAnswerLayout = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(#010614, #171a5f);
+    width: 100%;
+    height: 100vh;
+    overflow: scroll;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(#010614, #171a5f);
 `;
 
 const MyAnswerLayoutWrap = styled.div`
-  width: 740px;
-  height: 100%;
+    width: 740px;
+    height: 100%;
+    padding-bottom: 100px;
 `;
 
 const Header = styled.div`
@@ -156,43 +92,45 @@ const InnnerMyAnswerViewLayout = styled.div`
     padding: 0 20px 80px;
 `;
 
-const ResultLayout = styled.div`
+const ScoreLayout = styled.div`
     width: 100%;
+    height: 130px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    border: 3px solid #bbcbcb;
 `;
 
-const QuestionNumber = styled.div`
-    font-family: Galmuri_Bold;
+const ScoreTitle = styled.div`
     font-size: 16px;
     margin-bottom: 6px;
     color: #fff;
 `;
 
-const QuestionText = styled.div`
-    margin-bottom: 20px;
+const Score = styled.div<{ score: number }>`
     font-family: Galmuri_Bold;
-    font-size: 16px;
-    color: #fff;
-`;
-
-const AnswerContent = styled.div<{ selected: boolean }>`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    padding: 21px 0;
-    border: ${(props) => (props.selected ? "1px solid #fff" : "1px solid #1EB82D")};
-    border-radius: 12px;
-    margin-bottom: 16px;
-`;
-
-const AnswerText = styled.div`
-    font-family: Galmuri_Bold;
-    font-size: 14px;
-    color: #fff;
+    font-size: 24px;
+    color: ${(props) => (props.score <= 39 ? "#E5505D" : props.score > 39 && props.score < 80 ? "#F2AA18" : "#1eb82d")};
 `;
 
 const IconWrap = styled.div``;
+
+const DividerContent = styled.div`
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 3px;
+    margin-top: 40px;
+`;
+
+const Divider = styled.div`
+    width: 40%;
+    height: 1px;
+    border: dashed 1px #fff;
+`;
+
+const ContentTitle = styled.div`
+    color: #fff;
+    margin: 0 10px;
+`;

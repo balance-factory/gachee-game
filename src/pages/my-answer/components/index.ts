@@ -1,3 +1,3 @@
-import SelectResult from "./SelectResult";
+import AnswerItem from "./AnswerItem";
 
-export { SelectResult };
+export { AnswerItem };
