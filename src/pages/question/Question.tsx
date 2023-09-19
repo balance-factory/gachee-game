@@ -41,7 +41,7 @@ const Question: React.FC = () => {
             const data = await VM.postUserAnswers(answers, userId);
 
             if (data) {
-                navigate(`/result`);
+                navigate(`/match-list/${categoryId}`);
                 window.sessionStorage.removeItem("ANSWERS");
             }
         } catch (error) {

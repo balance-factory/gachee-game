@@ -7,38 +7,29 @@ import * as Component from "./components";
 import * as VM from "./MyAnswerViewModel";
 
 const MyAnswerView: React.FC = () => {
-    const { aid } = useParams();
+    const userAId = localStorage.getItem("userId");
     const navigate = useNavigate();
-    const [resultList, setResultList] = useState<Interface.UserAnswer[]>([]);
-    const [situationAndQuestion, setSituationAndQuestion] = useState<VM.SituationAndQuestion[]>();
+    const getCategoryId = localStorage.getItem("categoryId");
+    const [myAnswers, setMyAnswers] = useState<Interface.MySelectResult[]>();
 
     useEffect(() => {
         const fetchUserResult = async () => {
             try {
-                const users = await VM.getUserResult(aid!);
-                setResultList(users);
+                const answers = await VM.getUserResult(Number(getCategoryId), userAId!);
+                setMyAnswers(answers);
             } catch (error) {
                 console.error("Error fetching matched users:", error);
             }
         };
 
         fetchUserResult();
-
-        const fetchSituationAndQuestion = async (categoryId: string) => {
-            try {
-                const data = await VM.getSituationAndQuestion(categoryId);
-
-                setSituationAndQuestion(data);
-            } catch (error) {
-                console.error("Error fetching matched users:", error);
-            }
-        };
-        fetchSituationAndQuestion("1");
     }, []);
 
     const clickBack = () => {
-        navigate(`/match-list`);
+        navigate(`/match-list/${getCategoryId}`);
     };
+
+    console.log("myAnswers", myAnswers);
 
     return (
         <MyAnswerLayout>
@@ -49,8 +40,8 @@ const MyAnswerView: React.FC = () => {
                     </IconWrap>
                 </Header>
                 <InnnerMyAnswerViewLayout>
-                    {resultList.map((result, index) => {
-                        return <Component.AnswerItem result={result} index={index} />;
+                    {myAnswers?.map((result, index) => {
+                        return <Component.AnswerItem key={result.question_id} result={result} index={index} />;
                     })}
                 </InnnerMyAnswerViewLayout>
             </MyAnswerLayoutWrap>

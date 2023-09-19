@@ -13,9 +13,9 @@ const App: React.FC = () => {
                 <Route path="category" element={<Pages.CategoryView />} />
                 <Route path="/category/:id/question/*" element={<Pages.QuestionView />} />
                 <Route path="/category/:id/question/*/answer" element={<Pages.QuestionView />} />
-                <Route path="/match-list" element={<Pages.MatchListView />} />
-                <Route path="/result" element={<Pages.ResultView />} />
-                <Route path="/my-answer" element={<Pages.MyAnswerView />} />
+                <Route path="/match-list/:categoryId" element={<Pages.MatchListView />} />
+                <Route path="/result/:userId" element={<Pages.ResultView />} />
+                <Route path="/my-answer/:userId" element={<Pages.MyAnswerView />} />
                 <Route path="*" element={<>NotFound</>} />
                 {/* 링크 공유주소 "?requester-id=&participater-id=" */}
             </Routes>

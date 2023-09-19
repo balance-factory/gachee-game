@@ -44,7 +44,7 @@ export type Answer = {
 
 export const getSituationAndQuestion = async (categoryId: string): Promise<SituationAndQuestion[]> => {
     try {
-        const response = await fetch(`${BASE_URL}/questions-answers/${categoryId}`);
+        const response = await fetch(`${BASE_URL}/category/${categoryId}`);
 
         const data = await response.json();
         return data;
