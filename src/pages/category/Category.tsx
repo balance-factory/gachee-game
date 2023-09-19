@@ -41,25 +41,26 @@ const Category: React.FC = () => {
         <Content>
           <ContentText>원하는 테스트를 선택해주세요.</ContentText>
 
-          {categoryList.length > 0 &&
-            categoryList.map((c) => (
-              <CoupleLayout
-                key={c.category_id.toString()}
-                categoryId={c.category_id}
-                onClick={() => setCategoryId(c.category_id)}
-              >
-                {c.category_id === 2 && (
-                  <ComingSoonText>Coming Soon</ComingSoonText>
-                )}
-                {c.category_id === categoryId && <RightArrow />}
-                <DiscatIcon
+          <CategoryContentLayout>
+            {categoryList.length > 0 &&
+              categoryList.map((c) => (
+                <CategoryContent
+                  key={c.category_id.toString()}
                   categoryId={c.category_id}
-                  isOpacity={c.category_id === categoryId}
-                />
-                {c.category_id === categoryId && <LeftArrow />}
-              </CoupleLayout>
-            ))}
-
+                  onClick={() => setCategoryId(c.category_id)}
+                >
+                  {c.category_id === 2 && (
+                    <ComingSoonText>Coming Soon</ComingSoonText>
+                  )}
+                  {c.category_id === categoryId && <RightArrow />}
+                  <DiscatIcon
+                    categoryId={c.category_id}
+                    isOpacity={c.category_id === categoryId}
+                  />
+                  {c.category_id === categoryId && <LeftArrow />}
+                </CategoryContent>
+              ))}
+          </CategoryContentLayout>
           <ButtonIconLayout
             onClick={() => navigate(`/category/${categoryId}/question`)}
           >
@@ -74,9 +75,16 @@ const Category: React.FC = () => {
 
 export default Category;
 
+const CategoryContentLayout = styled.div`
+  height: calc(100% - 270px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
 const CategoryViewLayout = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -104,7 +112,8 @@ const HeaderText = styled.div`
 
 const Content = styled.div`
   width: 100%;
-  margin-top: 114px;
+  height: calc(100% - 28px);
+  padding: 114px 0 44px;
   text-align: center;
 `;
 
@@ -114,7 +123,7 @@ const ContentText = styled.div`
   font-weight: 700;
 `;
 
-const CoupleLayout = styled.div<{ categoryId: number }>`
+const CategoryContent = styled.div<{ categoryId: number }>`
   position: ${({ categoryId }) => {
     switch (categoryId) {
       case 1:

@@ -100,7 +100,7 @@ const QuestionAndAnswerTitle = styled.div`
 const QuestionAndAnswerSubTitle = styled.div`
   color: #fff;
   text-align: center;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 400;
   margin-top: 8px;
 `;
