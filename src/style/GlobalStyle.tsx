@@ -141,7 +141,7 @@ const GlobalStyle = createGlobalStyle`
         font-family: Galmuri, sans-serif;
         margin: 0px;
         box-sizing: border-box;
-       
+        height: 100vh;
     
 
         @media (max-width: 768px) {
