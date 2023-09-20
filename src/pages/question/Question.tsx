@@ -36,12 +36,12 @@ const Question: React.FC = () => {
         }
     };
 
-    const fetchPostUserAnswers = async (answers: VM.Answer[], userId: string) => {
+    const fetchPostUserAnswers = async (answers: VM.Answer[], userId: string, categoryId: number) => {
         try {
-            const data = await VM.postUserAnswers(answers, userId);
+            const data = await VM.postUserAnswers(answers, userId, categoryId);
 
             if (data) {
-                navigate(`/result`);
+                navigate(`/match-list/${categoryId}`);
                 window.sessionStorage.removeItem("ANSWERS");
             }
         } catch (error) {
@@ -59,7 +59,7 @@ const Question: React.FC = () => {
         window.sessionStorage.setItem("ANSWERS", JSON.stringify(userAnswers));
 
         if (situationTotal < updateOffset + 1) {
-            if (answers && userId) fetchPostUserAnswers(JSON.parse(answers), userId);
+            if (answers && userId) fetchPostUserAnswers(JSON.parse(answers), userId, Number(categoryId));
         } else {
             setSituationOffset(updateOffset);
             navigate(

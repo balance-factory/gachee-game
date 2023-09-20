@@ -1,9 +1,11 @@
-export type SelectResult = {
-    id: string;
-    question: string;
-    auserAnswerId: number;
-    buserAnswerId?: number;
-    answers: Answer[];
+export type MySelectResult = {
+    question_id: number;
+    title: string;
+    answers: [{ answer_id: number; answer_content: string; question_id: string }];
+    selected_answer: {
+        answerId: number;
+        questionId: number;
+    };
 };
 
 export type UserAnswer = {
@@ -22,16 +24,14 @@ export type Answer = {
 };
 
 export type MatchUser = {
-    match_id: number;
-    user_a_id: string;
-    user_b_id: string;
-    matched_date: string;
+    gachee_id: string;
+    name: string;
+    gender: string;
+    profile_image: "";
+    social: string;
+    user_id: string;
+    is_first: boolean;
+    created_at: string;
+    updated_at: string;
     match_score: number;
-    user_b: {
-        user_b_user_id: string;
-        user_b_name: string;
-        user_b_gender: string;
-        user_b_profile_image: string;
-        created_at: string;
-    };
 };

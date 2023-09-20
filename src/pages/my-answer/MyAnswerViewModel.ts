@@ -1,19 +1,6 @@
 export const BASE_URL: any = "https://btteur8pu6.execute-api.ap-northeast-2.amazonaws.com/dev";
 import * as Interface from "../../interface";
 
-export const getUserResult = async (userId: string): Promise<Interface.UserAnswer[]> => {
-    try {
-        const response = await fetch(`${BASE_URL}/user/${userId}/answers`);
-        await fetch(`${BASE_URL}/user/${userId}/answers`);
-        const data = await response.json();
-        console.log("data", data);
-        return data;
-    } catch (error) {
-        console.error("Error fetching match users:", error);
-        return [];
-    }
-};
-
 export type SituationAndQuestion = {
     question_id: number; // 문제 id
     situation: string; // 상황 설명
@@ -25,31 +12,34 @@ export type SituationAndQuestion = {
     answers: [{ answer_id: number; answer_content: string; question_id: string }];
 };
 
-export type Answer = {
-    question_id: number;
-    answer_id: number;
-};
-
-export const getSituationAndQuestion = async (categoryId: string): Promise<SituationAndQuestion[]> => {
+export const getUserResult = async (categoryId: number, userId: string): Promise<Interface.MySelectResult[]> => {
     try {
-        const response = await fetch(`${BASE_URL}/questions-answers/${categoryId}`);
+        const [api1Response, api2Response] = await Promise.all([
+            fetch(`${BASE_URL}/category/${categoryId}`).then((response) => response.json()) as Promise<
+                SituationAndQuestion[]
+            >,
+            fetch(`${BASE_URL}/category/${categoryId}/user/${userId}/answers`).then((response) =>
+                response.json().then((res) => res.data.userAnswerResults)
+            ) as Promise<{ answerId: number; questionId: number }[]>,
+        ]);
 
-        const data = await response.json();
-        return data;
+        // Map the questions from API1 and update with selected_answer from API2
+        const questions = api1Response.map((question) => {
+            const selectedAnswer = api2Response.find((answer) => answer.questionId === question.question_id);
+            const result: Interface.MySelectResult = {
+                question_id: question.question_id,
+                title: question.title,
+                answers: question.answers,
+                selected_answer: {
+                    answerId: selectedAnswer?.answerId!,
+                    questionId: selectedAnswer?.questionId!,
+                },
+            };
+            return result;
+        });
+        return questions; // Return the questions questions;
     } catch (error) {
-        console.log(`${error} 에러`);
-        return [];
-    }
-};
-
-export const getResult = async (userId: string, userBId: string): Promise<Interface.SelectResult[]> => {
-    try {
-        const response = await fetch(`${BASE_URL}/`);
-        const data = await response.json();
-        console.log("data", data);
-        return data;
-    } catch (error) {
-        console.error("Error fetching match users:", error);
-        return [];
+        console.error("Error fetching APIs:", error);
+        throw error;
     }
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as Interface from "../../interface";
 import * as VM from "./MatchListModel";
 import styled from "styled-components";
@@ -9,14 +9,18 @@ import Home from "../../assets/icon/home_icon.svg";
 
 const MatchList: React.FC = () => {
     const navigate = useNavigate();
+    const { categoryId } = useParams();
+    console.log("categoryId ", categoryId);
+    localStorage.setItem("categoryId", categoryId!);
+    localStorage.setItem("userId", "ea23bdc1-aef8-4180-a882-b714f981f509");
     const [matchUsers, setMatchUsers] = useState<Interface.MatchUser[]>([]);
-    const userAId = "1";
+    const userAId = "ea23bdc1-aef8-4180-a882-b714f981f509";
 
     useEffect(() => {
         // 컴포넌트가 마운트되었을 때 호출
         const fetchMatchedUsers = async () => {
             try {
-                const users = await VM.getMatchUsers(userAId);
+                const users = await VM.getMatchUsers(userAId, Number(categoryId));
                 setMatchUsers(users);
             } catch (error) {
                 console.error("Error fetching matched users:", error);
@@ -27,7 +31,7 @@ const MatchList: React.FC = () => {
     }, []);
 
     const handleClickMyAnswer = () => {
-        navigate(`/result/${userAId}`);
+        navigate(`/my-answer/${userAId}`);
     };
 
     const handleClickHome = () => {
@@ -84,14 +88,10 @@ const MatchList: React.FC = () => {
                             {matchUsers.map((user) => {
                                 return (
                                     <MatchUserLayout
-                                        onClick={() => handleClickMatchResult(user.user_b_id)}
-                                        key={`${user.user_b_id}`}>
-                                        {user.user_b.user_b_profile_image ? (
-                                            <UserImg src={user.user_b.user_b_profile_image} />
-                                        ) : (
-                                            <UserEmptyImg />
-                                        )}
-                                        <UserName>{user.user_b.user_b_name}</UserName>
+                                        onClick={() => handleClickMatchResult(user.gachee_id)}
+                                        key={`${user.gachee_id}`}>
+                                        {user.profile_image ? <UserImg src={user.profile_image} /> : <UserEmptyImg />}
+                                        <UserName>{user.name}</UserName>
                                         <UserScore score={user.match_score}>
                                             {user.match_score}% <ScoreText>일치</ScoreText>
                                         </UserScore>
@@ -110,6 +110,7 @@ export default MatchList;
 
 const MatchLayout = styled.div`
     width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -117,8 +118,8 @@ const MatchLayout = styled.div`
 `;
 
 const MatchLayoutWrap = styled.div`
-  width: 740px;
-  height: 100%;
+    width: 740px;
+    height: 100%;
 `;
 
 const Header = styled.div`

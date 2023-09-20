@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import * as Interface from "../../../interface";
 
 interface AnswerItemProps {
-    result: Interface.UserAnswer;
+    result: Interface.MySelectResult;
     index: number;
 }
 
@@ -11,11 +11,13 @@ const AnswerItem: React.FC<AnswerItemProps> = ({ result, index }) => {
     return (
         <ResultLayout>
             <QuestionNumber>{`Q${index + 1}`}</QuestionNumber>
-            <QuestionText>{result.question_title}</QuestionText>
+            <QuestionText>{result.title}</QuestionText>
             {result.answers.map((content) => {
                 return (
-                    <AnswerContent selected={result.selected_answer.answer_id === content.id} key={content.id}>
-                        <AnswerText>{content.text}</AnswerText>
+                    <AnswerContent
+                        selected={result.selected_answer.answerId === content.answer_id}
+                        key={content.answer_content}>
+                        <AnswerText>{content.answer_content}</AnswerText>
                     </AnswerContent>
                 );
             })}
