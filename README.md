@@ -13,4 +13,5 @@
 -   master branch
 -   develop branch
 -   feature branch --> [feature/login]
+-   fix branch --> [fix-login]
 -   hotfix branch --> [hotfix-login]
