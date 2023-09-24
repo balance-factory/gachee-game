@@ -29,8 +29,6 @@ const MyAnswerView: React.FC = () => {
         navigate(`/match-list/${getCategoryId}`);
     };
 
-    console.log("myAnswers", myAnswers);
-
     return (
         <MyAnswerLayout>
             <MyAnswerLayoutWrap>
