@@ -49,8 +49,7 @@ export const getSituationAndQuestion = async (categoryId: string): Promise<Situa
         const data = await response.json();
         return data;
     } catch (error) {
-        console.log(`${error} 에러`);
-        return [];
+      return [];
     }
 };
 
