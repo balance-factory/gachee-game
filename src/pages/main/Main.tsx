@@ -28,16 +28,12 @@ const Main: React.FC = () => {
     }
   };
 
-  // const clickLogin = () => {
-  //   if (myUserId && categoryId) {
-
-  //   } else {
-  //     setModal(true);
-  //   }
-  // };
-
   useEffect(() => {
-    matchUserId && fetchGetUserInfo(matchUserId);
+    if (matchUserId && myUserId && categoryId) {
+      navigate(`/match-list/${categoryId}`);
+    } else {
+      matchUserId && fetchGetUserInfo(matchUserId);
+    }
   }, []);
 
   return (

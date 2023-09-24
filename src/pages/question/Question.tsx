@@ -16,7 +16,9 @@ const Question: React.FC = () => {
     const categoryId = splitUrl[2];
     const questionId = splitUrl[4];
     const answers = window.sessionStorage.getItem("answers");
-    const userId = window.sessionStorage.getItem("my-user-id");
+    const myUserId = window.sessionStorage.getItem("my-user-id");
+    const matchUserId = window.sessionStorage.getItem("match-user-id");
+
     const lastPath = splitUrl[splitUrl.length - 1] === "answer" ? false : true;
     const [isPause, setIsPause] = useState<boolean>(false);
     const [situationAndQuestion, setSituationAndQuestion] =
@@ -45,8 +47,17 @@ const Question: React.FC = () => {
         const data = await VM.postUserAnswers(answers, userId, categoryId);
 
         if (data) {
-          navigate(`/match-list/${categoryId}`);
-          window.sessionStorage.removeItem("answers");
+          if (userId && matchUserId) {
+            const matchedData = await VM.postMatchedUsers(
+              categoryId,
+              userId,
+              matchUserId
+            );
+            if (matchedData) navigate(`/match-list/${categoryId}`);
+          } else {
+            navigate(`/match-list/${categoryId}`);
+            window.sessionStorage.removeItem("answers");
+          }
         }
       } catch (error) {
         console.error("Error fetching matched users:", error);
@@ -63,8 +74,12 @@ const Question: React.FC = () => {
       window.sessionStorage.setItem("answers", JSON.stringify(userAnswers));
 
       if (situationTotal < updateOffset + 1) {
-        if (answers && userId)
-          fetchPostUserAnswers(JSON.parse(answers), userId, Number(categoryId));
+        if (answers && myUserId)
+          fetchPostUserAnswers(
+            JSON.parse(answers),
+            myUserId,
+            Number(categoryId)
+          );
       } else {
         setSituationOffset(updateOffset);
         navigate(
@@ -77,16 +92,22 @@ const Question: React.FC = () => {
     };
 
     useEffect(() => {
-        fetchSituationAndQuestion(categoryId);
+      fetchSituationAndQuestion(categoryId);
     }, []);
 
     useEffect(() => {
-        if (situationAndQuestion && situationAndQuestion.length > 0 && questionId) {
-            const indexNumber = situationAndQuestion.findIndex((s) => s.question_id === Number(questionId));
+      if (
+        situationAndQuestion &&
+        situationAndQuestion.length > 0 &&
+        questionId
+      ) {
+        const indexNumber = situationAndQuestion.findIndex(
+          (s) => s.question_id === Number(questionId)
+        );
 
-            answers && setUserAnswers(JSON.parse(answers));
-            setSituationOffset(indexNumber);
-        }
+        answers && setUserAnswers(JSON.parse(answers));
+        setSituationOffset(indexNumber);
+      }
     }, [situationAndQuestion]);
 
     return (
