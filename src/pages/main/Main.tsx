@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import * as Modal from "./modal";
 import * as Images from "assets/image";
 import Button from "assets/icon/main_button_icon.svg";
+import Dot from "assets/icon/dot.svg";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import * as VM from "./MainViewModel";
 
@@ -42,8 +43,10 @@ const Main: React.FC = () => {
         <Header>
           <NavIcon src={Images.NavBar} />
         </Header>
-
         <Content>
+          <DotLayout>
+            <Dot />
+          </DotLayout>
           <Border>
             <HeartIcon src={Images.Heart} />
             <TitleIcon src={Images.Title} />
@@ -79,7 +82,6 @@ const MatchedText = styled.div`
   text-align: center;
 `;
 
-
 const MainViewLayout = styled.div`
   width: 100%;
   height: 100%;
@@ -87,13 +89,11 @@ const MainViewLayout = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
-  background-image: url(${Images.MainBackground});
 `;
 
 const ContentLayout = styled.div`
   width: 740px;
   height: 100%;
-  background-image: url(${Images.MainBackground});
 `;
 
 const Header = styled.div`
@@ -146,7 +146,11 @@ const Content = styled.div`
   width: 100%;
   height: calc(100% - 48px);
   padding: 24px 20px;
-  background: url(${Images.MainBackground}) center / contain no-repeat #171a5f;
+  background-color: #171a5f;
+`;
+
+const DotLayout = styled.div`
+  position: absolute;
 `;
 
 const Border = styled.div`
