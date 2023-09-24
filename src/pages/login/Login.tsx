@@ -13,7 +13,7 @@ const Login: React.FC = () => {
     
 
       if (userInfo.gachee_id) {
-        window.sessionStorage.setItem("ID", userInfo.gachee_id);
+        window.sessionStorage.setItem("my-id", userInfo.gachee_id);
         navigate(`/category`);
       } else {
         navigate(`/`);

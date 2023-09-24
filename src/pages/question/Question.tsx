@@ -22,31 +22,35 @@ const Question: React.FC = () => {
     const [situationTotal, setSituationTotal] = useState<number>(0);
     const [situationOffset, setSituationOffset] = useState<number>(0);
     const [userAnswers, setUserAnswers] = useState<VM.Answer[]>([]);
-    const answers = window.sessionStorage.getItem("ANSWERS");
-    const userId = window.sessionStorage.getItem("ID");
+    const answers = window.sessionStorage.getItem("answers");
+    const userId = window.sessionStorage.getItem("my-id");
 
     const fetchSituationAndQuestion = async (categoryId: string) => {
-        try {
-            const data = await VM.getSituationAndQuestion(categoryId);
+      try {
+        const data = await VM.getSituationAndQuestion(categoryId);
 
-            setSituationAndQuestion(data);
-            setSituationTotal(data.length);
-        } catch (error) {
-            console.error("Error fetching matched users:", error);
-        }
+        setSituationAndQuestion(data);
+        setSituationTotal(data.length);
+      } catch (error) {
+        console.error("Error fetching matched users:", error);
+      }
     };
 
-    const fetchPostUserAnswers = async (answers: VM.Answer[], userId: string, categoryId: number) => {
-        try {
-            const data = await VM.postUserAnswers(answers, userId, categoryId);
+    const fetchPostUserAnswers = async (
+      answers: VM.Answer[],
+      userId: string,
+      categoryId: number
+    ) => {
+      try {
+        const data = await VM.postUserAnswers(answers, userId, categoryId);
 
-            if (data) {
-                navigate(`/match-list/${categoryId}`);
-                window.sessionStorage.removeItem("ANSWERS");
-            }
-        } catch (error) {
-            console.error("Error fetching matched users:", error);
+        if (data) {
+          navigate(`/match-list/${categoryId}`);
+          window.sessionStorage.removeItem("answers");
         }
+      } catch (error) {
+        console.error("Error fetching matched users:", error);
+      }
     };
 
     const onClickNextSituation = (updateOffset: number, answerId: number) => {
@@ -56,7 +60,7 @@ const Question: React.FC = () => {
         });
         setUserAnswers(userAnswers);
 
-        window.sessionStorage.setItem("ANSWERS", JSON.stringify(userAnswers));
+        window.sessionStorage.setItem("answers", JSON.stringify(userAnswers));
 
         if (situationTotal < updateOffset + 1) {
             if (answers && userId) fetchPostUserAnswers(JSON.parse(answers), userId, Number(categoryId));
