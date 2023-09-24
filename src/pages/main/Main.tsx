@@ -76,7 +76,7 @@ export default Main;
 const MatchedText = styled.div`
   position: absolute;
   bottom: 340px;
-  left: calc(50% - 95px);
+  width: 100%;
   color: white;
   font-size: 24px;
   text-align: center;
@@ -136,7 +136,8 @@ const ButtonIconLayout = styled.div`
 const ButtonText = styled.div`
   position: absolute;
   bottom: 28px;
-  left: calc(50% - 20px);
+  width: 100%;
+  text-align: center;
   font-size: 16px;
   font-weight: 700;
 `;
