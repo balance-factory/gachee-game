@@ -13,11 +13,12 @@ const App: React.FC = () => {
                 <Route path="category" element={<Pages.CategoryView />} />
                 <Route path="/category/:id/question/*" element={<Pages.QuestionView />} />
                 <Route path="/category/:id/question/*/answer" element={<Pages.QuestionView />} />
-                <Route path="/match-list" element={<Pages.MatchListView />} />
+                <Route path="/match-list/:categoryId" element={<Pages.MatchListView />} />
                 <Route path="/result/:userId" element={<Pages.ResultView />} />
-                <Route path="/my-answer/:userId" element={<Pages.MyAnswerView />} />
+                <Route path="/my-answer" element={<Pages.MyAnswerView />} />
                 <Route path="*" element={<Pages.NotFoundView />} />
-                {/* 링크 공유주소 "?requester-id=&participater-id=" */}
+                {/* a가 b한테 공유할 링크 주소 "?category-id=1&match-user-id=" */}
+                {/* a,b 모두 테스트 완료했을때 결과 url"?category-id=1?my-user-id=&match-user-id= */}
             </Routes>
         </BrowserRouter>
     );

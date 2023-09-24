@@ -11,76 +11,103 @@ import * as Images from "assets/image";
 
 const Question: React.FC = () => {
     const pathname = useLocation().pathname;
+    const navigate = useNavigate();
     const splitUrl = pathname.split("/");
     const categoryId = splitUrl[2];
     const questionId = splitUrl[4];
+    const answers = window.sessionStorage.getItem("answers");
+    const myUserId = window.sessionStorage.getItem("my-user-id");
+    const matchUserId = window.sessionStorage.getItem("match-user-id");
+
     const lastPath = splitUrl[splitUrl.length - 1] === "answer" ? false : true;
     const [isPause, setIsPause] = useState<boolean>(false);
-
-    const navigate = useNavigate();
-    const [situationAndQuestion, setSituationAndQuestion] = useState<VM.SituationAndQuestion[]>();
+    const [situationAndQuestion, setSituationAndQuestion] =
+      useState<VM.SituationAndQuestion[]>();
     const [situationTotal, setSituationTotal] = useState<number>(0);
     const [situationOffset, setSituationOffset] = useState<number>(0);
     const [userAnswers, setUserAnswers] = useState<VM.Answer[]>([]);
-    const answers = window.sessionStorage.getItem("ANSWERS");
-    const userId = window.sessionStorage.getItem("ID");
 
     const fetchSituationAndQuestion = async (categoryId: string) => {
-        try {
-            const data = await VM.getSituationAndQuestion(categoryId);
+      try {
+        const data = await VM.getSituationAndQuestion(categoryId);
 
-            setSituationAndQuestion(data);
-            setSituationTotal(data.length);
-        } catch (error) {
-            console.error("Error fetching matched users:", error);
-        }
+        setSituationAndQuestion(data);
+        setSituationTotal(data.length);
+      } catch (error) {
+        console.error("Error fetching matched users:", error);
+      }
     };
 
-    const fetchPostUserAnswers = async (answers: VM.Answer[], userId: string, categoryId: number) => {
-        try {
-            const data = await VM.postUserAnswers(answers, userId, categoryId);
+    const fetchPostUserAnswers = async (
+      answers: VM.Answer[],
+      userId: string,
+      categoryId: number
+    ) => {
+      try {
+        const data = await VM.postUserAnswers(answers, userId, categoryId);
 
-            if (data) {
-                navigate(`/match-list/${categoryId}`);
-                window.sessionStorage.removeItem("ANSWERS");
-            }
-        } catch (error) {
-            console.error("Error fetching matched users:", error);
+        if (data) {
+          if (userId && matchUserId) {
+            const matchedData = await VM.postMatchedUsers(
+              categoryId,
+              userId,
+              matchUserId
+            );
+            if (matchedData) navigate(`/match-list/${categoryId}`);
+          } else {
+            navigate(`/match-list/${categoryId}`);
+            window.sessionStorage.removeItem("answers");
+          }
         }
+      } catch (error) {
+        console.error("Error fetching matched users:", error);
+      }
     };
 
     const onClickNextSituation = (updateOffset: number, answerId: number) => {
-        userAnswers.push({
-            question_id: Number(questionId),
-            answer_id: answerId,
-        });
-        setUserAnswers(userAnswers);
+      userAnswers.push({
+        question_id: Number(questionId),
+        answer_id: answerId,
+      });
+      setUserAnswers(userAnswers);
 
-        window.sessionStorage.setItem("ANSWERS", JSON.stringify(userAnswers));
+      window.sessionStorage.setItem("answers", JSON.stringify(userAnswers));
 
-        if (situationTotal < updateOffset + 1) {
-            if (answers && userId) fetchPostUserAnswers(JSON.parse(answers), userId, Number(categoryId));
-        } else {
-            setSituationOffset(updateOffset);
-            navigate(
-                `/category/${categoryId}/question/${
-                    situationAndQuestion && situationAndQuestion[updateOffset].question_id
-                }`
-            );
-        }
+      if (situationTotal < updateOffset + 1) {
+        if (answers && myUserId)
+          fetchPostUserAnswers(
+            JSON.parse(answers),
+            myUserId,
+            Number(categoryId)
+          );
+      } else {
+        setSituationOffset(updateOffset);
+        navigate(
+          `/category/${categoryId}/question/${
+            situationAndQuestion &&
+            situationAndQuestion[updateOffset].question_id
+          }`
+        );
+      }
     };
 
     useEffect(() => {
-        fetchSituationAndQuestion(categoryId);
+      fetchSituationAndQuestion(categoryId);
     }, []);
 
     useEffect(() => {
-        if (situationAndQuestion && situationAndQuestion.length > 0 && questionId) {
-            const indexNumber = situationAndQuestion.findIndex((s) => s.question_id === Number(questionId));
+      if (
+        situationAndQuestion &&
+        situationAndQuestion.length > 0 &&
+        questionId
+      ) {
+        const indexNumber = situationAndQuestion.findIndex(
+          (s) => s.question_id === Number(questionId)
+        );
 
-            answers && setUserAnswers(JSON.parse(answers));
-            setSituationOffset(indexNumber);
-        }
+        answers && setUserAnswers(JSON.parse(answers));
+        setSituationOffset(indexNumber);
+      }
     }, [situationAndQuestion]);
 
     return (

@@ -32,6 +32,16 @@ export type UserAnswer = {
     };
 };
 
+export type UserInfo = {
+  user_id: string;
+  name: string;
+  gender: string;
+  profile_image: string;
+  social: string;
+  gachee_id: string;
+  isFirstTime: number;
+};
+
 export type Answer = {
     id: number;
     text: string;

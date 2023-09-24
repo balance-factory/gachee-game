@@ -10,11 +10,19 @@ const Login: React.FC = () => {
     try {
       const userInfo = await VM.getKakaoToken(KAKAO_CODE);
 
-    
-
       if (userInfo.gachee_id) {
-        window.sessionStorage.setItem("ID", userInfo.gachee_id);
-        navigate(`/category`);
+        window.sessionStorage.setItem("my-user-id", userInfo.gachee_id);
+
+        if (
+          sessionStorage.getItem("category-id") &&
+          sessionStorage.getItem("match-user-id")
+        ) {
+          navigate(
+            `/category/${sessionStorage.getItem("category-id")}/question`
+          );
+        } else {
+          navigate(`/category`);
+        }
       } else {
         navigate(`/`);
       }

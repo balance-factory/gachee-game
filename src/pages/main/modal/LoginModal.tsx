@@ -11,7 +11,11 @@ const LoginModal: React.FC<LoginModalProps> = (props) => {
   return (
     <LoginModalViewLayout>
       <LoginContentLayout>
-        <Title>가치게임을 시작하려면 로그인이 필요합니다.</Title>
+        <Title>
+          가치게임을 시작하려면
+          <br />
+          로그인이 필요합니다.
+        </Title>
 
         <ButtonLayout>
           <LoginButton onClick={() => (window.location.href = KAKAO_AUTH_URL)}>

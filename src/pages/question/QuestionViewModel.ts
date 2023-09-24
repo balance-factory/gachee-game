@@ -70,3 +70,28 @@ export const postUserAnswers = async (answers: Answer[], userId: string, categor
         return console.log(`${error} 에러`);
     }
 };
+
+
+export const postMatchedUsers = async (
+  categoryId: number,
+  userId: string,
+  matchUserId: string
+) => {
+  try {
+    const response = await fetch(
+      `${BASE_URL}/category/${categoryId}/my-user-id/${userId}/match-user-id/${matchUserId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    return console.log(`${error} 에러`);
+  }
+};
