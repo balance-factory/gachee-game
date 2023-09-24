@@ -10,11 +10,10 @@ import Empty from "../../assets/icon/send-clock.svg";
 
 const MatchList: React.FC = () => {
     const navigate = useNavigate();
-    localStorage.setItem("categoryId", "1");
-    localStorage.setItem("userId", "ea23bdc1-aef8-4180-a882-b714f981f509");
-    const categoryId = localStorage.getItem("categoryId");
+    const { categoryId } = useParams();
     const [matchUsers, setMatchUsers] = useState<Interface.MatchUser[]>([]);
-    const userAId = "ea23bdc1-aef8-4180-a882-b714f981f509";
+    const userAId = sessionStorage.getItem("my-user-id")!;
+    sessionStorage.setItem("categoryId", `${categoryId}`);
 
     useEffect(() => {
         //컴포넌트가 마운트되었을 때 호출
@@ -31,7 +30,7 @@ const MatchList: React.FC = () => {
     }, []);
 
     const handleClickMyAnswer = () => {
-        navigate(`/my-answer/${userAId}`);
+        navigate(`/my-answer`);
     };
 
     const handleClickHome = () => {
@@ -43,7 +42,7 @@ const MatchList: React.FC = () => {
     };
 
     const handleClickMatchResult = (user: Interface.MatchUser) => {
-        localStorage.setItem("bUserInfo", JSON.stringify({ name: user.name, userScore: user.match_score }));
+        sessionStorage.setItem("bUserInfo", JSON.stringify({ name: user.name, userScore: user.match_score }));
         navigate(`/result/${user.gachee_id}`);
     };
 

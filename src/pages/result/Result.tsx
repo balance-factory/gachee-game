@@ -8,12 +8,12 @@ import * as Util from "../../utils";
 import * as VM from "./ResultViewModel";
 
 const ResultView: React.FC = () => {
-    const userAId = localStorage.getItem("userId");
-    const categoryId = localStorage.getItem("categoryId");
+    const userAId = sessionStorage.getItem("my-user-id");
+    const categoryId = sessionStorage.getItem("categoryId");
     const { userId } = useParams();
     const navigate = useNavigate();
 
-    const bUserInfo = localStorage.getItem("bUserInfo");
+    const bUserInfo = sessionStorage.getItem("bUserInfo");
     const [resultList, setResultList] = useState<Interface.MatchUserSelectResult[]>([]);
     const userInfo: { name: string; userScore: number } = JSON.parse(bUserInfo!);
 
@@ -32,7 +32,7 @@ const ResultView: React.FC = () => {
     }, []);
 
     const clickBack = () => {
-        navigate("/match-list");
+        navigate(`/match-list/${categoryId}`);
     };
 
     return (

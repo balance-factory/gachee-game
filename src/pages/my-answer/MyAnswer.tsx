@@ -7,15 +7,15 @@ import * as Component from "./components";
 import * as VM from "./MyAnswerViewModel";
 
 const MyAnswerView: React.FC = () => {
-    const userAId = localStorage.getItem("userId");
     const navigate = useNavigate();
-    const getCategoryId = localStorage.getItem("categoryId");
+    const userAId = sessionStorage.getItem("my-user-id");
+    const categoryId = sessionStorage.getItem("categoryId");
     const [myAnswers, setMyAnswers] = useState<Interface.MySelectResult[]>();
 
     useEffect(() => {
         const fetchUserResult = async () => {
             try {
-                const answers = await VM.getUserResult(Number(getCategoryId), userAId!);
+                const answers = await VM.getUserResult(Number(categoryId), userAId!);
                 setMyAnswers(answers);
             } catch (error) {
                 console.error("Error fetching matched users:", error);
@@ -26,7 +26,7 @@ const MyAnswerView: React.FC = () => {
     }, []);
 
     const clickBack = () => {
-        navigate(`/match-list`);
+        navigate(`/match-list/${categoryId}`);
     };
 
     return (
