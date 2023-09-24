@@ -55,7 +55,9 @@ const Main: React.FC = () => {
               </MatchedText>
             )}
             <ButtonIconLayout onClick={() => setModal(true)}>
-              <ButtonText>start</ButtonText>
+              <ButtonText>
+                {matchedUserName ? "함께 테스트하기" : "start"}
+              </ButtonText>
               <Button />
             </ButtonIconLayout>
           </Border>
