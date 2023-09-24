@@ -76,35 +76,33 @@ export const getKakaoUserInfo = async (accessToken: string): Promise<UserInfo> =
 
 export const getUserInfo = async (user: KakaoUserInfo): Promise<UserInfo> => {
     try {
-        const response = await fetch(`${BASE_URL}/users`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                social: user.social,
-                userId: user.userId,
-                email: user.email,
-                gender: user.gender,
-                name: user.name,
-                profile_image: user.profile_image ?? "",
-            }),
-        });
+      const response = await fetch(`${BASE_URL}/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          social: user.social,
+          userId: user.userId,
+          email: user.email,
+          gender: user.gender,
+          name: user.name,
+          profile_image: user.profile_image ?? "",
+        }),
+      });
 
-        const data = await response.json();
-        const userInfo: UserInfo = {
-            profile_image: data.user.profile_image ?? "",
-            gachee_id: data.user.gachee_id,
-            name: data.user.name,
-            email: data.user.email,
-            isFirstTime: data.user.is_first === 1 ? true : false,
-        };
+      const data = await response.json();
+      const userInfo: UserInfo = {
+        profile_image: data.user.profile_image ?? "",
+        gachee_id: data.user.gachee_id,
+        name: data.user.name,
+        email: data.user.email,
+        isFirstTime: data.user.is_first === 1 ? true : false,
+      };
 
-        console.log("userInfo", userInfo, data);
-        return userInfo;
+      return userInfo;
     } catch (error) {
-        console.log(`${error} 에러`);
-        const userInfo = {} as UserInfo;
-        return userInfo;
+      const userInfo = {} as UserInfo;
+      return userInfo;
     }
 };

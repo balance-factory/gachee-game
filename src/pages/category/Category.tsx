@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import * as VM from "./CategoryViewModel";
 
 const Category: React.FC = () => {
+  const isWeb = window.navigator.userAgent.toLowerCase().includes("web");
   const navigate = useNavigate();
   const [categoryList, setCategoryList] = useState<VM.Category[]>([]);
   const [categoryId, setCategoryId] = useState<number>(1);
@@ -22,6 +23,16 @@ const Category: React.FC = () => {
     } catch (error) {
       console.error("Error fetching matched users:", error);
     }
+  };
+
+  const getNowTime = () => {
+    const today = new Date();
+    const hours = today.getHours();
+    const ampm = today.getHours() >= 12 ? "PM" : "AM";
+    const minutes =
+      today.getMinutes() < 10 ? "0" + today.getMinutes() : today.getMinutes();
+
+    return `${hours}:${minutes} ${ampm}`;
   };
 
   useEffect(() => {
@@ -68,6 +79,17 @@ const Category: React.FC = () => {
             <Button />
           </ButtonIconLayout>
         </Content>
+        {isWeb && (
+          <BottomLineLayout>
+            <BottomLineRight>
+              <BottomDefaultBtn>start</BottomDefaultBtn>
+              <Border />
+              <BottomBtn>카테고리 선택</BottomBtn>
+            </BottomLineRight>
+
+            <BottomBtn>{getNowTime()}</BottomBtn>
+          </BottomLineLayout>
+        )}
       </ContentLayout>
     </CategoryViewLayout>
   );
@@ -94,7 +116,7 @@ const ContentLayout = styled.div`
   width: 740px;
   height: 100%;
   background: #171a5f;
-  padding: 21px 20px;
+  padding: 21px 0;
 `;
 
 const Header = styled.div`
@@ -102,6 +124,7 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: end;
+  padding: 0 20px;
 `;
 const HeaderText = styled.div`
   color: #fff;
@@ -112,7 +135,7 @@ const HeaderText = styled.div`
 
 const Content = styled.div`
   width: 100%;
-  height: calc(100% - 28px);
+  height: calc(100% - 50px);
   padding: 114px 0 44px;
   text-align: center;
 `;
@@ -179,3 +202,47 @@ const ButtonText = styled.div`
   right: 50%;
   top: calc(50% - 15px);
 `;
+
+const BottomLineLayout = styled.div`
+  border-top: 8px solid #5f63c6;
+  height: 42px;
+  background: #4a4ea0;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  font-size: 8px;
+  align-items: center;
+  padding: 0 20px;
+`;
+
+const BottomLineRight = styled.div`
+  display: flex;
+`;
+
+const Border = styled.div`
+  width: 2px;
+  height: 20px;
+  background: #585bb7;
+  margin: 0 12px;
+`;
+
+const BottomDefaultBtn = styled.div`
+  border-top: 2px solid #8689e3;
+  padding: 0 12px;
+  height: 20px;
+  background: #5f63c6;
+  display: flex;
+  align-items: center;
+`;
+
+const BottomBtn = styled.div`
+  border-top: 2px solid #40438e;
+  border-left: 2px solid #40438e;
+  width: 64px;
+  height: 20px;
+  background: #5356a4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
