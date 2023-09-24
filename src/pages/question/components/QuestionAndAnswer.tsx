@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as VM from "../QuestionViewModel";
 import styled from "styled-components";
 import * as Images from "assets/image";
@@ -20,6 +20,16 @@ const QuestionAndAnswer: React.FC<QuestionAndAnswerProps> = (props) => {
     index: 0,
     answerId: 0,
   });
+
+  useEffect(() => {
+    props.situationAndQuestion &&
+      setIsAnswer({
+        index: 0,
+        answerId:
+          props.situationAndQuestion[props.situationOffset].answers[0]
+            .answer_id,
+      });
+  }, [props.situationAndQuestion]);
 
   return props.situationAndQuestion ? (
     <>
