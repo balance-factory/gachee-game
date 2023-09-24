@@ -8,16 +8,20 @@ import * as Util from "../../utils";
 import * as VM from "./ResultViewModel";
 
 const ResultView: React.FC = () => {
-    const { aid, bid } = useParams();
+    const userAId = localStorage.getItem("userId");
+    const categoryId = localStorage.getItem("categoryId");
+    const { userId } = useParams();
     const navigate = useNavigate();
-    const [resultList, setResultList] = useState<Interface.SelectResult[]>([]);
-    // const RESULTSCORE = resultList.filter((result) => result.auserAnswerId === result.buserAnswerId).length;
+
+    const bUserInfo = localStorage.getItem("bUserInfo");
+    const [resultList, setResultList] = useState<Interface.MatchUserSelectResult[]>([]);
+    const userInfo: { name: string; userScore: number } = JSON.parse(bUserInfo!);
 
     useEffect(() => {
         // 컴포넌트가 마운트되었을 때 호출
         const fetchUserResult = async () => {
             try {
-                const users = await VM.getResult(aid!, "");
+                const users = await VM.getUserAnswersResult(Number(categoryId), userAId!, userId!);
                 setResultList(users);
             } catch (error) {
                 console.error("Error fetching matched users:", error);
@@ -40,11 +44,13 @@ const ResultView: React.FC = () => {
                     </IconWrap>
                 </Header>
                 <InnnerMyAnswerViewLayout>
-                    {bid && (
+                    {userId && (
                         <>
                             <ScoreLayout>
                                 <ScoreTitle>나와 김도희의 가치관은</ScoreTitle>
-                                <Score score={Util.calculateScore(8)}>{`${Util.calculateScore(8)}% 일치`}</Score>
+                                <Score score={Number(userInfo.userScore ?? 0)}>{`${Number(
+                                    userInfo.userScore ?? 0
+                                )}% 일치`}</Score>
                             </ScoreLayout>
                             <DividerContent>
                                 <Divider />
@@ -54,7 +60,15 @@ const ResultView: React.FC = () => {
                         </>
                     )}
                     {resultList.map((result, index) => {
-                        return <Component.SelectResult result={result} index={index} key={`result_${result.id}`} />;
+                        return (
+                            <Component.SelectResult
+                                result={result}
+                                index={index}
+                                bUserId={userId}
+                                userName={userInfo.name}
+                                key={`result_${result.question_id}`}
+                            />
+                        );
                     })}
                 </InnnerMyAnswerViewLayout>
             </MyAnswerLayoutWrap>

@@ -15,7 +15,7 @@ const AnswerItem: React.FC<AnswerItemProps> = ({ result, index }) => {
             {result.answers.map((content) => {
                 return (
                     <AnswerContent
-                        selected={result.selected_answer.answerId === content.answer_id}
+                        selected={result.selectedAnswer.answerId === content.answer_id}
                         key={content.answer_content}>
                         <AnswerText>{content.answer_content}</AnswerText>
                     </AnswerContent>

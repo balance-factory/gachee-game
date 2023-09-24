@@ -26,7 +26,7 @@ const MyAnswerView: React.FC = () => {
     }, []);
 
     const clickBack = () => {
-        navigate(`/match-list/${getCategoryId}`);
+        navigate(`/match-list`);
     };
 
     console.log("myAnswers", myAnswers);

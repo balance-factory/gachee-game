@@ -3,31 +3,32 @@ import React, { useState, useEffect } from "react";
 import * as Interface from "../../../interface";
 
 interface ResultProps {
-    result: Interface.SelectResult;
+    result: Interface.MatchUserSelectResult;
     index: number;
     bUserId?: string;
+    userName: string;
 }
 
-const SelectResult: React.FC<ResultProps> = ({ result, index, bUserId }) => {
+const SelectResult: React.FC<ResultProps> = ({ result, index, bUserId, userName }) => {
     return (
         <ResultLayout>
             <QuestionNumber>{`Q${index + 1}`}</QuestionNumber>
-            <QuestionText>{result.question}</QuestionText>
+            <QuestionText>{result.title.replace("\n", " ")}</QuestionText>
             {result.answers.map((content) => {
                 return (
                     <AnswerContent
-                        selected={result.auserAnswerId === content.id}
-                        bUserSelected={bUserId ? result.buserAnswerId === content.id : false}
-                        key={content.id}>
-                        <AnswerText>{content.text}</AnswerText>
+                        selected={result.selectedAnswer.answerId === content.answer_id}
+                        bUserSelected={bUserId ? result.selectedBAnswer.answerId === content.answer_id : false}
+                        key={content.answer_id}>
+                        <AnswerText>{content.answer_content}</AnswerText>
                         {bUserId && (
                             <>
-                                {result.auserAnswerId === content.id && <UserA>나</UserA>}
-                                {result.buserAnswerId === content.id && (
+                                {result.selectedAnswer.answerId === content.answer_id && <UserA>ME</UserA>}
+                                {result.selectedBAnswer.answerId === content.answer_id && (
                                     <UserB
-                                        aUserSelected={result.auserAnswerId === content.id}
-                                        bUserSelected={result.buserAnswerId === content.id}>
-                                        너
+                                        aUserSelected={result.selectedAnswer.answerId === content.answer_id}
+                                        bUserSelected={result.selectedBAnswer.answerId === content.answer_id}>
+                                        {`${userName.slice(0, 1)}`}
                                     </UserB>
                                 )}
                             </>
@@ -89,12 +90,15 @@ const UserA = styled.div`
     height: 32px;
     position: absolute;
     border-radius: 50%;
-    background-color: #fff;
     text-align: center;
     line-height: 32px;
     top: -20px;
     right: 0px;
-    border: 1px solid #1eb82d;
+    background-color: #1eb82d;
+    border: 1px solid #fff;
+    font-size: 12px;
+    font-family: Galmuri_Bold;
+    color: #fff;
 `;
 
 const UserB = styled.div<{ aUserSelected: boolean; bUserSelected: boolean }>`
@@ -102,11 +106,14 @@ const UserB = styled.div<{ aUserSelected: boolean; bUserSelected: boolean }>`
     width: 32px;
     height: 32px;
     position: absolute;
-    background-color: #fff;
+    background-color: ${(props) => (props.aUserSelected ? "#1EB82D" : "#F56571")};
     border-radius: 50%;
     text-align: center;
     line-height: 32px;
     top: -20px;
+    color: #fff;
+    border: 1px solid #fff;
+    font-size: 12px;
+    font-family: Galmuri_Bold;
     right: ${(props) => (props.aUserSelected ? "25px" : "0")};
-    border: ${(props) => (props.bUserSelected ? "1px solid #1EB82D" : "1px solid #F56571")};
 `;
