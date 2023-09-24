@@ -8,7 +8,7 @@ interface ErrorPopupProps {
 const ErrorPopup: React.FC<ErrorPopupProps> = (props) => {
   return (
     <ErrorPopupViewLayout>
-      <LoginContentLayout>
+      <ContentLayout>
         <Title>
           일시적인 네트워크 문제로
           <br />
@@ -18,7 +18,7 @@ const ErrorPopup: React.FC<ErrorPopupProps> = (props) => {
         </Title>
 
         <ConfirmButton onClick={props.cancelButton}>확인</ConfirmButton>
-      </LoginContentLayout>
+      </ContentLayout>
     </ErrorPopupViewLayout>
   );
 };
@@ -38,7 +38,7 @@ const ErrorPopupViewLayout = styled.div`
   background: rgba(3, 3, 3, 0.76);
 `;
 
-const LoginContentLayout = styled.div`
+const ContentLayout = styled.div`
   width: 300px;
   padding: 30px 28px 14px 28px;
   border-radius: 15px;
