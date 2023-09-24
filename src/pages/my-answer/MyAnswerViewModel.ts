@@ -30,7 +30,7 @@ export const getUserResult = async (categoryId: number, userId: string): Promise
                 question_id: question.question_id,
                 title: question.title,
                 answers: question.answers,
-                selected_answer: {
+                selectedAnswer: {
                     answerId: selectedAnswer?.answerId!,
                     questionId: selectedAnswer?.questionId!,
                 },

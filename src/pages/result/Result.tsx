@@ -4,22 +4,28 @@ import { useNavigate, useParams } from "react-router-dom";
 import BackArrow from "../../assets/icon/back_arrow_icon.svg";
 import * as Interface from "../../interface";
 import * as Component from "./components";
-import * as Util from "../../utils";
 import * as VM from "./ResultViewModel";
+import * as Components from "pages/components";
 
 const ResultView: React.FC = () => {
-    const { aid, bid } = useParams();
+    const myId = sessionStorage.getItem("my-user-id");
+    const categoryId = sessionStorage.getItem("categoryId");
+    const { matchUserId } = useParams();
     const navigate = useNavigate();
-    const [resultList, setResultList] = useState<Interface.SelectResult[]>([]);
-    // const RESULTSCORE = resultList.filter((result) => result.auserAnswerId === result.buserAnswerId).length;
+
+    const matchUserInfo = sessionStorage.getItem("match-user-info");
+    const [resultList, setResultList] = useState<Interface.MatchUserSelectResult[]>([]);
+    const matchUser: { name: string; userScore: number } = JSON.parse(matchUserInfo!);
+    const [openError, setOpenError] = useState<boolean>(false);
 
     useEffect(() => {
         // 컴포넌트가 마운트되었을 때 호출
         const fetchUserResult = async () => {
             try {
-                const users = await VM.getResult(aid!, "");
+                const users = await VM.getMyAnswerAndMatchedUserAnswerResult(Number(categoryId), myId!, matchUserId!);
                 setResultList(users);
             } catch (error) {
+                setOpenError(true);
                 console.error("Error fetching matched users:", error);
             }
         };
@@ -28,7 +34,7 @@ const ResultView: React.FC = () => {
     }, []);
 
     const clickBack = () => {
-        navigate("/match-list");
+        navigate(`/match-list/${categoryId}`);
     };
 
     return (
@@ -40,11 +46,13 @@ const ResultView: React.FC = () => {
                     </IconWrap>
                 </Header>
                 <InnnerMyAnswerViewLayout>
-                    {bid && (
+                    {matchUserId && (
                         <>
                             <ScoreLayout>
                                 <ScoreTitle>나와 김도희의 가치관은</ScoreTitle>
-                                <Score score={Util.calculateScore(8)}>{`${Util.calculateScore(8)}% 일치`}</Score>
+                                <Score score={Number(matchUser.userScore ?? 0)}>{`${Number(
+                                    matchUser.userScore ?? 0
+                                )}% 일치`}</Score>
                             </ScoreLayout>
                             <DividerContent>
                                 <Divider />
@@ -54,10 +62,19 @@ const ResultView: React.FC = () => {
                         </>
                     )}
                     {resultList.map((result, index) => {
-                        return <Component.SelectResult result={result} index={index} key={`result_${result.id}`} />;
+                        return (
+                            <Component.SelectResult
+                                result={result}
+                                index={index}
+                                matchUserId={matchUserId}
+                                matchUserName={matchUser.name}
+                                key={`result_${result.question_id}`}
+                            />
+                        );
                     })}
                 </InnnerMyAnswerViewLayout>
             </MyAnswerLayoutWrap>
+            {openError && <Components.ErrorPopup cancelButton={() => setOpenError(false)} />}
         </MyAnswerLayout>
     );
 };

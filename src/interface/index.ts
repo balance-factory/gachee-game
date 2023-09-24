@@ -2,7 +2,21 @@ export type MySelectResult = {
     question_id: number;
     title: string;
     answers: [{ answer_id: number; answer_content: string; question_id: string }];
-    selected_answer: {
+    selectedAnswer: {
+        answerId: number;
+        questionId: number;
+    };
+};
+
+export type MatchUserSelectResult = {
+    question_id: number;
+    title: string;
+    answers: [{ answer_id: number; answer_content: string; question_id: string }];
+    selectedAnswer: {
+        answerId: number;
+        questionId: number;
+    };
+    selectedBAnswer: {
         answerId: number;
         questionId: number;
     };

@@ -6,18 +6,17 @@ import styled from "styled-components";
 import BlueStar from "../../assets/icon/blue-star.svg";
 import Return from "../../assets/icon/small-return.svg";
 import Home from "../../assets/icon/home_icon.svg";
+import Empty from "../../assets/icon/send-clock.svg";
 
 const MatchList: React.FC = () => {
     const navigate = useNavigate();
     const { categoryId } = useParams();
-    console.log("categoryId ", categoryId);
-    localStorage.setItem("categoryId", categoryId!);
-    localStorage.setItem("userId", "ea23bdc1-aef8-4180-a882-b714f981f509");
     const [matchUsers, setMatchUsers] = useState<Interface.MatchUser[]>([]);
-    const userAId = "ea23bdc1-aef8-4180-a882-b714f981f509";
+    const userAId = sessionStorage.getItem("my-user-id")!;
+    sessionStorage.setItem("categoryId", `${categoryId}`);
 
     useEffect(() => {
-        // 컴포넌트가 마운트되었을 때 호출
+        //컴포넌트가 마운트되었을 때 호출
         const fetchMatchedUsers = async () => {
             try {
                 const users = await VM.getMatchUsers(userAId, Number(categoryId));
@@ -31,7 +30,7 @@ const MatchList: React.FC = () => {
     }, []);
 
     const handleClickMyAnswer = () => {
-        navigate(`/my-answer/${userAId}`);
+        navigate(`/my-answer`);
     };
 
     const handleClickHome = () => {
@@ -42,8 +41,9 @@ const MatchList: React.FC = () => {
         navigate(`/category`);
     };
 
-    const handleClickMatchResult = (userBId: string) => {
-        navigate(`/result/${userAId}/${userBId}`);
+    const handleClickMatchResult = (user: Interface.MatchUser) => {
+        sessionStorage.setItem("match-user-info", JSON.stringify({ name: user.name, userScore: user.match_score }));
+        navigate(`/result/${user.gachee_id}`);
     };
 
     return (
@@ -85,19 +85,32 @@ const MatchList: React.FC = () => {
                             <Count>{`${matchUsers.length ?? 0}명`}</Count>
                         </MatchUserCount>
                         <MatchUserListLayout>
-                            {matchUsers.map((user) => {
-                                return (
-                                    <MatchUserLayout
-                                        onClick={() => handleClickMatchResult(user.gachee_id)}
-                                        key={`${user.gachee_id}`}>
-                                        {user.profile_image ? <UserImg src={user.profile_image} /> : <UserEmptyImg />}
-                                        <UserName>{user.name}</UserName>
-                                        <UserScore score={user.match_score}>
-                                            {user.match_score}% <ScoreText>일치</ScoreText>
-                                        </UserScore>
-                                    </MatchUserLayout>
-                                );
-                            })}
+                            {matchUsers.length > 0 ? (
+                                matchUsers.map((user) => {
+                                    return (
+                                        <MatchUserLayout
+                                            onClick={() => handleClickMatchResult(user)}
+                                            key={`${user.gachee_id}`}>
+                                            {user.profile_image ? (
+                                                <UserImg src={user.profile_image} />
+                                            ) : (
+                                                <UserEmptyImg />
+                                            )}
+                                            <UserName>{user.name}</UserName>
+                                            <UserScore score={user.match_score}>
+                                                {user.match_score}% <ScoreText>일치</ScoreText>
+                                            </UserScore>
+                                        </MatchUserLayout>
+                                    );
+                                })
+                            ) : (
+                                <MatchUserEmptyLayout>
+                                    <div>
+                                        <Empty />
+                                    </div>
+                                    <EmptyText>{`${"아직 매칭을\n기다리고 있어요"}`}</EmptyText>
+                                </MatchUserEmptyLayout>
+                            )}
                         </MatchUserListLayout>
                     </MatchListWrap>
                 </InnnerMatchListLayout>
@@ -251,6 +264,15 @@ const MatchUserLayout = styled.div`
     margin: 20px 0;
 `;
 
+const MatchUserEmptyLayout = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100vh - 640px);
+`;
+
 const UserImg = styled.img`
     width: 36px;
     height: 36px;
@@ -286,4 +308,12 @@ const ScoreText = styled.span`
     font-size: 16px;
     color: inherit;
     margin-left: 4px;
+`;
+
+const EmptyText = styled.div`
+    margin-top: 16px;
+    font-size: 20px;
+    color: #7b7da1;
+    white-space: pre;
+    text-align: center;
 `;
