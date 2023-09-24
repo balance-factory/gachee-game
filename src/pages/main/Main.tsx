@@ -6,10 +6,12 @@ import Button from "assets/icon/main_button_icon.svg";
 import Dot from "assets/icon/dot.svg";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import * as VM from "./MainViewModel";
+import * as Components from "pages/components/index";
 
 const Main: React.FC = () => {
   const navigate = useNavigate();
   const [isModal, setModal] = useState<boolean>(false);
+  const [openError, setOpenError] = useState<boolean>(false);
   const [matchedUserName, setMatchedUserName] = useState<string>();
   const [serchParams, setSearchParams] = useSearchParams();
   const matchUserId = serchParams.get("match-user-id");
@@ -25,7 +27,7 @@ const Main: React.FC = () => {
       const UserInfo = await VM.getUserInfo(matchedUserId);
       UserInfo && setMatchedUserName(UserInfo.name);
     } catch (error) {
-      console.error("Error fetching matched users:", error);
+      setOpenError(true);
     }
   };
 
@@ -67,6 +69,9 @@ const Main: React.FC = () => {
         </Content>
       </ContentLayout>
       {isModal && <Modal.LoginModal cancelButton={() => setModal(false)} />}
+      {openError && (
+        <Components.ErrorPopup cancelButton={() => setOpenError(false)} />
+      )}
     </MainViewLayout>
   );
 };

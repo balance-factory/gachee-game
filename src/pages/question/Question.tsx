@@ -1,180 +1,188 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import * as VM from "./QuestionViewModel";
-import * as Components from "./components";
-import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import * as QuestionComponents from "./components";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import Pause from "assets/icon/pause_icon.svg";
 import ReplayIcon from "assets/icon/re_play_Icon.svg";
 import StopIcon from "assets/icon/stop.svg";
 import PlayIcon from "assets/icon/play.svg";
 import * as Images from "assets/image";
+import * as Components from "pages/components/index";
 
 const Question: React.FC = () => {
-    const pathname = useLocation().pathname;
-    const navigate = useNavigate();
-    const splitUrl = pathname.split("/");
-    const categoryId = splitUrl[2];
-    const questionId = splitUrl[4];
-    const answers = window.sessionStorage.getItem("answers");
-    const myUserId = window.sessionStorage.getItem("my-user-id");
-    const matchUserId = window.sessionStorage.getItem("match-user-id");
+  const pathname = useLocation().pathname;
+  const navigate = useNavigate();
+  const splitUrl = pathname.split("/");
+  const categoryId = splitUrl[2];
+  const questionId = splitUrl[4];
+  const answers = window.sessionStorage.getItem("answers");
+  const myUserId = window.sessionStorage.getItem("my-user-id");
+  const matchUserId = window.sessionStorage.getItem("match-user-id");
 
-    const lastPath = splitUrl[splitUrl.length - 1] === "answer" ? false : true;
-    const [isPause, setIsPause] = useState<boolean>(false);
-    const [situationAndQuestion, setSituationAndQuestion] =
-      useState<VM.SituationAndQuestion[]>();
-    const [situationTotal, setSituationTotal] = useState<number>(0);
-    const [situationOffset, setSituationOffset] = useState<number>(0);
-    const [userAnswers, setUserAnswers] = useState<VM.Answer[]>([]);
+  const lastPath = splitUrl[splitUrl.length - 1] === "answer" ? false : true;
+  const [openError, setOpenError] = useState<boolean>(false);
+  const [isPause, setIsPause] = useState<boolean>(false);
+  const [situationAndQuestion, setSituationAndQuestion] =
+    useState<VM.SituationAndQuestion[]>();
+  const [situationTotal, setSituationTotal] = useState<number>(0);
+  const [situationOffset, setSituationOffset] = useState<number>(0);
+  const [userAnswers, setUserAnswers] = useState<VM.Answer[]>([]);
 
-    const fetchSituationAndQuestion = async (categoryId: string) => {
-      try {
-        const data = await VM.getSituationAndQuestion(categoryId);
+  const fetchSituationAndQuestion = async (categoryId: string) => {
+    try {
+      const data = await VM.getSituationAndQuestion(categoryId);
 
-        setSituationAndQuestion(data);
-        setSituationTotal(data.length);
-      } catch (error) {
-        console.error("Error fetching matched users:", error);
-      }
-    };
+      setSituationAndQuestion(data);
+      setSituationTotal(data.length);
+    } catch (error) {
+      setOpenError(true);
+    }
+  };
 
-    const fetchPostUserAnswers = async (
-      answers: VM.Answer[],
-      userId: string,
-      categoryId: number
-    ) => {
-      try {
-        const data = await VM.postUserAnswers(answers, userId, categoryId);
+  const fetchPostUserAnswers = async (
+    answers: VM.Answer[],
+    userId: string,
+    categoryId: number
+  ) => {
+    try {
+      const data = await VM.postUserAnswers(answers, userId, categoryId);
 
-        if (data) {
-          if (userId && matchUserId) {
-            const matchedData = await VM.postMatchedUsers(
-              categoryId,
-              userId,
-              matchUserId
-            );
-            if (matchedData) navigate(`/match-list/${categoryId}`);
-          } else {
-            navigate(`/match-list/${categoryId}`);
-            window.sessionStorage.removeItem("answers");
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching matched users:", error);
-      }
-    };
-
-    const onClickNextSituation = (updateOffset: number, answerId: number) => {
-      userAnswers.push({
-        question_id: Number(questionId),
-        answer_id: answerId,
-      });
-      setUserAnswers(userAnswers);
-
-      window.sessionStorage.setItem("answers", JSON.stringify(userAnswers));
-
-      if (situationTotal < updateOffset + 1) {
-        if (answers && myUserId)
-          fetchPostUserAnswers(
-            JSON.parse(answers),
-            myUserId,
-            Number(categoryId)
+      if (data) {
+        if (userId && matchUserId) {
+          const matchedData = await VM.postMatchedUsers(
+            categoryId,
+            userId,
+            matchUserId
           );
-      } else {
-        setSituationOffset(updateOffset);
-        navigate(
-          `/category/${categoryId}/question/${
-            situationAndQuestion &&
-            situationAndQuestion[updateOffset].question_id
-          }`
-        );
+          if (matchedData) navigate(`/match-list/${categoryId}`);
+        } else {
+          navigate(`/match-list/${categoryId}`);
+          window.sessionStorage.removeItem("answers");
+        }
       }
-    };
+    } catch (error) {
+      setOpenError(true);
+    }
+  };
 
-    useEffect(() => {
-      fetchSituationAndQuestion(categoryId);
-    }, []);
+  const onClickNextSituation = (updateOffset: number, answerId: number) => {
+    userAnswers.push({
+      question_id: Number(questionId),
+      answer_id: answerId,
+    });
+    setUserAnswers(userAnswers);
 
-    useEffect(() => {
-      if (
-        situationAndQuestion &&
-        situationAndQuestion.length > 0 &&
-        questionId
-      ) {
-        const indexNumber = situationAndQuestion.findIndex(
-          (s) => s.question_id === Number(questionId)
-        );
+    window.sessionStorage.setItem("answers", JSON.stringify(userAnswers));
 
-        answers && setUserAnswers(JSON.parse(answers));
-        setSituationOffset(indexNumber);
-      }
-    }, [situationAndQuestion]);
+    if (situationTotal < updateOffset + 1) {
+      if (answers && myUserId)
+        fetchPostUserAnswers(JSON.parse(answers), myUserId, Number(categoryId));
+    } else {
+      setSituationOffset(updateOffset);
+      navigate(
+        `/category/${categoryId}/question/${
+          situationAndQuestion && situationAndQuestion[updateOffset].question_id
+        }`
+      );
+    }
+  };
 
-    return (
-        <QuestionViewLayout>
-            {isPause && (
-                <PauseLayout>
-                    <PauseContent>
-                        <PauseButtonColor
-                            onClick={() => {
-                                window.location.replace(`/category/${categoryId}/question`);
-                            }}>
-                            <ReplayIcon />
-                            다시하기
-                        </PauseButtonColor>
-                        <PauseButtonColor onClick={() => navigate("/")}>
-                            <StopIcon />
-                            그만하기
-                        </PauseButtonColor>
-                        <PauseButtonDefault onClick={() => setIsPause(false)}>
-                            <PlayIcon />
-                            계속하기
-                        </PauseButtonDefault>
-                    </PauseContent>
-                </PauseLayout>
-            )}
-            <ContentLayout>
-                <Pause onClick={() => setIsPause(true)} />
-                <>
-                    {lastPath && situationAndQuestion && (
-                        <>
-                            <SituationImage src={situationAndQuestion[situationOffset].situation_image} />
+  useEffect(() => {
+    fetchSituationAndQuestion(categoryId);
+  }, []);
 
-                            <QuestionLayout>
-                                <QuestionContent>
-                                    <QuestionText>{situationAndQuestion[situationOffset].situation}</QuestionText>
+  useEffect(() => {
+    if (situationAndQuestion && situationAndQuestion.length > 0 && questionId) {
+      const indexNumber = situationAndQuestion.findIndex(
+        (s) => s.question_id === Number(questionId)
+      );
 
-                                    <NextQuestionButton
-                                        onClick={() =>
-                                            navigate(
-                                                `/category/${categoryId}/question/${situationAndQuestion[situationOffset].question_id}/answer`
-                                            )
-                                        }>
-                                        <BottomArrow src={Images.BottomArrow} />
-                                    </NextQuestionButton>
-                                </QuestionContent>
-                            </QuestionLayout>
-                        </>
-                    )}
-                </>
+      answers && setUserAnswers(JSON.parse(answers));
+      setSituationOffset(indexNumber);
+    }
+  }, [situationAndQuestion]);
 
-                <Routes>
-                    {/* path에 부모 경로까지 적을 필요 없이 파라미터만 적어줌 (:questionId) */}
-                    <Route
-                        path="/:id/answer"
-                        element={
-                            <Components.QuestionAndAnswer
-                                categoryId={categoryId}
-                                situationAndQuestion={situationAndQuestion}
-                                situationOffset={situationOffset}
-                                clickGoNextSituation={onClickNextSituation}
-                            />
-                        }
-                    />
-                </Routes>
-            </ContentLayout>
-        </QuestionViewLayout>
-    );
+  return (
+    <QuestionViewLayout>
+      {isPause && (
+        <PauseLayout>
+          <PauseContent>
+            <PauseButtonColor
+              onClick={() => {
+                window.location.replace(`/category/${categoryId}/question`);
+              }}
+            >
+              <ReplayIcon />
+              다시하기
+            </PauseButtonColor>
+            <PauseButtonColor onClick={() => navigate("/")}>
+              <StopIcon />
+              그만하기
+            </PauseButtonColor>
+            <PauseButtonDefault onClick={() => setIsPause(false)}>
+              <PlayIcon />
+              계속하기
+            </PauseButtonDefault>
+          </PauseContent>
+        </PauseLayout>
+      )}
+      <ContentLayout>
+        <Pause onClick={() => setIsPause(true)} />
+        <>
+          {lastPath && situationAndQuestion && (
+            <>
+              <SituationImage
+                src={situationAndQuestion[situationOffset].situation_image}
+              />
+
+              <QuestionLayout>
+                <QuestionContent>
+                  <QuestionText>
+                    {situationAndQuestion[situationOffset].situation}
+                  </QuestionText>
+
+                  <NextQuestionButton
+                    onClick={() =>
+                      navigate(
+                        `/category/${categoryId}/question/${situationAndQuestion[situationOffset].question_id}/answer`
+                      )
+                    }
+                  >
+                    <BottomArrow src={Images.BottomArrow} />
+                  </NextQuestionButton>
+                </QuestionContent>
+              </QuestionLayout>
+            </>
+          )}
+        </>
+
+        <Routes>
+          {/* path에 부모 경로까지 적을 필요 없이 파라미터만 적어줌 (:questionId) */}
+          <Route
+            path="/:id/answer"
+            element={
+              <QuestionComponents.QuestionAndAnswer
+                categoryId={categoryId}
+                situationAndQuestion={situationAndQuestion}
+                situationOffset={situationOffset}
+                clickGoNextSituation={onClickNextSituation}
+              />
+            }
+          />
+        </Routes>
+      </ContentLayout>
+      {openError && (
+        <Components.ErrorPopup cancelButton={() => setOpenError(false)} />
+      )}
+    </QuestionViewLayout>
+  );
 };
 
 export default Question;
