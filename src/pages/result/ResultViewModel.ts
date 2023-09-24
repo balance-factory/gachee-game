@@ -12,20 +12,20 @@ export type SituationAndQuestion = {
     answers: [{ answer_id: number; answer_content: string; question_id: string }];
 };
 
-export const getUserAnswersResult = async (
+export const getMyAnswerAndMatchedUserAnswerResult = async (
     categoryId: number,
-    userId: string,
-    userBId: string
+    myId: string,
+    matchUserId: string
 ): Promise<Interface.MatchUserSelectResult[]> => {
     try {
         const [api1Response, api2Response, api3Response] = await Promise.all([
             fetch(`${BASE_URL}/category/${categoryId}`).then((response) => response.json()) as Promise<
                 SituationAndQuestion[]
             >,
-            fetch(`${BASE_URL}/category/${categoryId}/user/${userId}/answers`).then((response) =>
+            fetch(`${BASE_URL}/category/${categoryId}/user/${myId}/answers`).then((response) =>
                 response.json().then((res) => res.data.userAnswerResults)
             ) as Promise<{ answerId: number; questionId: number }[]>,
-            fetch(`${BASE_URL}/category/${categoryId}/user/${userBId}/answers`).then((response) =>
+            fetch(`${BASE_URL}/category/${categoryId}/user/${matchUserId}/answers`).then((response) =>
                 response.json().then((res) => res.data.userAnswerResults)
             ) as Promise<{ answerId: number; questionId: number }[]>,
         ]);

@@ -42,7 +42,7 @@ const MatchList: React.FC = () => {
     };
 
     const handleClickMatchResult = (user: Interface.MatchUser) => {
-        sessionStorage.setItem("bUserInfo", JSON.stringify({ name: user.name, userScore: user.match_score }));
+        sessionStorage.setItem("match-user-info", JSON.stringify({ name: user.name, userScore: user.match_score }));
         navigate(`/result/${user.gachee_id}`);
     };
 

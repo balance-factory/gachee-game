@@ -7,20 +7,20 @@ import * as Component from "./components";
 import * as VM from "./ResultViewModel";
 
 const ResultView: React.FC = () => {
-    const userAId = sessionStorage.getItem("my-user-id");
+    const myId = sessionStorage.getItem("my-user-id");
     const categoryId = sessionStorage.getItem("categoryId");
-    const { userId } = useParams();
+    const { matchUserId } = useParams();
     const navigate = useNavigate();
 
-    const bUserInfo = sessionStorage.getItem("bUserInfo");
+    const matchUserInfo = sessionStorage.getItem("match-user-info");
     const [resultList, setResultList] = useState<Interface.MatchUserSelectResult[]>([]);
-    const userInfo: { name: string; userScore: number } = JSON.parse(bUserInfo!);
+    const matchUser: { name: string; userScore: number } = JSON.parse(matchUserInfo!);
 
     useEffect(() => {
         // 컴포넌트가 마운트되었을 때 호출
         const fetchUserResult = async () => {
             try {
-                const users = await VM.getUserAnswersResult(Number(categoryId), userAId!, userId!);
+                const users = await VM.getMyAnswerAndMatchedUserAnswerResult(Number(categoryId), myId!, matchUserId!);
                 setResultList(users);
             } catch (error) {
                 console.error("Error fetching matched users:", error);
@@ -43,12 +43,12 @@ const ResultView: React.FC = () => {
                     </IconWrap>
                 </Header>
                 <InnnerMyAnswerViewLayout>
-                    {userId && (
+                    {matchUserId && (
                         <>
                             <ScoreLayout>
                                 <ScoreTitle>나와 김도희의 가치관은</ScoreTitle>
-                                <Score score={Number(userInfo.userScore ?? 0)}>{`${Number(
-                                    userInfo.userScore ?? 0
+                                <Score score={Number(matchUser.userScore ?? 0)}>{`${Number(
+                                    matchUser.userScore ?? 0
                                 )}% 일치`}</Score>
                             </ScoreLayout>
                             <DividerContent>
@@ -63,8 +63,8 @@ const ResultView: React.FC = () => {
                             <Component.SelectResult
                                 result={result}
                                 index={index}
-                                bUserId={userId}
-                                userName={userInfo.name}
+                                matchUserId={matchUserId}
+                                matchUserName={matchUser.name}
                                 key={`result_${result.question_id}`}
                             />
                         );

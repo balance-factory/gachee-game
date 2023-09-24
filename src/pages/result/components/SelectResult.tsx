@@ -5,11 +5,11 @@ import * as Interface from "../../../interface";
 interface ResultProps {
     result: Interface.MatchUserSelectResult;
     index: number;
-    bUserId?: string;
-    userName: string;
+    matchUserId?: string;
+    matchUserName: string;
 }
 
-const SelectResult: React.FC<ResultProps> = ({ result, index, bUserId, userName }) => {
+const SelectResult: React.FC<ResultProps> = ({ result, index, matchUserId, matchUserName }) => {
     return (
         <ResultLayout>
             <QuestionNumber>{`Q${index + 1}`}</QuestionNumber>
@@ -18,17 +18,17 @@ const SelectResult: React.FC<ResultProps> = ({ result, index, bUserId, userName 
                 return (
                     <AnswerContent
                         selected={result.selectedAnswer.answerId === content.answer_id}
-                        bUserSelected={bUserId ? result.selectedBAnswer.answerId === content.answer_id : false}
+                        bUserSelected={matchUserId ? result.selectedBAnswer.answerId === content.answer_id : false}
                         key={content.answer_id}>
                         <AnswerText>{content.answer_content}</AnswerText>
-                        {bUserId && (
+                        {matchUserId && (
                             <>
                                 {result.selectedAnswer.answerId === content.answer_id && <UserA>ME</UserA>}
                                 {result.selectedBAnswer.answerId === content.answer_id && (
                                     <UserB
                                         aUserSelected={result.selectedAnswer.answerId === content.answer_id}
                                         bUserSelected={result.selectedBAnswer.answerId === content.answer_id}>
-                                        {`${userName.slice(0, 1)}`}
+                                        {`${matchUserName.slice(0, 1)}`}
                                     </UserB>
                                 )}
                             </>
