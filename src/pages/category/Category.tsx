@@ -7,10 +7,12 @@ import RightArrow from "assets/icon/arrow_right_icon.svg";
 import LeftArrow from "assets/icon/arrow_left_icon.svg";
 import { useNavigate } from "react-router-dom";
 import * as VM from "./CategoryViewModel";
+import * as Components from "pages/components/index";
 
 const Category: React.FC = () => {
   const isWeb = window.navigator.userAgent.toLowerCase().includes("web");
   const navigate = useNavigate();
+  const [openError, setOpenError] = useState<boolean>(false);
   const [categoryList, setCategoryList] = useState<VM.Category[]>([]);
   const [categoryId, setCategoryId] = useState<number>(1);
 
@@ -21,7 +23,7 @@ const Category: React.FC = () => {
       setCategoryList(Categories);
       setCategoryId(Categories[0].category_id);
     } catch (error) {
-      console.error("Error fetching matched users:", error);
+      setOpenError(true);
     }
   };
 
@@ -90,6 +92,9 @@ const Category: React.FC = () => {
             <BottomBtn>{getNowTime()}</BottomBtn>
           </BottomLineLayout>
         )}
+        {openError && (
+          <Components.ErrorPopup cancelButton={() => setOpenError(false)} />
+        )}
       </ContentLayout>
     </CategoryViewLayout>
   );
@@ -105,6 +110,7 @@ const CategoryContentLayout = styled.div`
 `;
 
 const CategoryViewLayout = styled.div`
+  position: relative;
   width: 100%;
   height: 100%;
   display: flex;
