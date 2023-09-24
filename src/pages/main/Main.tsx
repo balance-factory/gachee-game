@@ -1,12 +1,36 @@
 import styled from "styled-components";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as Modal from "./modal";
 import * as Images from "assets/image";
 import Button from "assets/icon/main_button_icon.svg";
-
+import { useSearchParams } from "react-router-dom";
+import * as VM from "./MainViewModel";
 
 const Main: React.FC = () => {
   const [isModal, setModal] = useState<boolean>(false);
+  const [matchedUserName, setMatchedUserName] = useState<string>();
+
+  const [serchParams, setSearchParams] = useSearchParams();
+  const matchUserId = serchParams.get("match-user-id");
+  const myUserId = serchParams.get("my-user-id");
+  const categoryid = serchParams.get("category-id");
+
+  myUserId && window.sessionStorage.setItem("my-user-id", myUserId);
+  matchUserId && window.sessionStorage.setItem("matched-id", matchUserId);
+
+  const fetchGetUserInfo = async (matchedUserId: string) => {
+    try {
+      const UserInfo = await VM.getUserInfo(matchedUserId);
+      UserInfo && setMatchedUserName(UserInfo.name);
+    } catch (error) {
+      console.error("Error fetching matched users:", error);
+    }
+  };
+
+  useEffect(() => {
+    matchUserId && fetchGetUserInfo(matchUserId);
+  }, []);
+
   return (
     <MainViewLayout>
       <ContentLayout>
@@ -18,7 +42,13 @@ const Main: React.FC = () => {
           <Border>
             <HeartIcon src={Images.Heart} />
             <TitleIcon src={Images.Title} />
-
+            {matchedUserName && (
+              <MatchedText>
+                {matchedUserName}님이 테스트를
+                <br />
+                보냈어요!
+              </MatchedText>
+            )}
             <ButtonIconLayout onClick={() => setModal(true)}>
               <ButtonText>start</ButtonText>
               <Button />
@@ -32,6 +62,16 @@ const Main: React.FC = () => {
 };
 
 export default Main;
+
+const MatchedText = styled.div`
+  position: absolute;
+  bottom: 340px;
+  left: calc(50% - 95px);
+  color: white;
+  font-size: 24px;
+  text-align: center;
+`;
+
 
 const MainViewLayout = styled.div`
   width: 100%;

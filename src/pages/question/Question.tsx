@@ -11,19 +11,19 @@ import * as Images from "assets/image";
 
 const Question: React.FC = () => {
     const pathname = useLocation().pathname;
+    const navigate = useNavigate();
     const splitUrl = pathname.split("/");
     const categoryId = splitUrl[2];
     const questionId = splitUrl[4];
+    const answers = window.sessionStorage.getItem("answers");
+    const userId = window.sessionStorage.getItem("my-user-id");
     const lastPath = splitUrl[splitUrl.length - 1] === "answer" ? false : true;
     const [isPause, setIsPause] = useState<boolean>(false);
-
-    const navigate = useNavigate();
-    const [situationAndQuestion, setSituationAndQuestion] = useState<VM.SituationAndQuestion[]>();
+    const [situationAndQuestion, setSituationAndQuestion] =
+      useState<VM.SituationAndQuestion[]>();
     const [situationTotal, setSituationTotal] = useState<number>(0);
     const [situationOffset, setSituationOffset] = useState<number>(0);
     const [userAnswers, setUserAnswers] = useState<VM.Answer[]>([]);
-    const answers = window.sessionStorage.getItem("answers");
-    const userId = window.sessionStorage.getItem("my-id");
 
     const fetchSituationAndQuestion = async (categoryId: string) => {
       try {
@@ -54,24 +54,26 @@ const Question: React.FC = () => {
     };
 
     const onClickNextSituation = (updateOffset: number, answerId: number) => {
-        userAnswers.push({
-            question_id: Number(questionId),
-            answer_id: answerId,
-        });
-        setUserAnswers(userAnswers);
+      userAnswers.push({
+        question_id: Number(questionId),
+        answer_id: answerId,
+      });
+      setUserAnswers(userAnswers);
 
-        window.sessionStorage.setItem("answers", JSON.stringify(userAnswers));
+      window.sessionStorage.setItem("answers", JSON.stringify(userAnswers));
 
-        if (situationTotal < updateOffset + 1) {
-            if (answers && userId) fetchPostUserAnswers(JSON.parse(answers), userId, Number(categoryId));
-        } else {
-            setSituationOffset(updateOffset);
-            navigate(
-                `/category/${categoryId}/question/${
-                    situationAndQuestion && situationAndQuestion[updateOffset].question_id
-                }`
-            );
-        }
+      if (situationTotal < updateOffset + 1) {
+        if (answers && userId)
+          fetchPostUserAnswers(JSON.parse(answers), userId, Number(categoryId));
+      } else {
+        setSituationOffset(updateOffset);
+        navigate(
+          `/category/${categoryId}/question/${
+            situationAndQuestion &&
+            situationAndQuestion[updateOffset].question_id
+          }`
+        );
+      }
     };
 
     useEffect(() => {
