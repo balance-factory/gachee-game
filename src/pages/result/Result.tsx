@@ -5,6 +5,7 @@ import BackArrow from "../../assets/icon/back_arrow_icon.svg";
 import * as Interface from "../../interface";
 import * as Component from "./components";
 import * as VM from "./ResultViewModel";
+import * as Components from "pages/components";
 
 const ResultView: React.FC = () => {
     const myId = sessionStorage.getItem("my-user-id");
@@ -15,6 +16,7 @@ const ResultView: React.FC = () => {
     const matchUserInfo = sessionStorage.getItem("match-user-info");
     const [resultList, setResultList] = useState<Interface.MatchUserSelectResult[]>([]);
     const matchUser: { name: string; userScore: number } = JSON.parse(matchUserInfo!);
+    const [openError, setOpenError] = useState<boolean>(false);
 
     useEffect(() => {
         // 컴포넌트가 마운트되었을 때 호출
@@ -23,6 +25,7 @@ const ResultView: React.FC = () => {
                 const users = await VM.getMyAnswerAndMatchedUserAnswerResult(Number(categoryId), myId!, matchUserId!);
                 setResultList(users);
             } catch (error) {
+                setOpenError(true);
                 console.error("Error fetching matched users:", error);
             }
         };
@@ -71,6 +74,7 @@ const ResultView: React.FC = () => {
                     })}
                 </InnnerMyAnswerViewLayout>
             </MyAnswerLayoutWrap>
+            {openError && <Components.ErrorPopup cancelButton={() => setOpenError(false)} />}
         </MyAnswerLayout>
     );
 };
