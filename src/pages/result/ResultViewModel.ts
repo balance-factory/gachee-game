@@ -49,7 +49,7 @@ export const getUserAnswersResult = async (
             };
             return result;
         });
-        console.log("questions", questions);
+
         return questions; // Return the questions questions;
     } catch (error) {
         console.error("Error fetching APIs:", error);

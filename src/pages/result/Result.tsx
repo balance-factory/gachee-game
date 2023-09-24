@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import BackArrow from "../../assets/icon/back_arrow_icon.svg";
 import * as Interface from "../../interface";
 import * as Component from "./components";
-import * as Util from "../../utils";
 import * as VM from "./ResultViewModel";
 
 const ResultView: React.FC = () => {
