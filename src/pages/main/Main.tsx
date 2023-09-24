@@ -3,20 +3,21 @@ import React, { useState, useEffect } from "react";
 import * as Modal from "./modal";
 import * as Images from "assets/image";
 import Button from "assets/icon/main_button_icon.svg";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import * as VM from "./MainViewModel";
 
 const Main: React.FC = () => {
+  const navigate = useNavigate();
   const [isModal, setModal] = useState<boolean>(false);
   const [matchedUserName, setMatchedUserName] = useState<string>();
-
   const [serchParams, setSearchParams] = useSearchParams();
   const matchUserId = serchParams.get("match-user-id");
   const myUserId = serchParams.get("my-user-id");
-  const categoryid = serchParams.get("category-id");
+  const categoryId = serchParams.get("category-id");
 
   myUserId && window.sessionStorage.setItem("my-user-id", myUserId);
-  matchUserId && window.sessionStorage.setItem("matched-id", matchUserId);
+  matchUserId && window.sessionStorage.setItem("match-user-id", matchUserId);
+  categoryId && window.sessionStorage.setItem("category-id", categoryId);
 
   const fetchGetUserInfo = async (matchedUserId: string) => {
     try {
@@ -26,6 +27,14 @@ const Main: React.FC = () => {
       console.error("Error fetching matched users:", error);
     }
   };
+
+  // const clickLogin = () => {
+  //   if (myUserId && categoryId) {
+
+  //   } else {
+  //     setModal(true);
+  //   }
+  // };
 
   useEffect(() => {
     matchUserId && fetchGetUserInfo(matchUserId);
