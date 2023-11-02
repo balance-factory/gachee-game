@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import * as Components from "./components";
 import * as Interface from "../../interface";
 import * as VM from "./MatchListModel";
+import * as Util from "../../utils";
 import styled from "styled-components";
 import BlueStar from "../../assets/icon/blue-star.svg";
 import Return from "../../assets/icon/small-return.svg";
@@ -11,22 +13,21 @@ import Empty from "../../assets/icon/send-clock.svg";
 const MatchList: React.FC = () => {
     const navigate = useNavigate();
     const { categoryId } = useParams();
-    const [matchUsers, setMatchUsers] = useState<Interface.MatchUser[]>([]);
     const userAId = sessionStorage.getItem("my-user-id")!;
+    const [matchedUsers, setMatchedUsers] = useState<Interface.MatchedUser[]>([]);
     sessionStorage.setItem("categoryId", `${categoryId}`);
 
     useEffect(() => {
         //컴포넌트가 마운트되었을 때 호출
-        const fetchMatchedUsers = async () => {
-            try {
-                const users = await VM.getMatchUsers(userAId, Number(categoryId));
-                setMatchUsers(users);
-            } catch (error) {
-                console.error("Error fetching matched users:", error);
-            }
-        };
 
-        fetchMatchedUsers();
+        VM.getMatchedUsers(Number(categoryId))
+            .then((res) => {
+                setMatchedUsers(res);
+            })
+            .catch((err) => {
+                if (err.status) {
+                }
+            });
     }, []);
 
     const handleClickMyAnswer = () => {
@@ -41,9 +42,9 @@ const MatchList: React.FC = () => {
         navigate(`/category`);
     };
 
-    const handleClickMatchResult = (user: Interface.MatchUser) => {
-        sessionStorage.setItem("match-user-info", JSON.stringify({ name: user.name, userScore: user.match_score }));
-        navigate(`/result/${user.gachee_id}`);
+    const handleClickShare = () => {
+        console.log(location);
+        Util.addClipboard(`/?category-id=${categoryId}&match-user-id=${userAId}`);
     };
 
     return (
@@ -67,7 +68,7 @@ const MatchList: React.FC = () => {
                         <br />
                         링크를 공유해주세요.
                     </SubTitle>
-                    <LinkShareButton onClick={() => console.log("data")}>
+                    <LinkShareButton onClick={handleClickShare}>
                         <ButtonText style={{ fontFamily: "Galmuri_Bold" }}>링크 공유하기</ButtonText>
                     </LinkShareButton>
                     <MyAnswerButton onClick={handleClickMyAnswer}>
@@ -82,26 +83,12 @@ const MatchList: React.FC = () => {
                     <MatchListWrap>
                         <MatchUserCount>
                             {`응답한 사람`}
-                            <Count>{`${matchUsers.length ?? 0}명`}</Count>
+                            <Count>{`${matchedUsers.length ?? 0}명`}</Count>
                         </MatchUserCount>
                         <MatchUserListLayout>
-                            {matchUsers.length > 0 ? (
-                                matchUsers.map((user) => {
-                                    return (
-                                        <MatchUserLayout
-                                            onClick={() => handleClickMatchResult(user)}
-                                            key={`${user.gachee_id}`}>
-                                            {user.profile_image ? (
-                                                <UserImg src={user.profile_image} />
-                                            ) : (
-                                                <UserEmptyImg />
-                                            )}
-                                            <UserName>{user.name}</UserName>
-                                            <UserScore score={user.match_score}>
-                                                {user.match_score}% <ScoreText>일치</ScoreText>
-                                            </UserScore>
-                                        </MatchUserLayout>
-                                    );
+                            {matchedUsers.length > 0 ? (
+                                matchedUsers.map((user) => {
+                                    return <Components.MatchedUserItem matchedUserInfo={user} />;
                                 })
                             ) : (
                                 <MatchUserEmptyLayout>
@@ -251,18 +238,6 @@ const MatchUserListLayout = styled.div`
     margin-top: 10px;
 `;
 
-const MatchUserLayout = styled.div`
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 20px;
-    width: 100%;
-    height: 93px;
-    border: 1px solid #fff;
-    border-radius: 12px;
-    margin: 20px 0;
-`;
-
 const MatchUserEmptyLayout = styled.div`
     display: flex;
     justify-content: center;
@@ -270,43 +245,6 @@ const MatchUserEmptyLayout = styled.div`
     flex-direction: column;
     width: 100%;
     height: calc(100vh - 640px);
-`;
-
-const UserImg = styled.img`
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background-color: #eee;
-`;
-
-const UserEmptyImg = styled.div`
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background-color: #f56571;
-    border: 1px solid #fff;
-`;
-
-const UserName = styled.div`
-    font-size: 16px;
-    color: #fff;
-    margin-left: 30px;
-`;
-
-const UserScore = styled.div<{ score: number }>`
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    font-family: Galmuri_Bold;
-    font-size: 20px;
-    color: ${(props) => (props.score <= 39 ? "#E5505D" : props.score > 39 && props.score < 80 ? "#F2AA18" : "#1eb82d")};
-    margin-left: auto;
-`;
-
-const ScoreText = styled.span`
-    font-size: 16px;
-    color: inherit;
-    margin-left: 4px;
 `;
 
 const EmptyText = styled.div`

@@ -1,14 +1,13 @@
 import * as Interface from "../../interface";
-export const BASE_URL: any = "https://btteur8pu6.execute-api.ap-northeast-2.amazonaws.com/dev";
+import { api } from "../../api";
 
-export const getMatchUsers = async (userId: string, categoryId: number): Promise<Interface.MatchUser[]> => {
+export const getMatchedUsers = async (categoryId: number) => {
     try {
-        const response = await fetch(`${BASE_URL}/category/${categoryId}/user/${userId}/matched-users`);
-        const data = await response.json();
-
-        return data;
+        const response = await api.get<Interface.MatchedUser[]>(
+            `/memberAnswers/matchedUserList?categoryId=${categoryId}`
+        );
+        return response.data;
     } catch (error) {
-        console.error("Error fetching match users:", error);
-        return [];
+        throw error;
     }
 };

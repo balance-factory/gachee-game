@@ -5,11 +5,10 @@ type Params = {
     [key: string]: unknown;
 };
 
-export const baseUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+export const baseUrl = process.env.BACKEND_API_URL;
 export const errorHandle = {
     callback: (v: boolean) => {},
 };
-export const navigate = useNavigate();
 
 export const api = {
     get: <T>(url: string, params?: Params) => axios.get<T>(baseUrl + url, { params: { ...params } }),
@@ -26,6 +25,7 @@ axios.interceptors.response.use(
     },
     async function (error) {
         if (error.response.status === 401) {
+            const navigate = useNavigate();
             // 401: Unauthorized
             // localStorage에서 refreshToken을 가져와서 재발급 요청
             // 재발급 요청이 실패하면 로그인 페이지로 이동
@@ -36,7 +36,7 @@ axios.interceptors.response.use(
                 localStorage.removeItem("accessToken");
                 const refreshToken = localStorage.getItem("refreshToken");
                 const result = await api.post(
-                    "/",
+                    "/auth/refresh",
                     {
                         refreshToken,
                     },
@@ -59,9 +59,10 @@ axios.interceptors.response.use(
 );
 
 axios.interceptors.request.use(function (config: any) {
-    if (config.url.indexOf("/") > -1 || config.url.indexOf("/signup") > -1) return config;
+    if (config.url.indexOf("/") > -1 || config.url.indexOf("/") > -1) return config;
     config.headers = {
-        Authorization: localStorage.getItem("accessToken") || "",
+        ...config.headers,
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     };
     return config;
 });

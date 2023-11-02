@@ -33,13 +33,13 @@ export type UserAnswer = {
 };
 
 export type UserInfo = {
-  user_id: string;
-  name: string;
-  gender: string;
-  profile_image: string;
-  social: string;
-  gachee_id: string;
-  isFirstTime: number;
+    user_id: string;
+    name: string;
+    gender: string;
+    profile_image: string;
+    social: string;
+    gachee_id: string;
+    isFirstTime: number;
 };
 
 export type Answer = {
@@ -47,15 +47,15 @@ export type Answer = {
     text: string;
 };
 
-export type MatchUser = {
-    gachee_id: string;
+export type MatchedUser = {
+    gacheeId: string;
+    profileImage: string;
     name: string;
+    email: string;
+    isFirst: boolean;
     gender: string;
-    profile_image: "";
     social: string;
-    user_id: string;
-    is_first: boolean;
-    created_at: string;
-    updated_at: string;
-    match_score: number;
+    createdAt: string;
+    updatedAt: string;
+    matchScore: number;
 };

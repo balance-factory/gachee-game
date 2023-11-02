@@ -13,28 +13,16 @@ const MatchedResult: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { categoryId } = useParams();
-    const [matchUsers, setMatchUsers] = useState<Interface.MatchUser[]>([]);
+    const [matchUsers, setMatchUsers] = useState<Interface.MatchedUser[]>([]);
     const [resultList, setResultList] = useState<Interface.MatchUserSelectResult[]>([]);
     const userAId = sessionStorage.getItem("my-user-id")!;
+    const userBId = sessionStorage.getItem("my-user-id")!;
     sessionStorage.setItem("categoryId", `${categoryId}`);
 
     useEffect(() => {
         //컴포넌트가 마운트되었을 때 호출
-        const fetchMatchedUsers = async () => {
-            try {
-                // const users = await VM.getMatchUsers(userAId, Number(categoryId));
-                // setMatchUsers(users);
-            } catch (error) {
-                console.error("Error fetching matched users:", error);
-            }
-        };
-
-        fetchMatchedUsers();
+        // getMatchedUsers(categoryId).
     }, []);
-
-    const handleClickMyAnswer = () => {
-        navigate(`/my-answer`);
-    };
 
     const handleClickHome = () => {
         navigate(`/`);
@@ -44,14 +32,14 @@ const MatchedResult: React.FC = () => {
         navigate(`/category`);
     };
 
-    const handleClickMatchResult = (user: Interface.MatchUser) => {
-        sessionStorage.setItem("match-user-info", JSON.stringify({ name: user.name, userScore: user.match_score }));
-        navigate(`/result/${user.gachee_id}`);
+    const handleClickMatchResult = (user: Interface.MatchedUser) => {
+        sessionStorage.setItem("match-user-info", JSON.stringify({ name: user.name, userScore: user.matchScore }));
+        navigate(`/result/${user.gacheeId}`);
     };
 
     const handleClickShare = () => {
         console.log(location);
-        Util.addClipboard("aa");
+        Util.addClipboard(`/?category-id=${categoryId}?my-user-id=${userAId}&match-user-id=${userBId}`);
     };
 
     return (
@@ -90,17 +78,19 @@ const MatchedResult: React.FC = () => {
                     <ContentTitle>전체 답안 보기</ContentTitle>
                     <Divider />
                 </DividerContent>
-                {resultList.map((result, index) => {
-                    return (
-                        <Components.SelectResult
-                            result={result}
-                            index={index}
-                            matchUserId={"1"}
-                            matchUserName={"김도희"}
-                            key={`result_${result.question_id}`}
-                        />
-                    );
-                })}
+                <div style={{ height: "500px" }}>
+                    {resultList.map((result, index) => {
+                        return (
+                            <Components.SelectResult
+                                result={result}
+                                index={index}
+                                matchUserId={"1"}
+                                matchUserName={"김도희"}
+                                key={`result_${result.question_id}`}
+                            />
+                        );
+                    })}
+                </div>
             </MatchLayoutWrap>
         </MatchedUserLayout>
     );
@@ -196,24 +186,26 @@ const RetryTestText = styled.div`
     color: #fff;
     font-size: 14px;
     margin-left: 10px;
-    cursor: pointer;
 `;
 
 const DividerContent = styled.div`
     display: flex;
     align-items: center;
+    justify-content: center;
     width: 100%;
     height: 3px;
     margin-top: 40px;
 `;
 
 const Divider = styled.div`
-    width: 40%;
+    width: 36%;
     height: 1px;
     border: dashed 1px #fff;
 `;
 
 const ContentTitle = styled.div`
     color: #fff;
+    padding: 0 10px;
+    text-align: center;
     margin: 0 10px;
 `;
