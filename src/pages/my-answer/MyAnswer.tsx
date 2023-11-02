@@ -15,7 +15,7 @@ const MyAnswerView: React.FC = () => {
     useEffect(() => {
         const fetchUserResult = async () => {
             try {
-                const answers = await VM.getUserResult(Number(categoryId), userAId!);
+                const answers = await VM.getUserResult(Number(categoryId));
                 setMyAnswers(answers);
             } catch (error) {
                 console.error("Error fetching matched users:", error);
@@ -39,7 +39,7 @@ const MyAnswerView: React.FC = () => {
                 </Header>
                 <InnnerMyAnswerViewLayout>
                     {myAnswers?.map((result, index) => {
-                        return <Component.AnswerItem key={result.question_id} result={result} index={index} />;
+                        return <Component.AnswerItem key={result.questionId} result={result} index={index} />;
                     })}
                 </InnnerMyAnswerViewLayout>
             </MyAnswerLayoutWrap>
