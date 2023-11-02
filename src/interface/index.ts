@@ -1,54 +1,25 @@
 export type MySelectResult = {
-    question_id: number;
+    questionId: number;
     title: string;
-    answers: [{ answer_id: number; answer_content: string; question_id: string }];
-    selectedAnswer: {
-        answerId: number;
-        questionId: number;
-    };
+    answers: Answer[];
+    selectedAnswer: SelectedAnswer;
 };
 
 export type MatchUserSelectResult = {
-    question_id: number;
+    questionId: number;
     title: string;
-    answers: [{ answer_id: number; answer_content: string; question_id: string }];
-    selectedAnswer: {
-        answerId: number;
-        questionId: number;
-    };
-    selectedBAnswer: {
-        answerId: number;
-        questionId: number;
-    };
-};
-
-export type UserAnswer = {
-    question_id: number;
-    question_title: string;
     answers: Answer[];
-    selected_answer: {
-        answer_id: number;
-        answer_content: string;
-    };
+    selectedMyAnswer: SelectedAnswer;
+    selectedMatchedUserAnswer: SelectedAnswer;
 };
 
-export type UserInfo = {
-    user_id: string;
-    name: string;
-    gender: string;
-    profile_image: string;
-    social: string;
-    gachee_id: string;
-    isFirstTime: number;
-};
-
-export type Answer = {
-    id: number;
-    text: string;
+export type SelectedAnswer = {
+    answerId: number;
+    questionId: number;
 };
 
 export type MatchedUser = {
-    gacheeId: string;
+    memberId: string;
     profileImage: string;
     name: string;
     email: string;
@@ -58,4 +29,25 @@ export type MatchedUser = {
     createdAt: string;
     updatedAt: string;
     matchScore: number;
+};
+
+export type Question = {
+    questionId: number;
+    situation: string;
+    situationImage: string;
+    titleImage: string;
+    title: string;
+    subTitle?: string;
+    answerList: Answer[];
+};
+
+export type Answer = {
+    answerId: number;
+    questionId: number;
+    answerContent: string;
+};
+
+export type MemberAnswer = {
+    answerId: number;
+    questionId: number;
 };

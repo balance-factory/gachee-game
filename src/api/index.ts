@@ -5,7 +5,7 @@ type Params = {
     [key: string]: unknown;
 };
 
-export const baseUrl = process.env.BACKEND_API_URL;
+export const baseUrl = "https://btteur8pu6.execute-api.ap-northeast-2.amazonaws.com/dev";
 export const errorHandle = {
     callback: (v: boolean) => {},
 };

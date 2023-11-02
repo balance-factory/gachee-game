@@ -32,11 +32,6 @@ const MatchedResult: React.FC = () => {
         navigate(`/category`);
     };
 
-    const handleClickMatchResult = (user: Interface.MatchedUser) => {
-        sessionStorage.setItem("match-user-info", JSON.stringify({ name: user.name, userScore: user.matchScore }));
-        navigate(`/result/${user.gacheeId}`);
-    };
-
     const handleClickShare = () => {
         console.log(location);
         Util.addClipboard(`/?category-id=${categoryId}?my-user-id=${userAId}&match-user-id=${userBId}`);
@@ -86,7 +81,7 @@ const MatchedResult: React.FC = () => {
                                 index={index}
                                 matchUserId={"1"}
                                 matchUserName={"김도희"}
-                                key={`result_${result.question_id}`}
+                                key={`result_${result.questionId}`}
                             />
                         );
                     })}

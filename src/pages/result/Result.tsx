@@ -22,7 +22,7 @@ const ResultView: React.FC = () => {
         // 컴포넌트가 마운트되었을 때 호출
         const fetchUserResult = async () => {
             try {
-                const users = await VM.getMyAnswerAndMatchedUserAnswerResult(Number(categoryId), myId!, matchUserId!);
+                const users = await VM.getSelectedUserAnswers(Number(categoryId), matchUserId!);
                 setResultList(users);
             } catch (error) {
                 setOpenError(true);
@@ -63,7 +63,7 @@ const ResultView: React.FC = () => {
                                 index={index}
                                 matchUserId={matchUserId}
                                 matchUserName={matchUser.name}
-                                key={`result_${result.question_id}`}
+                                key={`result_${result.questionId}`}
                             />
                         );
                     })}

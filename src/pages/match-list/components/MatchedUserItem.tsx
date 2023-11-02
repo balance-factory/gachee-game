@@ -11,12 +11,12 @@ const MatchedUserItem: React.FC<MatchedUserItemProps> = ({ matchedUserInfo }) =>
     const navigate = useNavigate();
     const handleClickMatchResult = (user: Interface.MatchedUser) => {
         sessionStorage.setItem("match-user-info", JSON.stringify({ name: user.name, userScore: user.matchScore }));
-        navigate(`/result/${user.gacheeId}`);
+        navigate(`/result/${user.memberId}`);
     };
     return (
         <MatchedUserItemLayout
             onClick={() => handleClickMatchResult(matchedUserInfo)}
-            key={`${matchedUserInfo.gacheeId}`}>
+            key={`${matchedUserInfo.memberId}`}>
             {matchedUserInfo.profileImage ? <UserImg src={matchedUserInfo.profileImage} /> : <UserEmptyImg />}
             <UserName>{matchedUserInfo.name}</UserName>
             <UserScore score={matchedUserInfo.matchScore}>

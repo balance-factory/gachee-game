@@ -1,56 +1,97 @@
-export const BASE_URL: any = "https://btteur8pu6.execute-api.ap-northeast-2.amazonaws.com/dev";
 import * as Interface from "../../interface";
+import { api } from "../../api";
 
-export type SituationAndQuestion = {
-    question_id: number; // 문제 id
-    situation: string; // 상황 설명
-    situation_image: string; //상황 이미지
-    title_image: string; // 문제 이미지
-    title: string; // 문제 설명
-    sub_title: string; // 추가 설명
-    categoryId: number; //문제의 카테고리 id
-    answers: [{ answer_id: number; answer_content: string; question_id: string }];
+export const getQuestions = async (categoryId: number) => {
+    const { data } = await api.get<Interface.Question[]>(`/question/questionList?categoryId=${categoryId}`);
+    return questionList;
 };
 
-export const getMyAnswerAndMatchedUserAnswerResult = async (
+export const getUserAnswerList = async (memberId?: number) => {
+    const { data } = await api.get<Interface.MemberAnswer[]>(
+        memberId ? `/memberAnswer/memberAnswerList?matchedMemberId=${memberId}` : "/memberAnswer/memberAnswerList"
+    );
+    return questionList;
+};
+
+const questionList = [
+    {
+        questionId: 1004,
+        situation: "친구가 연락와서 소개팅할거냐고 물어봤다.키,외모,성격 모두 내 타입이다.",
+        situationImage: "https://mml.pstatic.net/www/mobile/edit/20231025_1095/upload_1698200483547lzwTg.png",
+        titleImage: "https://mml.pstatic.net/www/mobile/edit/20231025_1095/upload_1698200483547lzwTg.png",
+        title: "10살 차이나는 이성의 소개팅이 들어왔다.",
+        subTitle: "“근데 나이가...”",
+        answerList: [
+            {
+                answerId: 1,
+                questionId: 1004,
+                answerContent: "위로 10살을 받는다",
+            },
+            {
+                answerId: 2,
+                questionId: 1004,
+                answerContent: "아래로 10살을 받는다",
+            },
+        ],
+    },
+    {
+        questionId: 1005,
+        situation: "소개팅으로 만난 그 사람이 마음에 들어서 몇번의 만남 후 연인이 되었다.",
+        situationImage: "https://mml.pstatic.net/www/mobile/edit/20231025_1095/upload_1698200483547lzwTg.png",
+        titleImage: "https://mml.pstatic.net/www/mobile/edit/20231025_1095/upload_1698200483547lzwTg.png",
+        title: "내 애인의 직업은",
+        subTitle: "",
+        answerList: [
+            {
+                answerId: 3,
+                questionId: 1005,
+                answerContent: "연봉 7천 대기업 대리",
+            },
+            {
+                answerId: 4,
+                questionId: 1005,
+                answerContent: "연봉 추정불가 스타트업 대표",
+            },
+        ],
+    },
+];
+
+export const getSelectedUserAnswers = async (
     categoryId: number,
-    myId: string,
-    matchUserId: string
+    matchedUserId: string
 ): Promise<Interface.MatchUserSelectResult[]> => {
     try {
         const [api1Response, api2Response, api3Response] = await Promise.all([
-            fetch(`${BASE_URL}/category/${categoryId}`).then((response) => response.json()) as Promise<
-                SituationAndQuestion[]
-            >,
-            fetch(`${BASE_URL}/category/${categoryId}/user/${myId}/answers`).then((response) =>
-                response.json().then((res) => res.data.userAnswerResults)
-            ) as Promise<{ answerId: number; questionId: number }[]>,
-            fetch(`${BASE_URL}/category/${categoryId}/user/${matchUserId}/answers`).then((response) =>
-                response.json().then((res) => res.data.userAnswerResults)
-            ) as Promise<{ answerId: number; questionId: number }[]>,
+            api.get<Interface.Question[]>(`/question/questionList?categoryId=${categoryId}`),
+            api.get<Interface.MemberAnswer[]>("/memberAnswer/memberAnswerList"),
+            api.get<Interface.MemberAnswer[]>(`/memberAnswer/memberAnswerList?matchedMemberId=${matchedUserId}`),
         ]);
 
+        const questions = api1Response.data;
+        const myAnswerList = api2Response.data;
+        const matchedUserAnswerList = api3Response.data;
+
         // Map the questions from API1 and update with selected_answer from API2
-        const questions = api1Response.map((question) => {
-            const selectedAnswer = api2Response.find((answer) => answer.questionId === question.question_id);
-            const selectedBAnswer = api3Response.find((answer) => answer.questionId === question.question_id);
+        const userSelectedQuestionAndAnswers = questions.map((question) => {
+            const myAnswer = myAnswerList.find((answer) => answer.questionId === question.questionId);
+            const matchedAnswer = matchedUserAnswerList.find((answer) => answer.questionId === question.questionId);
             const result: Interface.MatchUserSelectResult = {
-                question_id: question.question_id,
+                questionId: question.questionId,
                 title: question.title,
-                answers: question.answers,
-                selectedAnswer: {
-                    answerId: selectedAnswer?.answerId!,
-                    questionId: selectedAnswer?.questionId!,
+                answers: question.answerList,
+                selectedMyAnswer: {
+                    answerId: myAnswer?.answerId!,
+                    questionId: myAnswer?.questionId!,
                 },
-                selectedBAnswer: {
-                    answerId: selectedBAnswer?.answerId!,
-                    questionId: selectedAnswer?.questionId!,
+                selectedMatchedUserAnswer: {
+                    answerId: matchedAnswer?.answerId!,
+                    questionId: matchedAnswer?.questionId!,
                 },
             };
             return result;
         });
 
-        return questions; // Return the questions questions;
+        return userSelectedQuestionAndAnswers; // Return the questions questions;
     } catch (error) {
         console.error("Error fetching APIs:", error);
         throw error;
