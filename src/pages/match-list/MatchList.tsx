@@ -143,7 +143,6 @@ const Header = styled.div`
     align-items: center;
     padding: 20px;
     color: #fff;
-    border-bottom: 1px solid #fff;
 `;
 
 const InnerTitleLayout = styled.div`

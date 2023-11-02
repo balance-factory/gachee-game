@@ -48,12 +48,7 @@ const ResultView: React.FC = () => {
                 <InnnerMyAnswerViewLayout>
                     {matchUserId && (
                         <>
-                            <ScoreLayout>
-                                <ScoreTitle>나와 김도희의 가치관은</ScoreTitle>
-                                <Score score={Number(matchUser.userScore ?? 0)}>{`${Number(
-                                    matchUser.userScore ?? 0
-                                )}% 일치`}</Score>
-                            </ScoreLayout>
+                            <Component.Score userScore={80} />
                             <DividerContent>
                                 <Divider />
                                 <ContentTitle>전체 답안 보기</ContentTitle>
@@ -111,28 +106,6 @@ const Header = styled.div`
 const InnnerMyAnswerViewLayout = styled.div`
     width: 100%;
     padding: 0 20px 80px;
-`;
-
-const ScoreLayout = styled.div`
-    width: 100%;
-    height: 130px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    border: 3px solid #bbcbcb;
-`;
-
-const ScoreTitle = styled.div`
-    font-size: 16px;
-    margin-bottom: 6px;
-    color: #fff;
-`;
-
-const Score = styled.div<{ score: number }>`
-    font-family: Galmuri_Bold;
-    font-size: 24px;
-    color: ${(props) => (props.score <= 39 ? "#E5505D" : props.score > 39 && props.score < 80 ? "#F2AA18" : "#1eb82d")};
 `;
 
 const IconWrap = styled.div``;
