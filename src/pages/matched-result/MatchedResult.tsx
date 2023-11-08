@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import * as Interface from "../../interface";
-// import * as VM from "./";
+import * as VM from "./MatchedResultViewModel";
 import styled from "styled-components";
 import BlueStar from "../../assets/icon/blue-star.svg";
 import Return from "../../assets/icon/small-return.svg";
@@ -20,8 +20,7 @@ const MatchedResult: React.FC = () => {
     sessionStorage.setItem("categoryId", `${categoryId}`);
 
     useEffect(() => {
-        //컴포넌트가 마운트되었을 때 호출
-        // getMatchedUsers(categoryId).
+        VM.getSelectedUserAnswers(1, "1");
     }, []);
 
     const handleClickHome = () => {

@@ -5,7 +5,7 @@ export const getUserResult = async (categoryId: number): Promise<Interface.MySel
     try {
         const [api1Response, api2Response] = await Promise.all([
             api.get<Interface.Question[]>(`/question/questionList?categoryId=${categoryId}`),
-            api.get<Interface.MemberAnswer[]>("/memberAnswer/memberAnswerList"),
+            api.get<Interface.MemberAnswer[]>("/memberAnswer/memberAnswerList", { matchedMemberId: "1" }),
         ]);
 
         const questions = api1Response.data;

@@ -5,7 +5,7 @@ type Params = {
     [key: string]: unknown;
 };
 
-export const baseUrl = "https://btteur8pu6.execute-api.ap-northeast-2.amazonaws.com/dev";
+export const baseUrl = "http://ec2-52-79-206-10.ap-northeast-2.compute.amazonaws.com:8080";
 export const errorHandle = {
     callback: (v: boolean) => {},
 };
@@ -59,10 +59,11 @@ axios.interceptors.response.use(
 );
 
 axios.interceptors.request.use(function (config: any) {
-    if (config.url.indexOf("/") > -1 || config.url.indexOf("/") > -1) return config;
-    config.headers = {
-        ...config.headers,
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-    };
+    if (config.url.indexOf("/") > -1 || config.url.indexOf("/") > -1) {
+        config.headers = {
+            ...config.headers,
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTcwMDA1NjEzMX0.bYFHe6oO2IDbFiKTwaeRN7dvxi3WvbvoVxphMZgX7Vk`,
+        };
+    }
     return config;
 });

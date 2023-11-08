@@ -8,8 +8,10 @@ import * as VM from "./ResultViewModel";
 import * as Components from "pages/components";
 
 const ResultView: React.FC = () => {
-    const myId = sessionStorage.getItem("my-user-id");
-    const categoryId = sessionStorage.getItem("categoryId");
+    // const myId = sessionStorage.getItem("my-user-id");
+    // const categoryId = sessionStorage.getItem("categoryId");
+    const myId = "1";
+    const categoryId = "1";
     const { matchUserId } = useParams();
     const navigate = useNavigate();
 
@@ -20,17 +22,8 @@ const ResultView: React.FC = () => {
 
     useEffect(() => {
         // 컴포넌트가 마운트되었을 때 호출
-        const fetchUserResult = async () => {
-            try {
-                const users = await VM.getSelectedUserAnswers(Number(categoryId), matchUserId!);
-                setResultList(users);
-            } catch (error) {
-                setOpenError(true);
-                console.error("Error fetching matched users:", error);
-            }
-        };
 
-        fetchUserResult();
+        VM.getSelectedUserAnswers(Number(categoryId), "1");
     }, []);
 
     const clickBack = () => {
