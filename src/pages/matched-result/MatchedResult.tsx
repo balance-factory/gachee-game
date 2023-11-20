@@ -63,7 +63,7 @@ const MatchedResult: React.FC = () => {
 
                     <RetryTest onClick={handleClickRetryTest}>
                         <Return />
-                        <RetryTestText style={{ color: "#fff" }}>테스트 다시하기</RetryTestText>
+                        <RetryTestText>테스트 다시하기</RetryTestText>
                     </RetryTest>
                 </InnerTitleLayout>
                 <DividerContent>
