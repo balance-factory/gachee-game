@@ -3,58 +3,15 @@ import { api } from "../../api";
 
 export const getQuestions = async (categoryId: number) => {
     const { data } = await api.get<Interface.Question[]>(`/question/questionList?categoryId=${categoryId}`);
-    return questionList;
+    return data;
 };
 
 export const getUserAnswerList = async (memberId?: number) => {
     const { data } = await api.get<Interface.MemberAnswer[]>(
         memberId ? `/memberAnswer/memberAnswerList?matchedMemberId=${memberId}` : "/memberAnswer/memberAnswerList"
     );
-    return questionList;
+    return data;
 };
-
-const questionList = [
-    {
-        questionId: 1004,
-        situation: "친구가 연락와서 소개팅할거냐고 물어봤다.키,외모,성격 모두 내 타입이다.",
-        situationImage: "https://mml.pstatic.net/www/mobile/edit/20231025_1095/upload_1698200483547lzwTg.png",
-        titleImage: "https://mml.pstatic.net/www/mobile/edit/20231025_1095/upload_1698200483547lzwTg.png",
-        title: "10살 차이나는 이성의 소개팅이 들어왔다.",
-        subTitle: "“근데 나이가...”",
-        answerList: [
-            {
-                answerId: 1,
-                questionId: 1004,
-                answerContent: "위로 10살을 받는다",
-            },
-            {
-                answerId: 2,
-                questionId: 1004,
-                answerContent: "아래로 10살을 받는다",
-            },
-        ],
-    },
-    {
-        questionId: 1005,
-        situation: "소개팅으로 만난 그 사람이 마음에 들어서 몇번의 만남 후 연인이 되었다.",
-        situationImage: "https://mml.pstatic.net/www/mobile/edit/20231025_1095/upload_1698200483547lzwTg.png",
-        titleImage: "https://mml.pstatic.net/www/mobile/edit/20231025_1095/upload_1698200483547lzwTg.png",
-        title: "내 애인의 직업은",
-        subTitle: "",
-        answerList: [
-            {
-                answerId: 3,
-                questionId: 1005,
-                answerContent: "연봉 7천 대기업 대리",
-            },
-            {
-                answerId: 4,
-                questionId: 1005,
-                answerContent: "연봉 추정불가 스타트업 대표",
-            },
-        ],
-    },
-];
 
 export const getSelectedUserAnswers = async (
     categoryId: number,

@@ -8,8 +8,10 @@ import * as VM from "./ResultViewModel";
 import * as Components from "pages/components";
 
 const ResultView: React.FC = () => {
-    const myId = sessionStorage.getItem("my-user-id");
-    const categoryId = sessionStorage.getItem("categoryId");
+    // const myId = sessionStorage.getItem("my-user-id");
+    // const categoryId = sessionStorage.getItem("categoryId");
+    const myId = "1";
+    const categoryId = "1";
     const { matchUserId } = useParams();
     const navigate = useNavigate();
 
@@ -20,17 +22,8 @@ const ResultView: React.FC = () => {
 
     useEffect(() => {
         // 컴포넌트가 마운트되었을 때 호출
-        const fetchUserResult = async () => {
-            try {
-                const users = await VM.getMyAnswerAndMatchedUserAnswerResult(Number(categoryId), myId!, matchUserId!);
-                setResultList(users);
-            } catch (error) {
-                setOpenError(true);
-                console.error("Error fetching matched users:", error);
-            }
-        };
 
-        fetchUserResult();
+        VM.getSelectedUserAnswers(Number(categoryId), "1");
     }, []);
 
     const clickBack = () => {
@@ -48,12 +41,7 @@ const ResultView: React.FC = () => {
                 <InnnerMyAnswerViewLayout>
                     {matchUserId && (
                         <>
-                            <ScoreLayout>
-                                <ScoreTitle>나와 김도희의 가치관은</ScoreTitle>
-                                <Score score={Number(matchUser.userScore ?? 0)}>{`${Number(
-                                    matchUser.userScore ?? 0
-                                )}% 일치`}</Score>
-                            </ScoreLayout>
+                            <Component.Score userScore={80} />
                             <DividerContent>
                                 <Divider />
                                 <ContentTitle>전체 답안 보기</ContentTitle>
@@ -68,7 +56,7 @@ const ResultView: React.FC = () => {
                                 index={index}
                                 matchUserId={matchUserId}
                                 matchUserName={matchUser.name}
-                                key={`result_${result.question_id}`}
+                                key={`result_${result.questionId}`}
                             />
                         );
                     })}
@@ -111,28 +99,6 @@ const Header = styled.div`
 const InnnerMyAnswerViewLayout = styled.div`
     width: 100%;
     padding: 0 20px 80px;
-`;
-
-const ScoreLayout = styled.div`
-    width: 100%;
-    height: 130px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    border: 3px solid #bbcbcb;
-`;
-
-const ScoreTitle = styled.div`
-    font-size: 16px;
-    margin-bottom: 6px;
-    color: #fff;
-`;
-
-const Score = styled.div<{ score: number }>`
-    font-family: Galmuri_Bold;
-    font-size: 24px;
-    color: ${(props) => (props.score <= 39 ? "#E5505D" : props.score > 39 && props.score < 80 ? "#F2AA18" : "#1eb82d")};
 `;
 
 const IconWrap = styled.div``;
