@@ -43,7 +43,6 @@ const MatchList: React.FC = () => {
     };
 
     const handleClickShare = () => {
-        console.log(location);
         Util.addClipboard(`/?category-id=${categoryId}&match-user-id=${userAId}`);
     };
 

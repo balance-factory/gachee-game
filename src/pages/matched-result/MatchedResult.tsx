@@ -32,7 +32,6 @@ const MatchedResult: React.FC = () => {
     };
 
     const handleClickShare = () => {
-        console.log(location);
         Util.addClipboard(`/?category-id=${categoryId}?my-user-id=${userAId}&match-user-id=${userBId}`);
     };
 
@@ -52,7 +51,7 @@ const MatchedResult: React.FC = () => {
                             <BlueStar />
                         </BlueStarIcon>
                     </Title>
-                    <Components.Score userScore={80} />
+                    <Components.Score userScore={80} matchedUserName={"김도희"} />
                     <SubTitle>
                         가치관을 확인한 상대에게
                         <br />
@@ -77,7 +76,7 @@ const MatchedResult: React.FC = () => {
                         return (
                             <Components.SelectResult
                                 result={result}
-                                index={index}
+                                index={result.questionId}
                                 matchUserId={"1"}
                                 matchUserName={"김도희"}
                                 key={`result_${result.questionId}`}

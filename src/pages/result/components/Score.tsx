@@ -3,12 +3,13 @@ import React from "react";
 
 interface ScoreProps {
     userScore: number;
+    matchedUserName: string;
 }
 
-const ScoreLayout: React.FC<ScoreProps> = ({ userScore }) => {
+const ScoreLayout: React.FC<ScoreProps> = ({ userScore, matchedUserName }) => {
     return (
         <ScoreWrap>
-            <ScoreTitle>나와 김도희의 가치관은</ScoreTitle>
+            <ScoreTitle>{`나와 ${matchedUserName}남의 가치관은`}</ScoreTitle>
             <Score score={Number(userScore)}>{`${Number(userScore)}% 일치`}</Score>
         </ScoreWrap>
     );

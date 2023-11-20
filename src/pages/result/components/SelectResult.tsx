@@ -17,17 +17,19 @@ const SelectResult: React.FC<ResultProps> = ({ result, index, matchUserId, match
             {result.answers.map((content) => {
                 return (
                     <AnswerContent
-                        selected={result.selectedAnswer.answerId === content.answer_id}
-                        bUserSelected={matchUserId ? result.selectedBAnswer.answerId === content.answer_id : false}
-                        key={content.answer_id}>
-                        <AnswerText>{content.answer_content}</AnswerText>
+                        selected={result.selectedMyAnswer.answerId === content.answerId}
+                        bUserSelected={
+                            matchUserId ? result.selectedMatchedUserAnswer.answerId === content.answerId : false
+                        }
+                        key={content.answerId}>
+                        <AnswerText>{content.answerContent}</AnswerText>
                         {matchUserId && (
                             <>
-                                {result.selectedAnswer.answerId === content.answer_id && <UserA>ME</UserA>}
-                                {result.selectedBAnswer.answerId === content.answer_id && (
+                                {result.selectedMyAnswer.answerId === content.answerId && <UserA>ME</UserA>}
+                                {result.selectedMatchedUserAnswer.answerId === content.answerId && (
                                     <UserB
-                                        aUserSelected={result.selectedAnswer.answerId === content.answer_id}
-                                        bUserSelected={result.selectedBAnswer.answerId === content.answer_id}>
+                                        aUserSelected={result.selectedMyAnswer.answerId === content.answerId}
+                                        bUserSelected={result.selectedMatchedUserAnswer.answerId === content.answerId}>
                                         {`${matchUserName.slice(0, 1)}`}
                                     </UserB>
                                 )}

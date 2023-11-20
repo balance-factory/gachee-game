@@ -62,7 +62,7 @@ axios.interceptors.request.use(function (config: any) {
     if (config.url.indexOf("/") > -1 || config.url.indexOf("/") > -1) {
         config.headers = {
             ...config.headers,
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTcwMDA1NjEzMX0.bYFHe6oO2IDbFiKTwaeRN7dvxi3WvbvoVxphMZgX7Vk`,
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         };
     }
     return config;
