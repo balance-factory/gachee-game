@@ -52,7 +52,6 @@ export const getSelectedUserAnswers = async (
             return result;
         });
 
-        console.log("userSelectedQuestionAndAnswers", matchedUserAnswerList);
         return {
             matchedUserName: matchedUserName,
             matchedScore: matchedScore,

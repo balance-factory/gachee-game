@@ -21,7 +21,6 @@ const ResultView: React.FC = () => {
         matchUserId &&
             VM.getSelectedUserAnswers(Number(categoryId), matchUserId)
                 .then((res) => {
-                    console.log("res", res);
                     setResultInfo(res);
                 })
                 .catch((err) => {
