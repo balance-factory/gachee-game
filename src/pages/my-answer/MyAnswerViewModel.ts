@@ -4,12 +4,24 @@ import { api } from "../../api";
 export const getUserResult = async (categoryId: number): Promise<Interface.MySelectResult[]> => {
     try {
         const [api1Response, api2Response] = await Promise.all([
-            api.get<Interface.Question[]>(`/question/questionList?categoryId=${categoryId}`),
-            api.get<Interface.MemberAnswer[]>("/memberAnswer/memberAnswerList", { matchedMemberId: "1" }),
+            api.get<{
+                body: {
+                    questionList: Interface.Question[];
+                };
+            }>(`/question/questionList?categoryId=${categoryId}`),
+            api.get<{
+                body: {
+                    matchScore: number;
+                    matchedMemberName: string;
+                    memberAnswerList: {
+                        myAnswerList: Interface.SelectedAnswer[];
+                    };
+                };
+            }>(`/memberAnswer/memberAnswerList?&categoryId=${categoryId}`),
         ]);
 
-        const questions = api1Response.data;
-        const myAnswerList = api2Response.data;
+        const questions = api1Response.data.body.questionList;
+        const myAnswerList = api2Response.data.body.memberAnswerList.myAnswerList;
 
         // Map the questions from API1 and update with selected_answer from API2
         const userSelectedQuestionAndAnswers = questions.map((question) => {
