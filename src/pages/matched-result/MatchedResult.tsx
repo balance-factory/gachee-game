@@ -11,16 +11,21 @@ import * as Components from "../result/components";
 
 const MatchedResult: React.FC = () => {
     const navigate = useNavigate();
-    const location = useLocation();
-    const { categoryId } = useParams();
-    const [matchUsers, setMatchUsers] = useState<Interface.MatchedUser[]>([]);
-    const [resultList, setResultList] = useState<Interface.MatchUserSelectResult[]>([]);
-    const userAId = sessionStorage.getItem("my-user-id")!;
-    const userBId = sessionStorage.getItem("my-user-id")!;
-    sessionStorage.setItem("categoryId", `${categoryId}`);
+    const categoryId = localStorage.getItem("categoryId");
+    const myId = localStorage.getItem("myUserId");
+    const { matchUserId } = useParams();
+    const [resultInfo, setResultInfo] = useState<Interface.MatchedUserResultInfo>();
 
     useEffect(() => {
-        VM.getSelectedUserAnswers(1, "1");
+        matchUserId &&
+            VM.getSelectedUserAnswers(Number(categoryId), matchUserId)
+                .then((res) => {
+                    setResultInfo(res);
+                })
+                .catch((err) => {
+                    if (err.status) {
+                    }
+                });
     }, []);
 
     const handleClickHome = () => {
@@ -32,58 +37,65 @@ const MatchedResult: React.FC = () => {
     };
 
     const handleClickShare = () => {
-        Util.addClipboard(`/?category-id=${categoryId}?my-user-id=${userAId}&match-user-id=${userBId}`);
+        Util.addClipboard(`/?category-id=${categoryId}?my-user-id=${myId}&match-user-id=${matchUserId}`);
     };
 
     return (
         <MatchedUserLayout>
             <MatchLayoutWrap>
                 <Header>
-                    <Home onClick={handleClickHome} />
+                    <IconWrap onClick={handleClickHome}>
+                        <Home />
+                    </IconWrap>
                 </Header>
-                <InnerTitleLayout>
-                    <Title>
-                        <BlueStarIcon style={{ top: "-15px", left: "-20px" }}>
-                            <BlueStar />
-                        </BlueStarIcon>
-                        <TitleText>테스트가 끝났습니다.</TitleText>
-                        <BlueStarIcon style={{ bottom: "-15px", right: "-20px" }}>
-                            <BlueStar />
-                        </BlueStarIcon>
-                    </Title>
-                    <Components.Score userScore={80} matchedUserName={"김도희"} />
-                    <SubTitle>
-                        가치관을 확인한 상대에게
-                        <br />
-                        결과를 공유해주세요.
-                    </SubTitle>
-                    <ResultShareButton onClick={handleClickShare}>
-                        <ButtonText>결과 공유하기</ButtonText>
-                    </ResultShareButton>
+                <InnnerMatchedUserViewLayout>
+                    <InnerTitleLayout>
+                        <Title>
+                            <BlueStarIcon style={{ top: "-15px", left: "-20px" }}>
+                                <BlueStar />
+                            </BlueStarIcon>
+                            <TitleText>테스트가 끝났습니다.</TitleText>
+                            <BlueStarIcon style={{ bottom: "-15px", right: "-20px" }}>
+                                <BlueStar />
+                            </BlueStarIcon>
+                        </Title>
+                        {resultInfo && (
+                            <Components.Score
+                                userScore={resultInfo.matchedScore ?? 0}
+                                matchedUserName={resultInfo.matchedUserName ?? ""}
+                            />
+                        )}
+                        <SubTitle>
+                            가치관을 확인한 상대에게
+                            <br />
+                            결과를 공유해주세요.
+                        </SubTitle>
+                        <ResultShareButton onClick={handleClickShare}>
+                            <ButtonText>결과 공유하기</ButtonText>
+                        </ResultShareButton>
 
-                    <RetryTest onClick={handleClickRetryTest}>
-                        <Return />
-                        <RetryTestText>테스트 다시하기</RetryTestText>
-                    </RetryTest>
-                </InnerTitleLayout>
-                <DividerContent>
-                    <Divider />
-                    <ContentTitle>전체 답안 보기</ContentTitle>
-                    <Divider />
-                </DividerContent>
-                <div style={{ height: "500px" }}>
-                    {resultList.map((result, index) => {
+                        <RetryTest onClick={handleClickRetryTest}>
+                            <Return />
+                            <RetryTestText>테스트 다시하기</RetryTestText>
+                        </RetryTest>
+                    </InnerTitleLayout>
+                    <DividerContent>
+                        <Divider />
+                        <ContentTitle>전체 답안 보기</ContentTitle>
+                        <Divider />
+                    </DividerContent>
+                    {resultInfo?.resultList.map((result, index) => {
                         return (
                             <Components.SelectResult
                                 result={result}
-                                index={result.questionId}
-                                matchUserId={"1"}
-                                matchUserName={"김도희"}
+                                index={index}
+                                matchUserId={matchUserId}
+                                matchUserName={resultInfo.matchedUserName}
                                 key={`result_${result.questionId}`}
                             />
                         );
                     })}
-                </div>
+                </InnnerMatchedUserViewLayout>
             </MatchLayoutWrap>
         </MatchedUserLayout>
     );
@@ -93,7 +105,8 @@ export default MatchedResult;
 
 const MatchedUserLayout = styled.div`
     width: 100%;
-    height: auto;
+    height: 100vh;
+    overflow: scroll;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -101,8 +114,9 @@ const MatchedUserLayout = styled.div`
 `;
 
 const MatchLayoutWrap = styled.div`
-    width: 740px;
+    width: 100%;
     height: 100%;
+    padding-bottom: 100px;
 `;
 
 const Header = styled.div`
@@ -111,8 +125,16 @@ const Header = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 20px 20px 0 20px;
     color: #fff;
+`;
+
+const IconWrap = styled.div``;
+
+const InnnerMatchedUserViewLayout = styled.div`
+    width: 100%;
+    height: auto;
+    padding: 0 20px 80px;
 `;
 
 const InnerTitleLayout = styled.div`
@@ -146,13 +168,14 @@ const TitleText = styled.div`
 
 const SubTitle = styled.div`
     margin-top: 32px;
+    font-size: 14px;
     color: #fff;
     text-align: center;
     font-weight: 400;
 `;
 
 const ResultShareButton = styled.div`
-    margin-top: 20px;
+    margin-top: 23px;
     width: 355px;
     height: 46px;
     border-radius: 12px;
@@ -187,7 +210,7 @@ const DividerContent = styled.div`
     justify-content: center;
     width: 100%;
     height: 3px;
-    margin-top: 40px;
+    margin-top: 43px;
 `;
 
 const Divider = styled.div`
@@ -198,7 +221,8 @@ const Divider = styled.div`
 
 const ContentTitle = styled.div`
     color: #fff;
-    padding: 0 10px;
-    text-align: center;
+    width: 130px;
     margin: 0 10px;
+    text-align: center;
+    font-family: Galmuri_Bold;
 `;

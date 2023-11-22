@@ -12,16 +12,14 @@ const MyAnswerView: React.FC = () => {
     const [myAnswers, setMyAnswers] = useState<Interface.MySelectResult[]>();
 
     useEffect(() => {
-        const fetchUserResult = async () => {
-            try {
-                const answers = await VM.getUserResult(Number(categoryId));
-                setMyAnswers(answers);
-            } catch (error) {
-                console.error("Error fetching matched users:", error);
-            }
-        };
-
-        fetchUserResult();
+        VM.getUserResult(Number(categoryId))
+            .then((res) => {
+                setMyAnswers(res);
+            })
+            .catch((err) => {
+                if (err.status) {
+                }
+            });
     }, []);
 
     const clickBack = () => {
@@ -80,45 +78,4 @@ const InnnerMyAnswerViewLayout = styled.div`
     padding: 0 20px 80px;
 `;
 
-const ScoreLayout = styled.div`
-    width: 100%;
-    height: 130px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    border: 3px solid #bbcbcb;
-`;
-
-const ScoreTitle = styled.div`
-    font-size: 16px;
-    margin-bottom: 6px;
-    color: #fff;
-`;
-
-const Score = styled.div<{ score: number }>`
-    font-family: Galmuri_Bold;
-    font-size: 24px;
-    color: ${(props) => (props.score <= 39 ? "#E5505D" : props.score > 39 && props.score < 80 ? "#F2AA18" : "#1eb82d")};
-`;
-
 const IconWrap = styled.div``;
-
-const DividerContent = styled.div`
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 3px;
-    margin-top: 40px;
-`;
-
-const Divider = styled.div`
-    width: 40%;
-    height: 1px;
-    border: dashed 1px #fff;
-`;
-
-const ContentTitle = styled.div`
-    color: #fff;
-    margin: 0 10px;
-`;

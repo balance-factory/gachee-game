@@ -16,7 +16,7 @@ const App: React.FC = () => {
                 <Route path="/match-list/:categoryId" element={<Pages.MatchListView />} />
                 <Route path="/result/:matchUserId" element={<Pages.ResultView />} />
                 {/* <Route path="/result/:userId/:matchedUserId" element={<Pages.MatchedResultView />} /> */}
-                <Route path="/matched-user" element={<Pages.MatchedResultView />} />
+                <Route path="/matched-user/:matchUserId" element={<Pages.MatchedResultView />} />
                 <Route path="/my-answer" element={<Pages.MyAnswerView />} />
                 <Route path="*" element={<Pages.NotFoundView />} />
                 {/* a가 b한테 공유할 링크 주소 "?category-id=1&match-user-id=" */}

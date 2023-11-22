@@ -13,10 +13,7 @@ const ResultView: React.FC = () => {
 
     const { matchUserId } = useParams();
     const navigate = useNavigate();
-
-    const matchUserInfo = sessionStorage.getItem("match-user-info");
     const [resultInfo, setResultInfo] = useState<Interface.MatchedUserResultInfo>();
-    const matchUser: { name: string; userScore: number } = JSON.parse(matchUserInfo!);
     const [openError, setOpenError] = useState<boolean>(false);
 
     useEffect(() => {
@@ -65,7 +62,7 @@ const ResultView: React.FC = () => {
                                 result={result}
                                 index={index}
                                 matchUserId={matchUserId}
-                                matchUserName={matchUser.name}
+                                matchUserName={resultInfo.matchedUserName}
                                 key={`result_${result.questionId}`}
                             />
                         );
@@ -90,7 +87,7 @@ const MyAnswerLayout = styled.div`
 `;
 
 const MyAnswerLayoutWrap = styled.div`
-    width: 740px;
+    height: 100%;
     height: 100%;
     padding-bottom: 100px;
 `;
