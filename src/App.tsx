@@ -14,7 +14,7 @@ const App: React.FC = () => {
                 <Route path="/category/:id/question/*" element={<Pages.QuestionView />} />
                 <Route path="/category/:id/question/*/answer" element={<Pages.QuestionView />} />
                 <Route path="/match-list/:categoryId" element={<Pages.MatchListView />} />
-                <Route path="/result/:userId" element={<Pages.ResultView />} />
+                <Route path="/result/:matchUserId" element={<Pages.ResultView />} />
                 {/* <Route path="/result/:userId/:matchedUserId" element={<Pages.MatchedResultView />} /> */}
                 <Route path="/matched-user" element={<Pages.MatchedResultView />} />
                 <Route path="/my-answer" element={<Pages.MyAnswerView />} />
