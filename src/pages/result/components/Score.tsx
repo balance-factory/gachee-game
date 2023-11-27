@@ -9,7 +9,7 @@ interface ScoreProps {
 const ScoreLayout: React.FC<ScoreProps> = ({ userScore, matchedUserName }) => {
     return (
         <ScoreWrap>
-            <ScoreTitle>{`나와 ${matchedUserName}남의 가치관은`}</ScoreTitle>
+            <ScoreTitle>{`나와 ${matchedUserName}님의 가치관은`}</ScoreTitle>
             <Score score={Number(userScore)}>{`${Number(userScore)}% 일치`}</Score>
         </ScoreWrap>
     );

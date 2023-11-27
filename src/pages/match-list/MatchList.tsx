@@ -19,7 +19,6 @@ const MatchList: React.FC = () => {
 
     useEffect(() => {
         //컴포넌트가 마운트되었을 때 호출
-
         VM.getMatchedUsers(Number(categoryId))
             .then((res) => {
                 setMatchedUsers(res);
@@ -75,7 +74,7 @@ const MatchList: React.FC = () => {
                     </MyAnswerButton>
                     <RetryTest onClick={handleClickRetryTest}>
                         <Return />
-                        <RetryTestText style={{ color: "#fff" }}>테스트 다시하기</RetryTestText>
+                        <RetryTestText>테스트 다시하기</RetryTestText>
                     </RetryTest>
                 </InnerTitleLayout>
                 <InnnerMatchListLayout>
@@ -109,7 +108,7 @@ export default MatchList;
 
 const MatchLayout = styled.div`
     width: 100%;
-    height: 100%;
+    height: auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -234,7 +233,7 @@ const Count = styled.span`
 `;
 
 const MatchUserListLayout = styled.div`
-    margin-top: 10px;
+    margin-top: 24px;
 `;
 
 const MatchUserEmptyLayout = styled.div`
@@ -242,8 +241,6 @@ const MatchUserEmptyLayout = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    width: 100%;
-    height: calc(100vh - 640px);
 `;
 
 const EmptyText = styled.div`

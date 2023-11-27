@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import React, { useState, useEffect } from "react";
 import * as Interface from "../../../interface";
 
 interface AnswerItemProps {
@@ -15,9 +14,9 @@ const AnswerItem: React.FC<AnswerItemProps> = ({ result, index }) => {
             {result.answers.map((content) => {
                 return (
                     <AnswerContent
-                        selected={result.selectedAnswer.answerId === content.answer_id}
-                        key={content.answer_content}>
-                        <AnswerText>{content.answer_content}</AnswerText>
+                        selected={result.selectedAnswer.answerId === content.answerId}
+                        key={content.answerId}>
+                        <AnswerText>{content.answerContent}</AnswerText>
                     </AnswerContent>
                 );
             })}

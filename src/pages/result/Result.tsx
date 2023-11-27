@@ -9,21 +9,24 @@ import * as Components from "pages/components";
 
 const ResultView: React.FC = () => {
     // const myId = sessionStorage.getItem("my-user-id");
-    // const categoryId = sessionStorage.getItem("categoryId");
-    const myId = "1";
-    const categoryId = "1";
+    const categoryId = localStorage.getItem("categoryId");
+
     const { matchUserId } = useParams();
     const navigate = useNavigate();
-
-    const matchUserInfo = sessionStorage.getItem("match-user-info");
-    const [resultList, setResultList] = useState<Interface.MatchUserSelectResult[]>([]);
-    const matchUser: { name: string; userScore: number } = JSON.parse(matchUserInfo!);
+    const [resultInfo, setResultInfo] = useState<Interface.MatchedUserResultInfo>();
     const [openError, setOpenError] = useState<boolean>(false);
 
     useEffect(() => {
         // 컴포넌트가 마운트되었을 때 호출
-
-        VM.getSelectedUserAnswers(Number(categoryId), "1");
+        matchUserId &&
+            VM.getSelectedUserAnswers(Number(categoryId), matchUserId)
+                .then((res) => {
+                    setResultInfo(res);
+                })
+                .catch((err) => {
+                    if (err.status) {
+                    }
+                });
     }, []);
 
     const clickBack = () => {
@@ -39,9 +42,12 @@ const ResultView: React.FC = () => {
                     </IconWrap>
                 </Header>
                 <InnnerMyAnswerViewLayout>
-                    {matchUserId && (
+                    {resultInfo && (
                         <>
-                            <Component.Score userScore={80} />
+                            <Component.Score
+                                userScore={resultInfo.matchedScore ?? 0}
+                                matchedUserName={resultInfo.matchedUserName ?? ""}
+                            />
                             <DividerContent>
                                 <Divider />
                                 <ContentTitle>전체 답안 보기</ContentTitle>
@@ -49,13 +55,13 @@ const ResultView: React.FC = () => {
                             </DividerContent>
                         </>
                     )}
-                    {resultList.map((result, index) => {
+                    {resultInfo?.resultList.map((result, index) => {
                         return (
                             <Component.SelectResult
                                 result={result}
                                 index={index}
                                 matchUserId={matchUserId}
-                                matchUserName={matchUser.name}
+                                matchUserName={resultInfo.matchedUserName}
                                 key={`result_${result.questionId}`}
                             />
                         );
@@ -80,7 +86,7 @@ const MyAnswerLayout = styled.div`
 `;
 
 const MyAnswerLayoutWrap = styled.div`
-    width: 740px;
+    height: 100%;
     height: 100%;
     padding-bottom: 100px;
 `;
@@ -119,5 +125,7 @@ const Divider = styled.div`
 
 const ContentTitle = styled.div`
     color: #fff;
+    width: 130px;
     margin: 0 10px;
+    text-align: center;
 `;

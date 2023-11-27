@@ -30,12 +30,14 @@ export default MatchedUserItem;
 
 const MatchedUserItemLayout = styled.div`
     width: 100%;
-    height: 130px;
+    height: 93px;
+    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
     border: 3px solid #bbcbcb;
+    border-radius: 12px;
+    margin-bottom: 20px;
 `;
 
 const UserImg = styled.img`

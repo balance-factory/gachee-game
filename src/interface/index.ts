@@ -13,6 +13,12 @@ export type MatchUserSelectResult = {
     selectedMatchedUserAnswer: SelectedAnswer;
 };
 
+export type MatchedUserResultInfo = {
+    matchedUserName: string;
+    matchedScore: number;
+    resultList: MatchUserSelectResult[];
+};
+
 export type SelectedAnswer = {
     answerId: number;
     questionId: number;
@@ -48,6 +54,13 @@ export type Answer = {
 };
 
 export type MemberAnswer = {
+    matchScore: number;
+    matchedMemberName: string;
+    memberAnswerList?: selectedAnswer[];
+    myAnswerList?: selectedAnswer[];
+};
+
+export type selectedAnswer = {
     answerId: number;
     questionId: number;
 };
