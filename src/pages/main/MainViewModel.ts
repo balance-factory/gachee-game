@@ -1,4 +1,6 @@
 import { UserInfo } from "interface";
+import * as Interface from "interface";
+import { api } from "api";
 
 export const BASE_URL: any =
   "https://btteur8pu6.execute-api.ap-northeast-2.amazonaws.com/dev";
