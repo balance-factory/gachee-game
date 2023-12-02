@@ -8,23 +8,24 @@ import LeftArrow from "assets/icon/arrow_left_icon.svg";
 import { useNavigate } from "react-router-dom";
 import * as VM from "./CategoryViewModel";
 import * as Components from "pages/components/index";
+import * as Interface from "interface";
 
 const Category: React.FC = () => {
   const isWeb = window.navigator.userAgent.toLowerCase().includes("web");
   const navigate = useNavigate();
   const [openError, setOpenError] = useState<boolean>(false);
-  const [categoryList, setCategoryList] = useState<VM.Category[]>([]);
+  const [categoryList, setCategoryList] = useState<Interface.Category[]>([]);
   const [categoryId, setCategoryId] = useState<number>(1);
 
-  const fetchCategories = async () => {
-    try {
-      const Categories = await VM.getCategories();
-
-      setCategoryList(Categories);
-      setCategoryId(Categories[0].category_id);
-    } catch (error) {
-      setOpenError(true);
-    }
+  const fetchCategories = () => {
+    VM.getCategories()
+      .then((res) => {
+        setCategoryList(res);
+        setCategoryId(res[0].categoryId);
+      })
+      .catch((err) => {
+        setOpenError(true);
+      });
   };
 
   const getNowTime = () => {
@@ -58,19 +59,19 @@ const Category: React.FC = () => {
             {categoryList.length > 0 &&
               categoryList.map((c) => (
                 <CategoryContent
-                  key={c.category_id.toString()}
-                  categoryId={c.category_id}
-                  onClick={() => setCategoryId(c.category_id)}
+                  key={c.categoryId.toString()}
+                  categoryId={c.categoryId}
+                  onClick={() => setCategoryId(c.categoryId)}
                 >
-                  {c.category_id === 2 && (
+                  {c.categoryId === 2 && (
                     <ComingSoonText>Coming Soon</ComingSoonText>
                   )}
-                  {c.category_id === categoryId && <RightArrow />}
+                  {c.categoryId === categoryId && <RightArrow />}
                   <DiscatIcon
-                    categoryId={c.category_id}
-                    isOpacity={c.category_id === categoryId}
+                    categoryId={c.categoryId}
+                    isOpacity={c.categoryId === categoryId}
                   />
-                  {c.category_id === categoryId && <LeftArrow />}
+                  {c.categoryId === categoryId && <LeftArrow />}
                 </CategoryContent>
               ))}
           </CategoryContentLayout>
@@ -251,4 +252,3 @@ const BottomBtn = styled.div`
   align-items: center;
   justify-content: center;
 `;
-
