@@ -22,13 +22,14 @@ const Main: React.FC = () => {
   matchUserId && window.sessionStorage.setItem("match-user-id", matchUserId);
   categoryId && window.sessionStorage.setItem("category-id", categoryId);
 
-  const fetchGetUserInfo = async (matchedUserId: string) => {
-    try {
-      const UserInfo = await VM.getUserInfo(matchedUserId);
-      UserInfo && setMatchedUserName(UserInfo.name);
-    } catch (error) {
-      setOpenError(true);
-    }
+  const fetchGetUserInfo = (matchedUserId: string) => {
+    VM.getMemberInfo(matchedUserId)
+      .then((res) => {
+        setMatchedUserName(res.name);
+      })
+      .catch((err) => {
+        setOpenError(true);
+      });
   };
 
   useEffect(() => {
@@ -160,8 +161,8 @@ const DotLayout = styled.div`
 `;
 
 const Border = styled.div`
-    width: 100%;
-    height: 100%;
-    border: 1px solid #fff;
-    position: relative;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #fff;
+  position: relative;
 `;

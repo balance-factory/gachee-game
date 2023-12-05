@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import * as VM from "../QuestionViewModel";
 import styled from "styled-components";
 import * as Images from "assets/image";
+import * as Interface from "interface";
 
 interface AnswerState {
   index: number;
@@ -11,7 +11,7 @@ interface AnswerState {
 interface QuestionAndAnswerProps {
   categoryId: string;
   situationOffset: number;
-  situationAndQuestion?: VM.SituationAndQuestion[];
+  situationAndQuestion?: Interface.Question[];
   clickGoNextSituation: (updateOffset: number, answerId: number) => void;
 }
 
@@ -26,8 +26,8 @@ const QuestionAndAnswer: React.FC<QuestionAndAnswerProps> = (props) => {
       setIsAnswer({
         index: 0,
         answerId:
-          props.situationAndQuestion[props.situationOffset].answers[0]
-            .answer_id,
+          props.situationAndQuestion[props.situationOffset].answerList[0]
+            .answerId,
       });
   }, [props.situationAndQuestion]);
 
@@ -38,22 +38,22 @@ const QuestionAndAnswer: React.FC<QuestionAndAnswerProps> = (props) => {
           {props.situationAndQuestion[props.situationOffset].title}
         </QuestionAndAnswerTitle>
         <QuestionAndAnswerSubTitle>
-          {props.situationAndQuestion[props.situationOffset].sub_title}
+          {props.situationAndQuestion[props.situationOffset].subTitle}
         </QuestionAndAnswerSubTitle>
       </div>
       <QuestionImage
-        src={props.situationAndQuestion[props.situationOffset].title_image}
+        src={props.situationAndQuestion[props.situationOffset].titleImage}
       />
       <QuestionAndAnswerLayout>
         <QuestionAndAnswerContent>
-          {props.situationAndQuestion[props.situationOffset].answers.map(
+          {props.situationAndQuestion[props.situationOffset].answerList.map(
             (a, i) => (
               <AnswerContent
                 key={i}
                 onClick={() =>
                   setIsAnswer({
                     index: i,
-                    answerId: a.answer_id,
+                    answerId: a.answerId,
                   })
                 }
               >
@@ -61,7 +61,7 @@ const QuestionAndAnswer: React.FC<QuestionAndAnswerProps> = (props) => {
                   <ClickArrowImage src={Images.ClickArrow} />
                 )}
 
-                {a.answer_content}
+                {a.answerContent}
               </AnswerContent>
             )
           )}

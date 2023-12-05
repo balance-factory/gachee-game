@@ -2,19 +2,14 @@ import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import * as VM from "./QuestionViewModel";
 import * as QuestionComponents from "./components";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Pause from "assets/icon/pause_icon.svg";
 import ReplayIcon from "assets/icon/re_play_Icon.svg";
 import StopIcon from "assets/icon/stop.svg";
 import PlayIcon from "assets/icon/play.svg";
 import * as Images from "assets/image";
 import * as Components from "pages/components/index";
+import * as Interface from "interface";
 
 const Question: React.FC = () => {
   const pathname = useLocation().pathname;
@@ -30,52 +25,68 @@ const Question: React.FC = () => {
   const [openError, setOpenError] = useState<boolean>(false);
   const [isPause, setIsPause] = useState<boolean>(false);
   const [situationAndQuestion, setSituationAndQuestion] =
-    useState<VM.SituationAndQuestion[]>();
+    useState<Interface.Question[]>();
   const [situationTotal, setSituationTotal] = useState<number>(0);
   const [situationOffset, setSituationOffset] = useState<number>(0);
-  const [userAnswers, setUserAnswers] = useState<VM.Answer[]>([]);
+  const [userAnswers, setUserAnswers] = useState<Interface.Answer[]>([]);
 
-  const fetchSituationAndQuestion = async (categoryId: string) => {
-    try {
-      const data = await VM.getSituationAndQuestion(categoryId);
-
-      setSituationAndQuestion(data);
-      setSituationTotal(data.length);
-    } catch (error) {
-      setOpenError(true);
-    }
+  const fetchSituationAndQuestion = (categoryId: string) => {
+    VM.getCategories(Number(categoryId))
+      .then((res) => {
+        setSituationAndQuestion(res);
+        setSituationTotal(res.length);
+      })
+      .catch((err) => {
+        setOpenError(true);
+      });
   };
 
   const fetchPostUserAnswers = async (
-    answers: VM.Answer[],
+    answers: Interface.Answer[],
     userId: string,
     categoryId: number
   ) => {
-    try {
-      const data = await VM.postUserAnswers(answers, userId, categoryId);
-
-      if (data) {
+    VM.postUserAnswers(answers, categoryId, Number(matchUserId))
+      .then((res) => {
         if (userId && matchUserId) {
-          const matchedData = await VM.postMatchedUsers(
-            categoryId,
-            userId,
-            matchUserId
-          );
-          if (matchedData) navigate(`/match-list/${categoryId}`);
+          navigate(`/match-list/${categoryId}`);
         } else {
           navigate(`/match-list/${categoryId}`);
           window.sessionStorage.removeItem("answers");
         }
-      }
-    } catch (error) {
-      setOpenError(true);
-    }
+      })
+      .catch((err) => {
+        setOpenError(true);
+      });
+
+    // try {
+    //   const data = await VM.postUserAnswers(answers, userId, categoryId);
+
+    //   if (data) {
+    //     if (userId && matchUserId) {
+    //       const matchedData = await VM.postMatchedUsers(
+    //         categoryId,
+    //         userId,
+    //         matchUserId
+    //       );
+
+    //       if (matchedData) navigate(`/match-list/${categoryId}`);
+
+    //     } else {
+    //       navigate(`/match-list/${categoryId}`);
+    //       window.sessionStorage.removeItem("answers");
+    //     }
+    //   }
+    // } catch (error) {
+    //   setOpenError(true);
+    // }
   };
 
   const onClickNextSituation = (updateOffset: number, answerId: number) => {
     userAnswers.push({
-      question_id: Number(questionId),
-      answer_id: answerId,
+      questionId: Number(questionId),
+      answerId: answerId,
+      answerContent: "",
     });
     setUserAnswers(userAnswers);
 
@@ -88,7 +99,7 @@ const Question: React.FC = () => {
       setSituationOffset(updateOffset);
       navigate(
         `/category/${categoryId}/question/${
-          situationAndQuestion && situationAndQuestion[updateOffset].question_id
+          situationAndQuestion && situationAndQuestion[updateOffset].questionId
         }`
       );
     }
@@ -101,7 +112,7 @@ const Question: React.FC = () => {
   useEffect(() => {
     if (situationAndQuestion && situationAndQuestion.length > 0 && questionId) {
       const indexNumber = situationAndQuestion.findIndex(
-        (s) => s.question_id === Number(questionId)
+        (s) => s.questionId === Number(questionId)
       );
 
       answers && setUserAnswers(JSON.parse(answers));
@@ -139,7 +150,7 @@ const Question: React.FC = () => {
           {lastPath && situationAndQuestion && (
             <>
               <SituationImage
-                src={situationAndQuestion[situationOffset].situation_image}
+                src={situationAndQuestion[situationOffset].situationImage}
               />
 
               <QuestionLayout>
@@ -151,7 +162,7 @@ const Question: React.FC = () => {
                   <NextQuestionButton
                     onClick={() =>
                       navigate(
-                        `/category/${categoryId}/question/${situationAndQuestion[situationOffset].question_id}/answer`
+                        `/category/${categoryId}/question/${situationAndQuestion[situationOffset].questionId}/answer`
                       )
                     }
                   >
@@ -188,102 +199,102 @@ const Question: React.FC = () => {
 export default Question;
 
 const QuestionViewLayout = styled.div`
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 `;
 const ContentLayout = styled.div`
-    position: absolute;
-    width: 740px;
-    height: 100%;
-    background: linear-gradient(180deg, #000513 0%, #171a5f 100%);
-    padding: 20px 20px 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  position: absolute;
+  width: 740px;
+  height: 100%;
+  background: linear-gradient(180deg, #000513 0%, #171a5f 100%);
+  padding: 20px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 const PauseLayout = styled.div`
-    z-index: 1;
-    height: 100%;
-    position: absolute;
-    width: 740px;
-    background: rgba(3, 3, 3, 0.76);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0 37px;
+  z-index: 1;
+  height: 100%;
+  position: absolute;
+  width: 740px;
+  background: rgba(3, 3, 3, 0.76);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 37px;
 `;
 
 const PauseContent = styled.div`
-    width: 100%;
-    padding: 34px 32px 35px 24px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 14px;
-    border-radius: 15px;
-    background: #fff;
-    color: var(--white, #fff);
-    font-size: 16px;
-    font-weight: 700;
+  width: 100%;
+  padding: 34px 32px 35px 24px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 14px;
+  border-radius: 15px;
+  background: #fff;
+  color: var(--white, #fff);
+  font-size: 16px;
+  font-weight: 700;
 `;
 
 const PauseButtonColor = styled.div`
-    display: flex;
-    height: 48px;
-    align-items: center;
-    border-radius: 30px;
-    background: #f56571;
-    justify-content: center;
+  display: flex;
+  height: 48px;
+  align-items: center;
+  border-radius: 30px;
+  background: #f56571;
+  justify-content: center;
 
-    box-shadow: 0px 5px 0px 1px #883037;
-    margin-bottom: 19px;
+  box-shadow: 0px 5px 0px 1px #883037;
+  margin-bottom: 19px;
 `;
 
 const PauseButtonDefault = styled.div`
-    display: flex;
-    height: 48px;
-    align-items: center;
-    border-radius: 30px;
-    background: #171a5f;
-    justify-content: center;
+  display: flex;
+  height: 48px;
+  align-items: center;
+  border-radius: 30px;
+  background: #171a5f;
+  justify-content: center;
 
-    box-shadow: 0px 5px 0px 1px #000;
+  box-shadow: 0px 5px 0px 1px #000;
 `;
 
 const SituationImage = styled.img``;
 
 const QuestionLayout = styled.div`
-    height: 168px;
-    border: 3px solid #bbcbcb;
-    background: #00316b;
+  height: 168px;
+  border: 3px solid #bbcbcb;
+  background: #00316b;
 `;
 
 const QuestionContent = styled.div`
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 24px 20px 13px 20px;
-    border-bottom: 11px solid #c7dde7;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px 20px 13px 20px;
+  border-bottom: 11px solid #c7dde7;
 `;
 
 const QuestionText = styled.div`
-    color: #f7ffff;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    font-size: 14px;
-    line-height: 160%;
-    letter-spacing: -0.07px;
+  color: #f7ffff;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  font-size: 14px;
+  line-height: 160%;
+  letter-spacing: -0.07px;
 `;
 
 const NextQuestionButton = styled.div`
-    text-align: end;
+  text-align: end;
 `;
 
 const BottomArrow = styled.img`
-    width: 15px;
-    height: 20px;
+  width: 15px;
+  height: 20px;
 `;
