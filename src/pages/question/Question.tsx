@@ -41,60 +41,35 @@ const Question: React.FC = () => {
       });
   };
 
-  const fetchPostUserAnswers = async (
-    answers: Interface.Answer[],
-    userId: string,
-    categoryId: number
-  ) => {
-    VM.postUserAnswers(answers, categoryId, Number(matchUserId))
-      .then((res) => {
-        if (userId && matchUserId) {
-          navigate(`/match-list/${categoryId}`);
-        } else {
-          navigate(`/match-list/${categoryId}`);
-          window.sessionStorage.removeItem("answers");
-        }
-      })
-      .catch((err) => {
-        setOpenError(true);
-      });
-
-    // try {
-    //   const data = await VM.postUserAnswers(answers, userId, categoryId);
-
-    //   if (data) {
-    //     if (userId && matchUserId) {
-    //       const matchedData = await VM.postMatchedUsers(
-    //         categoryId,
-    //         userId,
-    //         matchUserId
-    //       );
-
-    //       if (matchedData) navigate(`/match-list/${categoryId}`);
-
-    //     } else {
-    //       navigate(`/match-list/${categoryId}`);
-    //       window.sessionStorage.removeItem("answers");
-    //     }
-    //   }
-    // } catch (error) {
-    //   setOpenError(true);
-    // }
+  const fetchPostUserAnswers = async (userId: string, categoryId: number) => {
+    const answers = sessionStorage.getItem("answers");
+    if (answers) {
+      VM.postUserAnswers(JSON.parse(answers), categoryId, Number(matchUserId))
+        .then((res) => {
+          if (userId && matchUserId) {
+            navigate(`/match-list/${categoryId}`);
+          } else {
+            navigate(`/match-list/${categoryId}`);
+            window.sessionStorage.removeItem("answers");
+          }
+        })
+        .catch((err) => {
+          setOpenError(true);
+        });
+    }
   };
 
   const onClickNextSituation = (updateOffset: number, answerId: number) => {
     userAnswers.push({
-      questionId: Number(questionId),
       answerId: answerId,
-      answerContent: "",
+      comment: "",
     });
     setUserAnswers(userAnswers);
 
     window.sessionStorage.setItem("answers", JSON.stringify(userAnswers));
 
     if (situationTotal < updateOffset + 1) {
-      if (answers && myUserId)
-        fetchPostUserAnswers(JSON.parse(answers), myUserId, Number(categoryId));
+      if (myUserId) fetchPostUserAnswers(myUserId, Number(categoryId));
     } else {
       setSituationOffset(updateOffset);
       navigate(

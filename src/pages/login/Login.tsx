@@ -11,7 +11,13 @@ const Login: React.FC = () => {
   const fetchKakaoLogin = (KAKAO_CODE: string) => {
     VM.getKakaoLoginToUserInfo(KAKAO_CODE)
       .then((res) => {
-        if (res.memberInfo.memberId) {
+        if (res) {
+          localStorage.setItem("accessToken", res.jwtToken.accessToken);
+          localStorage.setItem("refreshToken", res.jwtToken.refreshToken);
+          localStorage.setItem(
+            "accessTokenExpiresIn",
+            res.jwtToken.accessTokenExpiresIn.toString()
+          );
           window.sessionStorage.setItem("my-user-id", res.memberInfo.memberId);
 
           if (
@@ -42,7 +48,12 @@ const Login: React.FC = () => {
   return (
     <>
       {openError && (
-        <Components.ErrorPopup cancelButton={() => setOpenError(false)} />
+        <Components.ErrorPopup
+          cancelButton={() => {
+            setOpenError(false);
+            navigate(`/`);
+          }}
+        />
       )}
     </>
   );
