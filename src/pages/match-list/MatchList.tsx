@@ -234,6 +234,7 @@ const Count = styled.span`
 
 const MatchUserListLayout = styled.div`
     margin-top: 24px;
+    height: calc(100vh - 608px);
 `;
 
 const MatchUserEmptyLayout = styled.div`
