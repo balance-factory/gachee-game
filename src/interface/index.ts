@@ -49,8 +49,8 @@ export type Question = {
 
 export type Answer = {
   answerId: number;
-  questionId: number;
-  answerContent: string;
+  // questionId: number;
+  comment: string;
 };
 
 export type MemberAnswer = {
