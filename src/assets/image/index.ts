@@ -1,6 +1,6 @@
 import Mouse from "./mouse.png";
 
-import Heart from "./heart.png";
+import Heart from "./main_heart.png";
 import Title from "./title.png";
 import NavBar from "./nav_bar.png";
 import CoupleDiscat from "./couple_discat.png";
