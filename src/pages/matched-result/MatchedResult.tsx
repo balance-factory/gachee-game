@@ -11,8 +11,8 @@ import * as Components from "../result/components";
 
 const MatchedResult: React.FC = () => {
     const navigate = useNavigate();
-    const categoryId = localStorage.getItem("categoryId");
-    const myId = localStorage.getItem("myUserId");
+    const categoryId = sessionStorage.getItem("categoryId");
+    const myId = sessionStorage.getItem("my-user-id");
     const { matchUserId } = useParams();
     const [resultInfo, setResultInfo] = useState<Interface.MatchedUserResultInfo>();
 
