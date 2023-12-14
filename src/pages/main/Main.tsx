@@ -40,8 +40,6 @@ const Main: React.FC = () => {
     }
   }, []);
 
-  console.log("REDIRECT_URI", process.env.REDIRECT_URI);
-
   return (
     <MainViewLayout>
       <ContentLayout>
