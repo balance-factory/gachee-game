@@ -1,4 +1,5 @@
 import axios from "axios";
+import * as Interface from "interface";
 import { useNavigate } from "react-router-dom";
 
 type Params = {
@@ -35,15 +36,16 @@ axios.interceptors.response.use(
                 const originalRequest = error.config;
                 localStorage.removeItem("accessToken");
                 const refreshToken = localStorage.getItem("refreshToken");
-                const result = await api.post(
-                    "/auth/refresh",
-                    {
-                        refreshToken,
-                    },
-                    { refreshToken }
-                );
-                localStorage.setItem("accessToken", result.headers.authorization);
+                const result = await api.get<{
+                    body: {
+                        jwtToken: Interface.TokenInfo;
+                        memberInfo: Interface.MemberInfo;
+                    };
+                }>(`/token/reissue?refreshToken=${refreshToken}`);
+
                 if (result) {
+                    localStorage.setItem("accessToken", result.data.body.jwtToken.accessToken);
+                    localStorage.setItem("refreshToken", result.data.body.jwtToken.refreshToken);
                     return await axios.request(originalRequest);
                 } else {
                     navigate("/");

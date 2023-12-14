@@ -8,8 +8,7 @@ import * as VM from "./ResultViewModel";
 import * as Components from "pages/components";
 
 const ResultView: React.FC = () => {
-    // const myId = sessionStorage.getItem("my-user-id");
-    const categoryId = localStorage.getItem("categoryId");
+    const categoryId = sessionStorage.getItem("categoryId");
 
     const { matchUserId } = useParams();
     const navigate = useNavigate();

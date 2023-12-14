@@ -8,7 +8,7 @@ import * as VM from "./MyAnswerViewModel";
 
 const MyAnswerView: React.FC = () => {
     const navigate = useNavigate();
-    const categoryId = localStorage.getItem("categoryId");
+    const categoryId = sessionStorage.getItem("categoryId");
     const [myAnswers, setMyAnswers] = useState<Interface.MySelectResult[]>();
 
     useEffect(() => {
