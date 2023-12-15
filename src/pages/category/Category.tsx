@@ -76,7 +76,9 @@ const Category: React.FC = () => {
               ))}
           </CategoryContentLayout>
           <ButtonIconLayout
-            onClick={() => navigate(`/category/${categoryId}/question`)}
+            onClick={() => {
+              categoryId === 1 && navigate(`/category/${categoryId}/question`);
+            }}
           >
             <ButtonText>OK</ButtonText>
             <Button />
