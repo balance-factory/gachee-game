@@ -6,7 +6,9 @@ type Params = {
   [key: string]: unknown;
 };
 
-export const baseUrl = "https://kor1du.shop";
+export const baseUrl = location.href.includes("localhost")
+  ? "http://kalzake.gonetis.com:8080"
+  : "https://kor1du.shop";
 export const errorHandle = {
   callback: (v: boolean) => {},
 };
