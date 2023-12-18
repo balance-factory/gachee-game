@@ -37,7 +37,10 @@ const MatchedResult: React.FC = () => {
     };
 
     const handleClickShare = () => {
-        Util.addClipboard(`/?category-id=${categoryId}?my-user-id=${myId}&match-user-id=${matchUserId}`);
+        const REDIRECT_URI = location.href.includes("localhost")
+            ? "http://localhost:3000"
+            : "https://gachee-game.vercel.app";
+        Util.addClipboard(`${REDIRECT_URI}/?category-id=${categoryId}?my-user-id=${myId}&match-user-id=${matchUserId}`);
     };
 
     return (
