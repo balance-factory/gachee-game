@@ -10,7 +10,6 @@ interface MatchedUserItemProps {
 const MatchedUserItem: React.FC<MatchedUserItemProps> = ({ matchedUserInfo }) => {
     const navigate = useNavigate();
     const handleClickMatchResult = (user: Interface.MatchedUser) => {
-        sessionStorage.setItem("match-user-info", JSON.stringify({ name: user.name, userScore: user.matchScore }));
         navigate(`/result/${user.memberId}`);
     };
     return (
