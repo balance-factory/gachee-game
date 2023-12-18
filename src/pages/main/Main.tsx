@@ -18,9 +18,9 @@ const Main: React.FC = () => {
   const myUserId = serchParams.get("my-user-id");
   const categoryId = serchParams.get("category-id");
 
-  myUserId && window.sessionStorage.setItem("my-user-id", myUserId);
-  matchUserId && window.sessionStorage.setItem("match-user-id", matchUserId);
-  categoryId && window.sessionStorage.setItem("category-id", categoryId);
+  myUserId && window.localStorage.setItem("myUserId", myUserId);
+  matchUserId && window.localStorage.setItem("matchUserId", matchUserId);
+  categoryId && window.localStorage.setItem("categoryId", categoryId);
 
   const fetchGetUserInfo = (matchedUserId: string) => {
     VM.getMemberInfo(matchedUserId)
