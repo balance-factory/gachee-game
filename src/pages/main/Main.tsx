@@ -40,6 +40,14 @@ const Main: React.FC = () => {
     }
   }, []);
 
+  const handleClickStart = () => {
+    if (window.localStorage.getItem("accessToken")) {
+      navigate(`/category`);
+    } else {
+      setModal(true);
+    }
+  };
+
   return (
     <MainViewLayout>
       <ContentLayout>
@@ -60,7 +68,7 @@ const Main: React.FC = () => {
                 보냈어요!
               </MatchedText>
             )}
-            <ButtonIconLayout onClick={() => setModal(true)}>
+            <ButtonIconLayout onClick={handleClickStart}>
               <ButtonText>
                 {matchedUserName ? "함께 테스트하기" : "start"}
               </ButtonText>
