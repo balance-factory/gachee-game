@@ -2,7 +2,6 @@ import * as Interface from "../../interface";
 import { api } from "../../api";
 
 export const getUserResult = async (categoryId: number): Promise<Interface.MySelectResult[]> => {
-    console.log("test");
     try {
         const [api1Response, api2Response] = await Promise.all([
             api.get<{
