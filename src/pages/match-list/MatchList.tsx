@@ -9,13 +9,14 @@ import BlueStar from "../../assets/icon/blue-star.svg";
 import Return from "../../assets/icon/small-return.svg";
 import Home from "../../assets/icon/home_icon.svg";
 import Empty from "../../assets/icon/send-clock.svg";
+import { REDIRECT_URI } from "KakaoOAuth";
 
 const MatchList: React.FC = () => {
     const navigate = useNavigate();
     const { categoryId } = useParams();
-    const userAId = sessionStorage.getItem("my-user-id")!;
+    const userAId = localStorage.getItem("myUserId")!;
     const [matchedUsers, setMatchedUsers] = useState<Interface.MatchedUser[]>([]);
-    sessionStorage.setItem("categoryId", `${categoryId}`);
+    localStorage.setItem("categoryId", `${categoryId}`);
 
     useEffect(() => {
         //컴포넌트가 마운트되었을 때 호출
@@ -42,9 +43,7 @@ const MatchList: React.FC = () => {
     };
 
     const handleClickShare = () => {
-        const REDIRECT_URI = location.href.includes("localhost")
-            ? "http://localhost:3000"
-            : "https://gachee-game.vercel.app";
+        window.location.href.includes("localhost") ? "http://localhost:3000" : "https://gachee-game.vercel.app";
         Util.addClipboard(`${REDIRECT_URI}/?category-id=${categoryId}&match-user-id=${userAId}`);
     };
 

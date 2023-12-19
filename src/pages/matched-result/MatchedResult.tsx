@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as Interface from "../../interface";
 import * as VM from "./MatchedResultViewModel";
 import styled from "styled-components";
@@ -8,11 +8,12 @@ import Return from "../../assets/icon/small-return.svg";
 import Home from "../../assets/icon/home_icon.svg";
 import * as Util from "../../utils";
 import * as Components from "../result/components";
+import { REDIRECT_URI } from "KakaoOAuth";
 
 const MatchedResult: React.FC = () => {
     const navigate = useNavigate();
-    const categoryId = sessionStorage.getItem("categoryId");
-    const myId = sessionStorage.getItem("my-user-id");
+    const categoryId = localStorage.getItem("categoryId");
+    const myId = localStorage.getItem("myUserId");
     const { matchUserId } = useParams();
     const [resultInfo, setResultInfo] = useState<Interface.MatchedUserResultInfo>();
 
@@ -37,9 +38,7 @@ const MatchedResult: React.FC = () => {
     };
 
     const handleClickShare = () => {
-        const REDIRECT_URI = location.href.includes("localhost")
-            ? "http://localhost:3000"
-            : "https://gachee-game.vercel.app";
+        window.location.href.includes("localhost") ? "http://localhost:3000" : "https://gachee-game.vercel.app";
         Util.addClipboard(`${REDIRECT_URI}/?category-id=${categoryId}?my-user-id=${myId}&match-user-id=${matchUserId}`);
     };
 

@@ -50,7 +50,7 @@ axios.interceptors.response.use(
                         "accessTokenExpiresIn",
                         result.data.body.jwtToken.accessTokenExpiresIn.toString()
                     );
-                    window.sessionStorage.setItem("my-user-id", result.data.body.memberInfo.memberId);
+                    window.localStorage.setItem("my-user-id", result.data.body.memberInfo.memberId);
                     return await axios.request(originalRequest);
                 } else {
                     navigate("/");

@@ -17,9 +17,9 @@ const Question: React.FC = () => {
     const splitUrl = pathname.split("/");
     const categoryId = splitUrl[2];
     const questionId = splitUrl[4];
-    const answers = window.sessionStorage.getItem("answers");
-    const myUserId = window.sessionStorage.getItem("my-user-id");
-    const matchUserId = window.sessionStorage.getItem("match-user-id");
+    const answers = sessionStorage.getItem("answers");
+    const myUserId = localStorage.getItem("myUserId");
+    const matchUserId = localStorage.getItem("matchUserId");
 
     const lastPath = splitUrl[splitUrl.length - 1] === "answer" ? false : true;
     const [openError, setOpenError] = useState<boolean>(false);
