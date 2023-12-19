@@ -17,9 +17,9 @@ const Question: React.FC = () => {
   const splitUrl = pathname.split("/");
   const categoryId = splitUrl[2];
   const questionId = splitUrl[4];
-  const answers = window.sessionStorage.getItem("answers");
-  const myUserId = window.sessionStorage.getItem("my-user-id");
-  const matchUserId = window.sessionStorage.getItem("match-user-id");
+  const answers = sessionStorage.getItem("answers");
+  const myUserId = localStorage.getItem("myUserId");
+  const matchUserId = localStorage.getItem("matchUserId");
 
   const lastPath = splitUrl[splitUrl.length - 1] === "answer" ? false : true;
   const [openError, setOpenError] = useState<boolean>(false);
@@ -50,7 +50,7 @@ const Question: React.FC = () => {
             navigate(`/match-list/${categoryId}`);
           } else {
             navigate(`/match-list/${categoryId}`);
-            window.sessionStorage.removeItem("answers");
+            sessionStorage.removeItem("answers");
           }
         })
         .catch((err) => {
@@ -66,7 +66,7 @@ const Question: React.FC = () => {
     });
     setUserAnswers(userAnswers);
 
-    window.sessionStorage.setItem("answers", JSON.stringify(userAnswers));
+    sessionStorage.setItem("answers", JSON.stringify(userAnswers));
 
     if (situationTotal < updateOffset + 1) {
       if (myUserId) fetchPostUserAnswers(myUserId, Number(categoryId));

@@ -7,75 +7,81 @@ import * as Component from "./components";
 import * as VM from "./MyAnswerViewModel";
 
 const MyAnswerView: React.FC = () => {
-    const navigate = useNavigate();
-    const categoryId = sessionStorage.getItem("categoryId");
-    const [myAnswers, setMyAnswers] = useState<Interface.MySelectResult[]>();
+  const navigate = useNavigate();
+  const categoryId = localStorage.getItem("categoryId");
+  const [myAnswers, setMyAnswers] = useState<Interface.MySelectResult[]>();
 
-    useEffect(() => {
-        VM.getUserResult(Number(categoryId))
-            .then((res) => {
-                setMyAnswers(res);
-            })
-            .catch((err) => {
-                if (err.status) {
-                }
-            });
-    }, []);
+  useEffect(() => {
+    VM.getUserResult(Number(categoryId))
+      .then((res) => {
+        setMyAnswers(res);
+      })
+      .catch((err) => {
+        if (err.status) {
+        }
+      });
+  }, []);
 
-    const clickBack = () => {
-        navigate(`/match-list/${categoryId}`);
-    };
+  const clickBack = () => {
+    navigate(`/match-list/${categoryId}`);
+  };
 
-    return (
-        <MyAnswerLayout>
-            <MyAnswerLayoutWrap>
-                <Header>
-                    <IconWrap onClick={clickBack}>
-                        <BackArrow />
-                    </IconWrap>
-                </Header>
-                <InnnerMyAnswerViewLayout>
-                    {myAnswers?.map((result, index) => {
-                        return <Component.AnswerItem key={result.questionId} result={result} index={index} />;
-                    })}
-                </InnnerMyAnswerViewLayout>
-            </MyAnswerLayoutWrap>
-        </MyAnswerLayout>
-    );
+  return (
+    <MyAnswerLayout>
+      <MyAnswerLayoutWrap>
+        <Header>
+          <IconWrap onClick={clickBack}>
+            <BackArrow />
+          </IconWrap>
+        </Header>
+        <InnnerMyAnswerViewLayout>
+          {myAnswers?.map((result, index) => {
+            return (
+              <Component.AnswerItem
+                key={result.questionId}
+                result={result}
+                index={index}
+              />
+            );
+          })}
+        </InnnerMyAnswerViewLayout>
+      </MyAnswerLayoutWrap>
+    </MyAnswerLayout>
+  );
 };
 
 export default MyAnswerView;
 
 const MyAnswerLayout = styled.div`
-    width: 100%;
-    height: 100vh;
-    overflow: scroll;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(#010614, #171a5f);
+  width: 100%;
+  height: 100vh;
+  overflow: scroll;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(#010614, #171a5f);
 `;
 
 const MyAnswerLayoutWrap = styled.div`
-    width: 740px;
-    height: 100%;
-    padding-bottom: 100px;
+  width: 740px;
+  height: 100%;
+  padding-bottom: 100px;
 `;
 
 const Header = styled.div`
-    width: 100%;
-    height: 58px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    color: #fff;
-    margin-bottom: 62px;
+  width: 100%;
+  height: 58px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  color: #fff;
+  margin-bottom: 62px;
 `;
 
 const InnnerMyAnswerViewLayout = styled.div`
-    width: 100%;
-    padding: 0 20px 80px;
+  width: 100%;
+  padding: 0 20px 80px;
 `;
 
 const IconWrap = styled.div``;

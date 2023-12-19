@@ -18,14 +18,14 @@ const Login: React.FC = () => {
             "accessTokenExpiresIn",
             res.jwtToken.accessTokenExpiresIn.toString()
           );
-          window.sessionStorage.setItem("my-user-id", res.memberInfo.memberId);
+          window.localStorage.setItem("myUserId", res.memberInfo.memberId);
 
           if (
-            sessionStorage.getItem("category-id") &&
-            sessionStorage.getItem("match-user-id")
+            localStorage.getItem("categoryId") &&
+            localStorage.getItem("matchUserId")
           ) {
             navigate(
-              `/category/${sessionStorage.getItem("category-id")}/question`
+              `/category/${localStorage.getItem("categoryId")}/question`
             );
           } else {
             navigate(`/category`);
