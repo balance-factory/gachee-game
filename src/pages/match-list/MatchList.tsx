@@ -9,7 +9,7 @@ import BlueStar from "../../assets/icon/blue-star.svg";
 import Return from "../../assets/icon/small-return.svg";
 import Home from "../../assets/icon/home_icon.svg";
 import Empty from "../../assets/icon/send-clock.svg";
-import { REDIRECT_URI } from "KakaoOAuth";
+import { REDIRECT_URI } from "Constant";
 
 const MatchList: React.FC = () => {
     const navigate = useNavigate();
@@ -43,7 +43,6 @@ const MatchList: React.FC = () => {
     };
 
     const handleClickShare = () => {
-        window.location.href.includes("localhost") ? "http://localhost:3000" : "https://gachee-game.vercel.app";
         Util.addClipboard(`${REDIRECT_URI}/?category-id=${categoryId}&match-user-id=${userAId}`);
     };
 

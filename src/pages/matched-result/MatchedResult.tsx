@@ -8,7 +8,7 @@ import Return from "../../assets/icon/small-return.svg";
 import Home from "../../assets/icon/home_icon.svg";
 import * as Util from "../../utils";
 import * as Components from "../result/components";
-import { REDIRECT_URI } from "KakaoOAuth";
+import { REDIRECT_URI } from "Constant";
 
 const MatchedResult: React.FC = () => {
     const navigate = useNavigate();
@@ -38,7 +38,6 @@ const MatchedResult: React.FC = () => {
     };
 
     const handleClickShare = () => {
-        window.location.href.includes("localhost") ? "http://localhost:3000" : "https://gachee-game.vercel.app";
         Util.addClipboard(`${REDIRECT_URI}/?category-id=${categoryId}?my-user-id=${myId}&match-user-id=${matchUserId}`);
     };
 
