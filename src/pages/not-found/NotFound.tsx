@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import BackArrow from "../../assets/icon/back_arrow_icon.svg";
 import Button from "assets/icon/main_button_icon.svg";
 import Error from "assets/image/error.png";
 
