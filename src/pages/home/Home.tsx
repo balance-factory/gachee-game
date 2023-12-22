@@ -5,10 +5,10 @@ import * as Images from "assets/image";
 import Button from "assets/icon/main_button_icon.svg";
 import Dot from "assets/icon/dot.svg";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import * as VM from "./MainViewModel";
+import * as VM from "./HomeViewModel";
 import * as Components from "pages/components/index";
 
-const Main: React.FC = () => {
+const Home: React.FC = () => {
   const navigate = useNavigate();
   const [isModal, setModal] = useState<boolean>(false);
   const [openError, setOpenError] = useState<boolean>(false);
@@ -53,7 +53,7 @@ const Main: React.FC = () => {
   console.log(process.env.npm_package_version);
 
   return (
-    <MainViewLayout>
+    <HomeViewLayout>
       <ContentLayout>
         <Header>
           <NavIcon src={Images.NavBar} />
@@ -87,11 +87,11 @@ const Main: React.FC = () => {
       {openError && (
         <Components.ErrorPopup cancelButton={() => setOpenError(false)} />
       )}
-    </MainViewLayout>
+    </HomeViewLayout>
   );
 };
 
-export default Main;
+export default Home;
 
 const PackageVersion = styled.div`
   color: white;
@@ -111,7 +111,7 @@ const MatchedText = styled.div`
   text-align: center;
 `;
 
-const MainViewLayout = styled.div`
+const HomeViewLayout = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
