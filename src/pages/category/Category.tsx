@@ -45,12 +45,12 @@ const Category: React.FC = () => {
   return (
     <CategoryViewLayout>
       <ContentLayout>
-        <Header>
-          <Question />
-          <HeaderText onClick={() => navigate("/menual")}>
-            게임 메뉴얼
-          </HeaderText>
-        </Header>
+        <MenualLayout>
+          <Menual onClick={() => navigate("/menual")}>
+            <Question />
+            <MenualText>게임 메뉴얼</MenualText>
+          </Menual>
+        </MenualLayout>
 
         <Content>
           <ContentText>원하는 테스트를 선택해주세요.</ContentText>
@@ -128,14 +128,19 @@ const ContentLayout = styled.div`
   padding: 21px 0;
 `;
 
-const Header = styled.div`
+const MenualLayout = styled.div`
   width: 100%;
   display: flex;
-  align-items: center;
   justify-content: end;
   padding: 0 20px;
 `;
-const HeaderText = styled.div`
+
+const Menual = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const MenualText = styled.div`
   color: #fff;
   font-size: 12px;
   font-weight: 700;

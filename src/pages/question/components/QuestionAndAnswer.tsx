@@ -16,20 +16,7 @@ interface QuestionAndAnswerProps {
 }
 
 const QuestionAndAnswer: React.FC<QuestionAndAnswerProps> = (props) => {
-  const [isAnswer, setIsAnswer] = useState<AnswerState>({
-    index: 0,
-    answerId: 0,
-  });
-
-  useEffect(() => {
-    props.situationAndQuestion &&
-      setIsAnswer({
-        index: 0,
-        answerId:
-          props.situationAndQuestion[props.situationOffset].answerList[0]
-            .answerId,
-      });
-  }, [props.situationAndQuestion]);
+  const [isAnswer, setIsAnswer] = useState<AnswerState>();
 
   return props.situationAndQuestion ? (
     <>
@@ -41,9 +28,11 @@ const QuestionAndAnswer: React.FC<QuestionAndAnswerProps> = (props) => {
           {props.situationAndQuestion[props.situationOffset].subTitle}
         </QuestionAndAnswerSubTitle>
       </div>
-      <QuestionImage
-        src={props.situationAndQuestion[props.situationOffset].titleImage}
-      />
+      <QuestionImageLayout>
+        <QuestionImage
+          src={props.situationAndQuestion[props.situationOffset].titleImage}
+        />
+      </QuestionImageLayout>
       <QuestionAndAnswerLayout>
         <QuestionAndAnswerContent>
           {props.situationAndQuestion[props.situationOffset].answerList.map(
@@ -57,7 +46,7 @@ const QuestionAndAnswer: React.FC<QuestionAndAnswerProps> = (props) => {
                   })
                 }
               >
-                {i === isAnswer.index && (
+                {isAnswer && i === isAnswer.index && (
                   <ClickArrowImage src={Images.ClickArrow} />
                 )}
 
@@ -68,6 +57,7 @@ const QuestionAndAnswer: React.FC<QuestionAndAnswerProps> = (props) => {
 
           <NextBtnLayout
             onClick={() =>
+              isAnswer &&
               props.clickGoNextSituation(
                 props.situationOffset + 1,
                 isAnswer.answerId
@@ -86,7 +76,20 @@ const QuestionAndAnswer: React.FC<QuestionAndAnswerProps> = (props) => {
 };
 export default QuestionAndAnswer;
 
-const QuestionImage = styled.img``;
+const QuestionImageLayout = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
+const QuestionImage = styled.img`
+  width: 375px;
+  height: 300px;
+
+  @media (max-width: 375px) {
+    width: 100%;
+  }
+`;
 
 const QuestionAndAnswerLayout = styled.div`
   height: 168px;

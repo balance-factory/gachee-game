@@ -63,16 +63,21 @@ const Home: React.FC = () => {
             <Dot />
           </DotLayout>
           <Border>
-            <HeartIcon src={Images.Heart} />
-            <TitleIcon src={Images.Title} />
-            {matchedUserName && (
-              <MatchedText>
-                {matchedUserName}님이 테스트를
-                <br />
-                보냈어요!
-              </MatchedText>
-            )}
-
+            <MainContentLayout>
+              <MainContent>
+                <div>
+                  <HeartIcon src={Images.Heart} />
+                </div>
+                <TitleIcon src={Images.Title} />
+                {matchedUserName && (
+                  <MatchedText>
+                    {matchedUserName}님이 테스트를
+                    <br />
+                    보냈어요!
+                  </MatchedText>
+                )}
+              </MainContent>
+            </MainContentLayout>
             <ButtonIconLayout onClick={handleClickStart}>
               <ButtonText>
                 {matchedUserName ? "함께 테스트하기" : "start"}
@@ -100,15 +105,6 @@ const PackageVersion = styled.div`
   width: 100%;
   text-align: center;
   font-size: 10px;
-`;
-
-const MatchedText = styled.div`
-  position: absolute;
-  bottom: 340px;
-  width: 100%;
-  color: white;
-  font-size: 24px;
-  text-align: center;
 `;
 
 const HomeViewLayout = styled.div`
@@ -140,20 +136,34 @@ const NavIcon = styled.img`
   height: 28px;
 `;
 
+const MainContentLayout = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  height: calc(100% - 105px);
+  align-items: center;
+`;
+
+const MainContent = styled.div`
+  width: 100%;
+  text-align: center;
+`;
+
+const MatchedText = styled.div`
+  width: 100%;
+  color: white;
+  font-size: 24px;
+  text-align: center;
+`;
+
 const HeartIcon = styled.img`
   width: 50px;
   height: 44px;
-  position: absolute;
-  top: calc(50% - 100px);
-  left: calc(50% - 18px);
 `;
 
 const TitleIcon = styled.img`
   width: 299px;
   height: 72px;
-  position: absolute;
-  top: calc(50% - 60px);
-  left: calc(50% - 145px);
 `;
 
 const ButtonIconLayout = styled.div`
