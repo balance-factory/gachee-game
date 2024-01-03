@@ -1,6 +1,5 @@
 import axios from "axios";
 import * as Interface from "interface";
-import { useNavigate } from "react-router-dom";
 
 type Params = {
     [key: string]: unknown;
@@ -26,13 +25,15 @@ axios.interceptors.response.use(
     },
     async function (error) {
         if (error.response.status === 401) {
-            const navigate = useNavigate();
+            console.log("error", error.response.status);
+
             // 401: Unauthorized
             // localStorage에서 refreshToken을 가져와서 재발급 요청
             // 재발급 요청이 실패하면 로그인 페이지로 이동
             // 재발급 요청이 성공하면 accessToken을 localStorage에 저장하고
             // 요청했던 API를 다시 요청
             try {
+                console.log("여기", error.response.status);
                 const originalRequest = error.config;
                 localStorage.removeItem("accessToken");
                 const refreshToken = localStorage.getItem("refreshToken");
@@ -53,10 +54,11 @@ axios.interceptors.response.use(
                     window.localStorage.setItem("my-user-id", result.data.body.memberInfo.memberId);
                     return await axios.request(originalRequest);
                 } else {
-                    navigate("/");
+                    window.location.replace("/");
+                    return Promise.reject(error.response.data);
                 }
             } catch (e) {
-                navigate("/");
+                window.location.replace("/");
                 return Promise.reject(error);
             }
         }
