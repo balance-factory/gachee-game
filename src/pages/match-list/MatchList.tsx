@@ -10,12 +10,14 @@ import Return from "../../assets/icon/small-return.svg";
 import Home from "../../assets/icon/home_icon.svg";
 import Empty from "../../assets/icon/send-clock.svg";
 import { REDIRECT_URI } from "Constant";
+import ToastPopup from "pages/components/ToastPopup";
 
 const MatchList: React.FC = () => {
     const navigate = useNavigate();
     const { categoryId } = useParams();
     const userAId = localStorage.getItem("myUserId")!;
     const [matchedUsers, setMatchedUsers] = useState<Interface.MatchedUser[]>([]);
+    const [openToast, setOpenToast] = useState<boolean>(false);
     localStorage.setItem("categoryId", `${categoryId}`);
 
     useEffect(() => {
@@ -44,6 +46,7 @@ const MatchList: React.FC = () => {
 
     const handleClickShare = () => {
         Util.addClipboard(`${REDIRECT_URI}/?category-id=${categoryId}&match-user-id=${userAId}`);
+        setOpenToast(true);
     };
 
     return (
@@ -101,6 +104,7 @@ const MatchList: React.FC = () => {
                     </MatchListWrap>
                 </InnnerMatchListLayout>
             </MatchLayoutWrap>
+            {openToast && <ToastPopup title={"링크가 복사됐어요."} isOpen={openToast} />}
         </MatchLayout>
     );
 };
@@ -108,6 +112,7 @@ const MatchList: React.FC = () => {
 export default MatchList;
 
 const MatchLayout = styled.div`
+    position: relative;
     width: 100%;
     height: auto;
     display: flex;
@@ -235,7 +240,7 @@ const Count = styled.span`
 
 const MatchUserListLayout = styled.div`
     margin-top: 24px;
-    height: calc(100vh - 608px);
+    height: 100%;
 `;
 
 const MatchUserEmptyLayout = styled.div`
@@ -243,6 +248,7 @@ const MatchUserEmptyLayout = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    padding: 60px 0;
 `;
 
 const EmptyText = styled.div`
