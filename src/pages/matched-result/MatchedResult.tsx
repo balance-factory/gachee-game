@@ -9,6 +9,7 @@ import Home from "../../assets/icon/home_icon.svg";
 import * as Util from "../../utils";
 import * as Components from "../result/components";
 import { REDIRECT_URI } from "Constant";
+import ToastPopup from "pages/components/ToastPopup";
 
 const MatchedResult: React.FC = () => {
     const navigate = useNavigate();
@@ -16,6 +17,7 @@ const MatchedResult: React.FC = () => {
     const myId = localStorage.getItem("myUserId");
     const { matchUserId } = useParams();
     const [resultInfo, setResultInfo] = useState<Interface.MatchedUserResultInfo>();
+    const [openToast, setOpenToast] = useState<boolean>(false);
 
     useEffect(() => {
         matchUserId &&
@@ -39,6 +41,7 @@ const MatchedResult: React.FC = () => {
 
     const handleClickShare = () => {
         Util.addClipboard(`${REDIRECT_URI}/?category-id=${categoryId}?my-user-id=${myId}&match-user-id=${matchUserId}`);
+        setOpenToast(true);
     };
 
     return (
@@ -98,6 +101,7 @@ const MatchedResult: React.FC = () => {
                     })}
                 </InnnerMatchedUserViewLayout>
             </MatchLayoutWrap>
+            {openToast && <ToastPopup title={"링크가 복사됐어요."} isOpen={openToast} />}
         </MatchedUserLayout>
     );
 };
@@ -105,6 +109,7 @@ const MatchedResult: React.FC = () => {
 export default MatchedResult;
 
 const MatchedUserLayout = styled.div`
+    position: relative;
     width: 100%;
     height: 100vh;
     overflow: scroll;
