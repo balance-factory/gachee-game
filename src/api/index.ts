@@ -51,11 +51,11 @@ axios.interceptors.response.use(
                     window.localStorage.setItem("my-user-id", result.data.body.memberInfo.memberId);
                     return await axios.request(originalRequest);
                 } else {
-                    window.location.replace("/");
+                    window.location.href = "/";
                     return Promise.reject(error.response.data);
                 }
             } catch (e) {
-                window.location.replace("/");
+                window.location.href = "/";
                 return Promise.reject(error);
             }
         }
