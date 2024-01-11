@@ -25,15 +25,12 @@ axios.interceptors.response.use(
     },
     async function (error) {
         if (error.response.status === 401) {
-            console.log("error", error.response.status);
-
             // 401: Unauthorized
             // localStorage에서 refreshToken을 가져와서 재발급 요청
             // 재발급 요청이 실패하면 로그인 페이지로 이동
             // 재발급 요청이 성공하면 accessToken을 localStorage에 저장하고
             // 요청했던 API를 다시 요청
             try {
-                console.log("여기", error.response.status);
                 const originalRequest = error.config;
                 localStorage.removeItem("accessToken");
                 const refreshToken = localStorage.getItem("refreshToken");
