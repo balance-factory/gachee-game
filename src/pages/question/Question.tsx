@@ -41,7 +41,6 @@ const Question: React.FC = () => {
     };
 
     const fetchPostUserAnswers = async (userId: string, categoryId: number) => {
-        console.log("data");
         const answers = sessionStorage.getItem("answers");
         if (answers) {
             VM.postUserAnswers(JSON.parse(answers), categoryId, Number(matchUserId))
