@@ -84,6 +84,7 @@ const AnswerText = styled.div`
     font-family: Galmuri_Bold;
     font-size: 14px;
     color: #fff;
+    text-align: center;
 `;
 
 const UserA = styled.div`
